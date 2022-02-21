@@ -1,0 +1,62 @@
+productName: "LucaMail"
+appId: "com.raghavyuva.lucamail"
+
+# Package electron code into a asar archive. Set to false to debug issues.
+asar: true
+
+files:
+  - "build/"
+  - "package.json"
+  - "src/main/index.js"
+  - "src/main"
+  - "src/renderer"
+  - "src/renderer/dist"
+  - "splashscreen.html"
+  - "dist"
+  - "tailwind.config.js"
+  - "package.json"
+  - "*.js"
+  - "build"
+  - "node_modules"
+
+# # Mac OS configuration
+# mac:
+#   icon: - "src/app/assets/images/icon.icns"
+
+# Config for OSX dmg
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: "link"
+      path: "/Applications"
+
+# Windows configuration
+win:
+  icon: "src/main/helpers/assets/lucamail.ico"
+  target:
+    - "zip"
+    - "nsis"
+
+# Config for the windows installer
+nsis:
+  oneClick: true
+  perMachine: true
+
+# Linux configuration
+linux:
+  icon: "src/main/helpers/lucamail.png"
+  category: Development
+  target:
+    - "AppImage"
+    - "deb"
+    - "rpm"
+    - "snap"
+    - "flatpak"
+
+directories:
+  buildResources: "resources"
+  output: "release"
+  
