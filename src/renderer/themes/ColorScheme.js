@@ -18,7 +18,7 @@ export const creamRose = {
 }
 export const dark = {
   primary: "blue",
-  secondary: "#010307",
+  secondary: "#161616",
   accent: "#001f3d",
   text: "#F9F8FF",
   backgroundPrimary: "black",

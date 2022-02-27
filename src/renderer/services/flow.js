@@ -1,20 +1,18 @@
-import { WriteFile } from '~/lib/fileAction';
-const path = require("path")
+import { WriteFile } from "~/lib/fileAction";
+const path = require("path");
 
-export async function LogintoAccount(client, setAuthResult) {
+export async function LogintoAccount(client) {
   let lock;
   try {
     await client.connect();
     lock = await client.getMailboxLock("INBOX");
     if (client.authenticated == true) {
-      setAuthResult(true);
-    }else{
-      setAuthResult(false)
+      return true;
+    } else {
+      return false;
     }
   } catch (error) {
-    client.on('error', err=>{
-  });
-    setAuthResult("invalid credentials or configuration")
+    return false;
   }
 }
 
@@ -22,14 +20,13 @@ export async function AuthenticateUser(client) {
   await client.connect();
   let lock = await client.getMailboxLock("INBOX");
   if (client.authenticated == true) {
-    return true
+    return true;
   } else {
-    return false
+    return false;
   }
 }
 
-
-export async function setFolders(connection,) {
+export async function setFolders(connection) {
   await connection.connect();
   let tree = await connection.listTree();
 }
@@ -38,33 +35,41 @@ export async function getInformation(client, Path, writepath) {
   try {
     await client.connect();
     let tree = await client.listTree();
-    let obj = {}; let status;
+    let obj = {};
+    let status;
     obj.folderTree = tree?.folders;
-    let lock = await client.getMailboxLock(Path)
+    let lock = await client.getMailboxLock(Path);
     status = await client.status(Path, { unseen: true, messages: true });
-    obj.mailStatus = status
-    obj.user = client?.options?.auth?.user
+    obj.mailStatus = status;
+    obj.user = client?.options?.auth?.user;
     let quota = await client.getQuota();
-    obj.quota = quota
-    WriteFile((path.join("conf", writepath)), obj)
+    obj.quota = quota;
+    WriteFile(path.join("conf", writepath), obj);
+    return obj;
   } catch (error) {
+    return error;
   }
 }
 
-export async function SetInfoForFirstTime(client, Path, writepath, setInfoData) {
+export async function SetInfoForFirstTime(
+  client,
+  Path,
+  writepath,
+  setInfoData
+) {
   try {
     await client.connect();
     let tree = await client.listTree();
-    let obj = {}; let status;
+    let obj = {};
+    let status;
     obj.folderTree = tree?.folders;
-    let lock = await client.getMailboxLock(Path)
+    let lock = await client.getMailboxLock(Path);
     status = await client.status(Path, { unseen: true, messages: true });
-    obj.mailStatus = status
-    obj.user = client?.options?.auth?.user
+    obj.mailStatus = status;
+    obj.user = client?.options?.auth?.user;
     let quota = await client.getQuota();
-    obj.quota = quota
+    obj.quota = quota;
     setInfoData(obj);
-    WriteFile((path.join("conf", writepath)), obj)
-  } catch (error) {
-  }
+    WriteFile(path.join("conf", writepath), obj);
+  } catch (error) {}
 }

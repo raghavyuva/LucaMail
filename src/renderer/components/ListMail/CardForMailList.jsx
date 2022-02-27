@@ -22,9 +22,9 @@ function CardForMailList({
     <div
       ref={ref}
       className={`${
-        localread ? "bg-secondary  opacity-90" : "bg-positive opacity-100"
+        localread ? "bg-positive  opacity-90" : "bg-positive opacity-100"
       } rounded-sm  mr-4  flex flex-col   overflow-clip
-                                       bg-gradient-to-br from-positive via-primary-background to-positive shadow-lg lg:max-w-lg  md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
+                                       bg-positive shadow-lg lg:max-w-lg  md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
       onClick={() => {
         setisAnyMailOpen(true);
         setopenedmail(mailObject);

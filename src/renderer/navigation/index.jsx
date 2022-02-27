@@ -4,16 +4,18 @@ import { connect, useDispatch } from "react-redux";
 import { setAuthenticated } from "~/redux/actions/UserActions";
 import Login from "~/pages/Login";
 import WindowBar from "~/components/TopBar/WindowBar";
-import Loading from "~/components/Loading/Loading";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import Inbox from "~/pages/Inbox";
 import { getInformation } from "~/services/flow";
 import Folder from "~/pages/Folder";
 import Settings from "~/pages/Settings";
 import NotFound from "./NotFound";
+// import Layout from "../pages/Layout";
+import { setUser } from "../redux/actions/UserActions";
+import Inbox from "../pages/Inbox";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
-function Index({ loading, Authenticated, default_theme }) {
+
+function Index({ Authenticated }) {
   const dispatch = useDispatch();
 
   let data = JSON.parse(readFile(path.join("user", "user.txt")))
@@ -24,10 +26,10 @@ function Index({ loading, Authenticated, default_theme }) {
     let isMounted = true;
     if (data?.auth?.user && data?.auth?.pass) {
       dispatch(setAuthenticated(true));
-      let client = new ImapFlow(data);
-      if (!checkExists("conf")) {
+      dispatch(setUser(data));
+      if (!checkExists("conf" || !checkExists("mail"))) {
         createFolder("conf");
-        getInformation(client, "INBOX", "conf.txt");
+        createFolder("mail");
       }
     } else {
       dispatch(setAuthenticated(false));
@@ -37,20 +39,12 @@ function Index({ loading, Authenticated, default_theme }) {
     };
   }, [data]);
 
-  if (loading) {
-    return <Loading />;
-  }
   return (
     <div>
       {Authenticated ? (
         <HashRouter>
           <Routes>
-            <Route
-              index
-              path="/"
-              exact
-              element={<Inbox clientconfig={data} />}
-            />
+            <Route index path="/" exact element={<Inbox />} />
             <Route
               index
               path="/folder/:folderName"
@@ -58,12 +52,11 @@ function Index({ loading, Authenticated, default_theme }) {
               element={<Folder />}
             />
             <Route index path="/settings" exact element={<Settings />} />
-            <Route path="*" element={<NotFound/>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </HashRouter>
       ) : (
         <>
-          <WindowBar icon={false} />
           <Login />
         </>
       )}

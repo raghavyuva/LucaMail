@@ -10,12 +10,12 @@ function InputField({
     setvisible,
 }) {
     return (
-        <div className='mx-2'>
+        <div className='mx-2 my-2'>
             <label className="sr-only">{label}</label>
             <div className="relative">
                 <input
                     type={visible ? label : "text"}
-                    className="w-full p-4 pr-12 text-sm text-primary-text border-2 border-double bg-primary-background rounded-lg shadow-lg "
+                    className="w-full p-4 pr-12 text-sm text-primary-text  border-double bg-primary-background rounded-lg shadow-lg "
                     placeholder={placeholder}
                     onChange={(e) => updatedValue(e.target.value)}
                     value={value}

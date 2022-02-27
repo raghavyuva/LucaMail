@@ -55,7 +55,7 @@ export default function SelfPromotional({
     }
 
     return (
-        <div className='bg-gradient-to-tr from-positive via-primary-background to-primary h-fit  lg:h-[calc(100vh_-_6rem)] p-4 w-screen '>
+        <div className=' h-fit  lg:h-[calc(100vh_-_6rem)] p-4 w-screen '>
             <Stats
                 uname={uname}
                 Data={Data}
