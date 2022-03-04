@@ -47,19 +47,20 @@ function ShowMail({
     const [UpdatedMailStorage, setUpdatedMailStorage] = useState([]);
 
     useEffect(() => {
-        for (let index = 0; index < MailWithBody?.length; index++) {
-            if (MailWithBody[index]?.messageId === openedmail?.messageId) {
+        for (let index = 0; index < message?.length; index++) {
+            if (message[index]?.envelope?.messageId === openedmail?.messageId) {
                 setActiveIndex(index);
-                setActiveMail(MailWithBody[index]);
+                console.log(message[index]?.body)
+                setActiveMail(message[index]?.body);
                 for (let x = 0; x < message?.length; x++) {
                     const element = message[x];
-                    if (element.envelope?.messageId === MailWithBody[index]?.messageId) {
+                    if (element.envelope?.messageId === message[index]?.body?.messageId) {
                         setUid(element.uid)
                     }
                 }
             }
         }
-    }, [openedmail, ActiveMail, MailWithBody, ActiveIndex])
+    }, [openedmail, ActiveMail, message, ActiveIndex])
 
     let client, client_single;
     useEffect(() => {
@@ -137,7 +138,7 @@ function ShowMail({
     }
 
     return (
-        <div className='p-2  bg-gradient-to-tr from-positive via-primary-background to-primary'>
+        <div className='p-2 bg-positive'>
             <div className='flex flex-row justify-between items-center mt-3  '>
                 <div className='flex '>
                     {

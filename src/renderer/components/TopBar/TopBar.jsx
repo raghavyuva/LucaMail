@@ -18,7 +18,7 @@ function TopBar({
   isDrawerOpen,
 }) {
   const [isExpanded, setisExpanded] = useState(false);
-  const [selected, setselected] = useState("dark");
+  const [selected, setselected] = useState("RavenBlack");
   const [toggle, settoggle] = useState(false);
   const { ref } = useComponentVisible(false, toggle, settoggle);
 

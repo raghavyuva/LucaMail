@@ -21,14 +21,16 @@ export const createFolder = (newpath) => {
 
 export const WriteFile = async (filePath, data) => {
   try {
-    await fs.writeFileSync(
-      path.join(homedir, appPath, filePath),
-      JSON.stringify(data, Set_toJSON),
-      {
-        encoding: "utf8",
-        flag: "w",
-      }
-    );
+    if (data) {
+      await fs.writeFileSync(
+        path.join(homedir, appPath, filePath),
+        JSON.stringify(data, Set_toJSON),
+        {
+          encoding: "utf8",
+          flag: "w",
+        }
+      );
+    }
     function Set_toJSON(key, value) {
       if (typeof value === "object" && value instanceof Set) {
         return [...value];
@@ -36,6 +38,7 @@ export const WriteFile = async (filePath, data) => {
       return value;
     }
   } catch (error) {
+    console.log(error);
     return false;
   }
 };

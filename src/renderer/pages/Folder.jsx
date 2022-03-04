@@ -1,254 +1,220 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import Structure from "../utils/Structure";
+import { FetchMail, OnUpdatedMailFromServer } from "../services";
+import { useDispatch, connect } from "react-redux";
+import { setAllMail } from "../redux/actions/MailList";
 import Loading from "~/components/Loading/Loading";
 import { checkExists, readFile, WriteFile } from "~/lib/fileAction";
-import { FetchMail, OnUpdatedMailFromServer } from "~/services";
 import { getInformation } from "~/services/flow";
-import { config } from "~/static/constants/Config";
-import Structure from "~/utils/Structure";
-const { ImapFlow } = window.require("imapflow");
-import { connect } from "react-redux";
+import { setEnvelope } from "~/redux/actions/MailList";
 import { SettingTypes } from "../static/constants/Settings";
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/actions/UserActions";
-
+import { setLoading } from "../redux/actions/LoadingActions";
+import { setFolderStrucure, setMailStats } from "../redux/actions/appActions";
+import { ParseContent } from "../utils/Utils";
+import { useLocation } from "react-router-dom";
+const { ImapFlow } = window.require("imapflow");
 const path = require("path");
-function Folder({user}) {
-  const [Mail, setMail] = useState([]);
-  const [Body, setBody] = useState([]);
-  const [envelope, setenvelope] = useState([]);
-  const [load, setload] = useState(false);
+
+function Folder({
+  user,
+  currentSideBar,
+  loading,
+  MailStats,
+  Envelope,
+  maillist,
+  folderStructure,
+}) {
+  const location = useLocation();
+  let StorePath = location?.state?.substring(
+    location?.state?.lastIndexOf("/") + 1
+  );
+  const MailPath = location?.state;
+  const [StoreObj, setStoreObj] = useState();
   const [isAnyMailOpen, setisAnyMailOpen] = useState(false);
   const [openedMail, setopenedMail] = useState("");
   const [composeopen, setcomposeopen] = useState(false);
-  const location = useLocation();
-  let storepath = location?.state?.substring(
-    location?.state?.lastIndexOf("/") + 1
-  );
   const [ActionFromreply, setActionFromreply] = useState("newcompose");
   const [SearchText, setSearchText] = useState("");
   const [FilteredData, setFilteredData] = useState([]);
-  const [Envarr, setEnvarr] = useState([]);
-  const [lmLen, setlmLen] = useState(0);
-  let InfoData = JSON.parse(readFile(path.join("conf", storepath)))
-    ? JSON.parse(readFile(path.join("conf", storepath)))
-    : 0;
-  let tLen = InfoData?.mailStatus?.messages;
-  let fLimit = tLen ? (tLen > 25 ? 25 : tLen) : 10;
-  let infoclient;
-  const [cnt, setcnt] = useState(0);
-  const [updatedMail, setupdatedMail] = useState([]);
-  const [updatedBody, setupdatedBody] = useState([]);
-  const [NewMail, setNewMail] = useState([]);
-  const [NewBody, setNewBody] = useState([]);
-  const [fetchedCount, setfetchedCount] = useState(
-    JSON.parse(readFile(path.join("mail", storepath)))
-      ? JSON.parse(readFile(path.join("mail", storepath)))?.Mail?.length
+  const [InfoData] = useState(
+    JSON.parse(readFile(path.join("conf", "conf.txt")))
+      ? JSON.parse(readFile(path.join("conf", "conf.txt")))
       : 0
   );
+  const [tLen, settLen] = useState(InfoData?.mailStatus?.messages);
+  const [fLimit, setfLimit] = useState(tLen ? (tLen > 50 ? 20 : tLen) : 1);
+  const [fetchedCount, setfetchedCount] = useState(
+    JSON.parse(readFile(path.join("mail", MailPath)))
+      ? JSON.parse(readFile(path.join("mail", MailPath)))?.Mail?.length
+      : 0
+  );
+  const dispatch = useDispatch();
   let SettingFromStorage = JSON.parse(localStorage.getItem("Settings"));
-
-  const [store, setstore] = useState(
+  const [store] = useState(
     SettingFromStorage
       ? SettingFromStorage[2].default
       : SettingTypes["boolvaled"][2].default
   );
-const dispatch = useDispatch()
+  let infoclient, client;
   useEffect(() => {
-    setload(true);
+    let isMounted = true;
+    dispatch(setLoading(true));
+    GetFolderStructure();
+    return () => {
+      isMounted = false;
+    };
+  }, [location.state]);
 
-    return () => {};
-  }, []);
-
-  useEffect(() => {
-    if (!user) {
-      dispatch(setUser(config));
-    }
-    SetVariablesOnLocChange();
-    GetDetailsAboutFolder();
-
-    return () => {};
-  }, [location]);
-
-  function SetVariablesOnLocChange() {
-    setload(true);
-    setMail([]);
-    setBody([]);
-    setEnvarr([]);
-    setenvelope([]);
-    setNewMail([]);
-    setNewBody([]);
-  }
-
-  function GetDetailsAboutFolder() {
-    if (!checkExists(path.join("conf", storepath))) {
-      let client = new ImapFlow(user);
-      getInformation(client, location?.state, storepath);
-    }
-    if (!checkExists(path.join("mail", storepath))) {
-      RetrieveFromFolder();
-    } else {
-      RetrieveData();
-    }
-  }
-
-  function ReadData() {
+  async function GetFolderStructure() {
     try {
-      let mdata = JSON.parse(readFile(path.join("mail", storepath)));
-      if (mdata?.Mail?.length > 0 && mdata?.Body?.length) {
-        return mdata;
+      let folder = await ParseContent("conf", "conf.txt");
+      if (folder) {
+        DispatchFolderStructure(folder);
       } else {
-        return false;
+        client = new ImapFlow(user);
+        GetFolderStructureFromServer(client);
       }
     } catch (error) {
-      return false;
+      console.log(error);
     }
   }
 
-  async function RetrieveData() {
+  async function GetFolderStructureFromServer(client) {
+    if (!checkExists(path.join("conf", StorePath))) {
+      let folder = await getInformation(client, MailPath, StorePath);
+      DispatchFolderStructure(folder);
+    }
+  }
+
+  async function DispatchFolderStructure(folder) {
+    if (folder) {
+      settLen(folder?.mailStatus?.messages);
+      let fetchlimit =
+        folder?.mailStatus?.messages > 50 ? 20 : folder?.mailStatus?.messages;
+      setfLimit(fetchlimit);
+      dispatch(setMailStats(folder));
+      dispatch(setFolderStrucure(folder?.folderTree));
+      CheckForMailExistense();
+    }
+  }
+
+  async function CheckForMailExistense() {
     try {
-      let mdata = ReadData();
-      if (Object.keys(mdata)?.length != 0) {
-        setfetchedCount(mdata?.Mail?.length);
-        mdata?.Mail?.map((ele) => {
-          setMail((p) => [...p, ele]);
-          setenvelope((p) => [...p, ele?.envelope]);
-        });
-        mdata?.Body?.map((itm) => {
-          setBody((p) => [...p, itm]);
-        });
+      let mailfromlocal = await ParseContent("mail", StorePath);
+      if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
+        DispatchMails(mailfromlocal.Mail, mailfromlocal?.Body);
         await UpdateArrayWithLatestMail();
       } else {
-        RetrieveFromFolder();
+        parseToFn();
       }
     } catch (error) {
-      RetrieveFromFolder();
+      console.log(error);
     }
   }
 
-  function RetrieveFromFolder() {
-    setMail([]),
-      setBody([]),
-      setenvelope([]),
-      setisAnyMailOpen(false),
-      setEnvarr([]);
-    infoclient = new ImapFlow(user);
-    FetchMail(
-      setMail,
-      setBody,
-      infoclient,
-      fLimit,
-      0,
-      false,
-      false,
-      location?.state
-    );
+  function parseToFn() {
+    fetchMail(false, false);
   }
-  function FetchUptoNextLimit() {
-    let rlen = tLen - envelope?.length;
-    let client = new ImapFlow(user);
-    FetchMail(
-      setupdatedMail,
-      setupdatedBody,
+
+  async function fetchMail(again, withlimit) {
+    client = new ImapFlow(user);
+    let { Messagesarray, envelopearray } = await FetchMail(
+      client,
+      fLimit,
+      fetchedCount,
+      withlimit,
+      again,
+      MailPath
+    );
+    if (envelopearray.length > 0 && Messagesarray.length > 0) {
+      DispatchMails(envelopearray, Messagesarray);
+      let obj = {};
+      obj.Mail = envelopearray;
+      obj.Body = Messagesarray;
+      setStoreObj(obj);
+    }
+  }
+
+  async function DispatchMails(envelopearray, Messagesarray) {
+    dispatch(setEnvelope(envelopearray));
+    dispatch(setAllMail(Messagesarray));
+    setfetchedCount(envelopearray?.length);
+    setTimeout(() => {
+      dispatch(setLoading(false));
+    }, 500);
+  }
+
+  useEffect(() => {
+    if (StoreObj) {
+      if (
+        Object.values(StoreObj)[0]?.length > 0 &&
+        Object.values(StoreObj)[1]?.length > 0 &&
+        Object.values(StoreObj)[0]?.length ===
+          Object.values(StoreObj)[1]?.length &&
+        store
+      ) {
+        StoreAsFile();
+      }
+    }
+    return () => {};
+  }, [StoreObj]);
+
+  function StoreAsFile() {
+    WriteFile(path.join("mail", StorePath), StoreObj);
+  }
+
+  async function FetchUptoNextLimit() {
+    dispatch(setLoading(true));
+    let rlen = tLen - fetchedCount;
+    client = new ImapFlow(user);
+    let { Messagesarray, envelopearray } = await FetchMail(
       client,
       rlen < fLimit ? rlen : fLimit,
-      envelope?.length,
+      fetchedCount,
       true,
       true,
-      location?.state
+      MailPath
     );
+    if (envelopearray.length > 0 && Messagesarray.length > 0) {
+      let envelopeconcat = envelopearray.concat(Envelope);
+      let maillistconcat = Messagesarray?.concat(maillist);
+      CallToaddLatestMail(envelopeconcat, maillistconcat);
+      dispatch(setLoading(false));
+    }
   }
 
-  useEffect(() => {
-    if (Mail?.length) {
-      let result = [];
-      result = Mail?.filter((e, i, a) => a.indexOf(e) === i);
-      result?.map((val) => {
-        setEnvarr((vl) => [...vl, val?.envelope]);
-      });
-      setfetchedCount(result?.length);
-    }
-    if (fetchedCount < Mail?.length && store) {
-      storeMails();
-      setcnt(cnt + 1);
-    }
-    return () => {};
-  }, [Mail]);
-
-  async function storeMails() {
-    let obj = {};
-    obj.Mail = Mail;
-    obj.Body = Body;
-    await WriteFile(path.join("mail", storepath), obj);
-  }
-
-  function UpdateArrayWithLatestMail() {
+  async function UpdateArrayWithLatestMail() {
     let updatedClient = new ImapFlow(user);
-    OnUpdatedMailFromServer(
-      updatedClient,
-      setNewMail,
-      setNewBody,
-      tLen,
-      setlmLen,
-      Mail,
-      Body,
-      location?.state
-    );
+
+    let { latestmailwithenvelope, count, latestMessagesarray } =
+      await OnUpdatedMailFromServer(updatedClient, tLen, MailPath);
+
+    if (latestmailwithenvelope?.length > 0 && latestMessagesarray?.length > 0) {
+      let mailfromlocal = await ParseContent("mail", MailPath);
+      if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
+        let envelopeconcat = mailfromlocal?.Mail?.concat(
+          latestmailwithenvelope
+        );
+        let maillistconcat = mailfromlocal?.Body?.concat(latestMessagesarray);
+        CallToaddLatestMail(envelopeconcat, maillistconcat);
+      }
+    }
     infoclient = new ImapFlow(user);
-    getInformation(infoclient, location?.state, storepath);
-  }
-  useEffect(() => {
-    if (lmLen > 0) {
-      CallToaddLatestMail();
-    }
-    return () => {};
-  }, [NewMail, NewBody, lmLen]);
-
-  useEffect(() => {
-    if (Envarr) {
-      let result = [];
-      result = Envarr?.filter((e, i, a) => a.indexOf(e) === i);
-      if (result.length == fetchedCount) {
-        setload(false);
-      }
-      setenvelope(result);
-    }
-    return () => {};
-  }, [Envarr, fetchedCount]);
-
-  function CallToaddLatestMail() {
-    if (NewMail?.length == lmLen) {
-      setBody((oldarray) => [...oldarray, ...NewBody]);
-      let mconcat = [];
-      let enconcat = [];
-      NewMail?.map((val) => {
-        mconcat?.push(val);
-        enconcat?.push(val?.envelope);
-      });
-      if (
-        mconcat?.length == NewMail?.length &&
-        enconcat?.length == NewMail?.length
-      ) {
-        setMail((oldarray) => [...oldarray, ...mconcat]);
-        setenvelope((oldarray) => [...oldarray, ...enconcat]);
-      }
-    }
+    getInformation(infoclient, MailPath, StorePath);
   }
 
-  useEffect(() => {
-    if (updatedMail.length > 0 && updatedBody.length > 0) {
-      updatedMail.forEach((val) => {
-        setMail([...Mail, val]);
-        setenvelope([...envelope, val?.envelope]);
-      });
-      updatedBody.forEach((val) => {
-        setBody([...Body, val]);
-      });
-    }
-  }, [updatedMail]);
+  function CallToaddLatestMail(envelopeconcat, maillistconcat) {
+    let obj = {};
+    obj.Mail = envelopeconcat;
+    obj.Body = maillistconcat;
+    dispatch(setEnvelope(envelopeconcat));
+    setfetchedCount(envelopeconcat?.length);
+    dispatch(setAllMail(maillistconcat));
+    setStoreObj(obj);
+  }
 
   function SearchFor() {
-    let FilteredData = envelope?.filter(function (item) {
+    let FilteredData = Envelope?.filter(function (item) {
       return item?.subject?.toLowerCase().includes(SearchText?.toLowerCase());
     });
     if (FilteredData?.length > 0) {
@@ -258,37 +224,36 @@ const dispatch = useDispatch()
     }
   }
 
-  if (load) {
-    return <Loading count={Mail?.length} />;
+  if (loading) {
+    return <Loading />;
   }
 
   return (
     <div>
       <Structure
-        DrawerContents
         isAnyMailOpen={isAnyMailOpen}
         setisAnyMailOpen={setisAnyMailOpen}
-        Data={envelope?.sort((a, b) => {
+        Data={Envelope?.sort((a, b) => {
           return new Date(b.date) - new Date(a.date);
         })}
         openedmail={openedMail}
         setopenedmail={setopenedMail}
         composeopen={composeopen}
         setcomposeopen={setcomposeopen}
-        MailWithBody={Body}
-        message={Mail}
-        Quota={InfoData?.quota}
+        message={maillist}
+        Quota={MailStats?.quota}
         actionFromReply={ActionFromreply}
         setactionFromReply={setActionFromreply}
         searchText={SearchText}
         setsearchText={setSearchText}
         search={SearchFor}
-        FetchLimit={fLimit}
-        FetchUptoNextLimit={FetchUptoNextLimit}
         FilteredData={FilteredData}
         Status={tLen}
+        // FetchLimit={fLimit}
+        FetchUptoNextLimit={FetchUptoNextLimit}
         Refresh={UpdateArrayWithLatestMail}
-        ConfData={InfoData}
+        MailStats={MailStats}
+        folderStructure={folderStructure}
       />
     </div>
   );
@@ -298,7 +263,10 @@ const mapStateToProps = (state) => ({
   loading: state.loadingDetails.loading,
   maillist: state.mailDetails.maillist,
   Envelope: state.mailDetails.Envelope,
-  user:state.userDetails.user
+  currentSideBar: state.appDetails.currentSideBar,
+  folderStructure: state.appDetails.folderStructure,
+  MailStats: state.appDetails.MailStats,
+  user: state.userDetails.user,
 });
 
 const mapDispatchToProps = {};

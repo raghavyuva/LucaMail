@@ -57,7 +57,7 @@ export default function SelfPromotional({
     return (
         <div className=' h-fit  lg:h-[calc(100vh_-_6rem)] p-4 w-screen '>
             <Stats
-                uname={uname}
+                uname={uname && uname}
                 Data={Data}
                 UnreadCount={UnreadCount}
                 StarredCount={StarredCount}

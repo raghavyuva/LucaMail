@@ -4,7 +4,7 @@ import Index from "./navigation";
 import { applyTheme } from "./themes/themeutil";
 function App() {
   useEffect(() => {
-    applyTheme("solarized");
+    applyTheme("RavenBlack");
     return () => { };
   }, []);
 

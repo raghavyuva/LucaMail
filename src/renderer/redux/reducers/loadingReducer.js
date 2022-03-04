@@ -1,7 +1,7 @@
 import { LoadingTypes } from "../constants/action-types";
 
 const initialState = {
-	loading: false,
+	loading: true,
 };
 
 export const loadingReducer = (state = initialState, { type, payload }) => {

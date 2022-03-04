@@ -14,3 +14,4 @@ export const setAuthenticated = (value) => {
 		payload: value,
 	};
 };
+

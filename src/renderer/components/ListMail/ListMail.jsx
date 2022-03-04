@@ -22,7 +22,6 @@ function ListMail({
   setselected,
   Refresh,
   setcomposeopen,
-  Body,
 }) {
   let today = new Date();
   const location = useLocation();
@@ -139,15 +138,8 @@ function ListMail({
     }
   }, [UpdatedMailStorage]);
 
-  useEffect(() => {
-    if (envelope?.length == message?.length) {
-      let obj = {};
-      obj.Mail = UpdatedMailStorage;
-      obj.Body = Body;
-      WriteFile(path.join("mail", "mail"), obj);
-    }
-    return () => {};
-  }, [envelope]);
+
+
 
   return (
     <div className="   ">

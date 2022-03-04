@@ -15,44 +15,49 @@ import {
 } from "react-icons/md";
 import { HiTrash } from "react-icons/hi";
 import { readFile } from "../../lib/fileAction";
+import { useDispatch } from "react-redux";
+import {
+  setActiveSideBar,
+  setFolderStrucure,
+} from "../../redux/actions/appActions";
 const path = require("path");
 function SideBar({
-  ExtendedSideBarContents,
   composeopen,
   setcomposeopen,
   setactionFromReply,
   isAnyMailOpen,
   showSupportCard,
+  folderStructure,
 }) {
   const [active, setactive] = useState(0);
   const location = useLocation();
-
-  const [SideContent, setSideContent] = useState(
-    JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
-      ? JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
-      : 0
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!SideContent) {
-      setSideContent(
-        JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
-          ? JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
-          : 0
+    let isMounted = true;
+    if (!folderStructure) {
+      dispatch(
+        setFolderStrucure(
+          JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
+            ? JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
+            : 0
+        )
       );
     }
-
-    return () => {};
-  }, [ExtendedSideBarContents]);
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     let x = location.pathname.substring(location.pathname.lastIndexOf(":") + 1);
     let y = x.split("%");
     if (y[0] == "/") {
-      y[0] = SideContent ? SideContent[0]?.path : y[0];
+      y[0] = folderStructure ? folderStructure[0]?.path : y[0];
     }
-    SideContent.length > 0 &&
-      SideContent?.map((content, index) => {
+    dispatch(setActiveSideBar(y[0]));
+    folderStructure?.length > 0 &&
+      folderStructure?.map((content, index) => {
         if (
           content?.path
             ?.substring(content?.path?.lastIndexOf("/") + 1)
@@ -77,30 +82,6 @@ function SideBar({
       });
   }, [location]);
 
-  function ChooseIcons(label) {
-    let l = label?.toLowerCase();
-    switch (l) {
-      case "inbox":
-        return MdInbox;
-      case "starred":
-        return MdStar;
-      case "drafts":
-        return MdDrafts;
-      case "important":
-        return MdLabelImportant;
-      case "junk":
-        return MdReport;
-      case "spam":
-        return MdReport;
-      case "trash" || "bin":
-        return HiTrash;
-      case "sent mail":
-        return MdSend;
-      default:
-        return MdFolder;
-    }
-  }
-
   return (
     <div className=" flex flex-col shadow-lg justify-between h-[calc(100vh_-_2rem)] ml-2">
       <div className="flex flex-col justify-center ">
@@ -112,8 +93,8 @@ function SideBar({
           />
         )}
         <div className=" flex flex-col mt-2   ">
-          {SideContent.length &&
-            SideContent?.map((content, index) => (
+          {folderStructure?.length &&
+            folderStructure?.map((content, index) => (
               <>
                 {!content?.folders && (
                   <SideElementsComp
@@ -139,7 +120,7 @@ function SideBar({
                 ))}
               </>
             ))}
-      </div>
+        </div>
       </div>
       <div className=" flex flex-col">
         {!showSupportCard && <SupportCard />}
@@ -160,3 +141,27 @@ function SideBar({
 }
 
 export default SideBar;
+
+function ChooseIcons(label) {
+  let l = label?.toLowerCase();
+  switch (l) {
+    case "inbox":
+      return MdInbox;
+    case "starred":
+      return MdStar;
+    case "drafts":
+      return MdDrafts;
+    case "important":
+      return MdLabelImportant;
+    case "junk":
+      return MdReport;
+    case "spam":
+      return MdReport;
+    case "trash" || "bin":
+      return HiTrash;
+    case "sent mail":
+      return MdSend;
+    default:
+      return MdFolder;
+  }
+}

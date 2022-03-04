@@ -71,11 +71,12 @@ function DisplayMails({
           </div>
         </div>
       </div>
-      <div className=" justify-center items-center flex p-4">
+      <div className=" justify-center text-primary-text items-center flex p-4">
         <iframe
           srcDoc={Html}
           style={{
             color: "white",
+                        
           }}
           className="w-full aspect-video border-0  text-primary-text overflow-y-scroll h-full  body"
         />

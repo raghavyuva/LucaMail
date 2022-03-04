@@ -3,13 +3,10 @@ import { checkExists, createFolder, readFile } from "~/lib/fileAction";
 import { connect, useDispatch } from "react-redux";
 import { setAuthenticated } from "~/redux/actions/UserActions";
 import Login from "~/pages/Login";
-import WindowBar from "~/components/TopBar/WindowBar";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { getInformation } from "~/services/flow";
 import Folder from "~/pages/Folder";
 import Settings from "~/pages/Settings";
 import NotFound from "./NotFound";
-// import Layout from "../pages/Layout";
 import { setUser } from "../redux/actions/UserActions";
 import Inbox from "../pages/Inbox";
 const { ImapFlow } = require("imapflow");
@@ -27,7 +24,7 @@ function Index({ Authenticated }) {
     if (data?.auth?.user && data?.auth?.pass) {
       dispatch(setAuthenticated(true));
       dispatch(setUser(data));
-      if (!checkExists("conf" || !checkExists("mail"))) {
+      if (!checkExists("conf") || !checkExists("mail")) {
         createFolder("conf");
         createFolder("mail");
       }
@@ -38,6 +35,8 @@ function Index({ Authenticated }) {
       isMounted = false;
     };
   }, [data]);
+
+
 
   return (
     <div>
