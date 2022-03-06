@@ -3,7 +3,7 @@ import TitleBar from "~/components/TopBar/WindowBar";
 
 function Loading({ icon }) {
   return (
-    <div className="">
+    <div className="bg-LoadingBackground  text-LoadingText">
       <>
         <TitleBar icon={icon} />
         <div className="flex flex-col justify-center items-center      h-[calc(100vh_-_2rem)]">
@@ -13,7 +13,7 @@ function Loading({ icon }) {
             </span>
             <div
               style={{ borderTopColor: "transparent" }}
-              className="w-8 h-8  border-4 border-blue-400 border-solid rounded-full animate-spin"
+              className="w-8 h-8  border-4 border-LoadingIcon border-solid rounded-full animate-spin"
             ></div>
           </div>
         </div>

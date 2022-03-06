@@ -3,10 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setAuthenticated } from "~/redux/actions/UserActions";
 import { setActiveSideBar } from "../../redux/actions/appActions";
-import { setLoading } from "../../redux/actions/LoadingActions";
 import { setAllMail, setEnvelope } from "../../redux/actions/MailList";
-const { ipcRenderer } = require("electron");
-const ipc = ipcRenderer;
 const os = require("os");
 const homedir = os.homedir();
 var fs = require("fs");
@@ -15,8 +12,6 @@ let appPath = "luca";
 function SideElementsComp({ index, label, Icon, active, link, bottom }) {
   const [visible] = useState(false);
   const dispatch = useDispatch();
-
-
 
   return (
     <Link
@@ -50,7 +45,7 @@ function SideElementsComp({ index, label, Icon, active, link, bottom }) {
       }}
       className={`${
         active === label ? "" : "opacity-100 "
-      }  my-2     cursor-pointer opacity-90    no-underline  `}
+      }  my-3     cursor-pointer opacity-90    no-underline  `}
     >
       <div className="flex justify-between flex-row items-center ">
         <div
@@ -62,15 +57,15 @@ function SideElementsComp({ index, label, Icon, active, link, bottom }) {
             <Icon
               className={` ${
                 active == label
-                  ? "bg-primary text-primary-background"
-                  : " bg-primary-background  text-primary-text"
-              } p-2 rounded-lg shadow-lg `}
+                  ? "bg-SideBarIconActiveBackground text-SideBarIconText"
+                  : " bg-SideBarIconInActiveBackground  text-text"
+              } p-2 rounded-lg shadow-lg  `}
               size={30}
             />
           )}
 
           <div>
-            <span className="text-primary-text capitalize    font-semibold pl-2  no-underline ">
+            <span className="text-text capitalize    font-semibold pl-2  no-underline ">
               {label}
             </span>
           </div>

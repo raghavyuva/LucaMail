@@ -13,7 +13,7 @@ function SideBarWrapper({
   showSupportCard,
 }) {
   return (
-    <div className="bg-positive    md:w-32  w-0 h-screen">
+    <div className="bg-SideBarBackground    md:w-36  w-0 h-screen">
       <div className="md:flex flex-col   hidden h-full">
         <ul className="">
           <SideBar

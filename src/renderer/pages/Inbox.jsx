@@ -65,7 +65,6 @@ function Home({
   async function GetFolderStructure() {
     try {
       let folder = await ParseContent("conf", "conf.txt");
-      console.log(folder)
       if (folder) {
         DispatchFolderStructure(folder);
       } else {
@@ -101,9 +100,11 @@ function Home({
       let mailfromlocal = await ParseContent("mail", "mail");
       if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
         DispatchMails(mailfromlocal.Mail, mailfromlocal?.Body);
+        console.log("from local");
         await UpdateArrayWithLatestMail();
       } else {
         parseToFn();
+        console.log("from server");
       }
     } catch (error) {
       console.log(error);
@@ -125,11 +126,17 @@ function Home({
       "INBOX"
     );
     if (envelopearray.length > 0 && Messagesarray.length > 0) {
-      DispatchMails(envelopearray, Messagesarray);
-      let obj = {};
-      obj.Mail = envelopearray;
-      obj.Body = Messagesarray;
-      setStoreObj(obj);
+      let converttojson = await JSON.stringify(Messagesarray, Set_toJSON);
+      if (converttojson) {
+        let parsedjson = await JSON.parse(converttojson);
+        if (parsedjson) {
+          DispatchMails(envelopearray, parsedjson);
+          let obj = {};
+          obj.Mail = envelopearray;
+          obj.Body = Messagesarray;
+          setStoreObj(obj);
+        }
+      }
     }
   }
 
@@ -159,10 +166,15 @@ function Home({
     WriteFile(path.join("mail", "mail"), StoreObj);
   }
 
+  function Set_toJSON(key, value) {
+    if (typeof value === "object" && value instanceof Set) {
+      return [...value];
+    }
+    return value;
+  }
   async function FetchUptoNextLimit() {
     dispatch(setLoading(true));
     let rlen = tLen - fetchedCount;
-    console.log(tLen, fetchedCount, rlen);
     client = new ImapFlow(user);
     let { Messagesarray, envelopearray } = await FetchMail(
       client,

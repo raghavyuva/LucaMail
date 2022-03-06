@@ -99,7 +99,7 @@ function SideBar({
                 {!content?.folders && (
                   <SideElementsComp
                     label={content?.folders ? "" : content?.name}
-                    key={index}
+                    key={content?.path?.toString()}
                     index={index}
                     Icon={ChooseIcons(content?.name)}
                     active={active}
@@ -110,8 +110,8 @@ function SideBar({
                 {content?.folders?.map((folder, i) => (
                   <SideElementsComp
                     label={folder.name}
-                    key={i}
-                    index={i}
+                    key={folder?.path?.toString()}
+                    index={folder?.path?.toString()}
                     Icon={ChooseIcons(folder?.name)}
                     active={active}
                     link={folder.path}
@@ -128,7 +128,7 @@ function SideBar({
           sidebarBottomContents.map((content, index) => (
             <SideElementsComp
               label={content.label}
-              key={index.toString()}
+              key={content?.id}
               index={index}
               Icon={content.icon}
               link={content.link}

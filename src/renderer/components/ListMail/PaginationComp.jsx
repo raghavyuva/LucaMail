@@ -6,8 +6,8 @@ function PaginationComp({
     return (
 
 
-        <div className="flex self-end  text-coolGray-800">
-            <button title="fetch more" type="button" className="inline-flex items-center justify-center self-end w-8 h-8 py-0 border rounded-md shadow-md bg-coolGray-50 border-coolGray-100"
+        <div className="flex self-end  text-text">
+            <button title="fetch more" type="button" className="inline-flex items-center justify-center self-end w-8 h-8 py-0 bg-MailCardBackground rounded-md shadow-md "
                 onClick={() => FetchUptoNextLimit()}
             >
                 <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-4">

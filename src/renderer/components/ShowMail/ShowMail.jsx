@@ -23,12 +23,12 @@ function ShowMail({
     setopenedmail,
     composeopen,
     setcomposeopen,
-    MailWithBody,
     message,
     actionFromReply,
     setactionFromReply,
     maillist,
-    pathContents
+    pathContents,
+    setisAnyMailOpen
 }) {
     const { contents, rightcontent } = ListOpenedBar;
     const [ActiveMail, setActiveMail] = useState(null);
@@ -50,7 +50,6 @@ function ShowMail({
         for (let index = 0; index < message?.length; index++) {
             if (message[index]?.envelope?.messageId === openedmail?.messageId) {
                 setActiveIndex(index);
-                console.log(message[index]?.body)
                 setActiveMail(message[index]?.body);
                 for (let x = 0; x < message?.length; x++) {
                     const element = message[x];
@@ -89,16 +88,16 @@ function ShowMail({
 
     useEffect(() => {
 
-        if ((envelope?.length == UpdatedMailStorage?.length) && singleMail) {
-            let obj = {};
-            obj.Mail = UpdatedMailStorage;
-            obj.Body = MailWithBody;
-            WriteFile((path.join("mail",
-                "mail")), obj)
-        }
-        return () => {
+        // if ((envelope?.length == UpdatedMailStorage?.length) && singleMail) {
+        //     let obj = {};
+        //     obj.Mail = UpdatedMailStorage;
+        //     obj.Body = MailWithBody;
+        //     WriteFile((path.join("mail",
+        //         "mail")), obj)
+        // }
+        // return () => {
 
-        };
+        // };
     }, [envelope]);
 
 
@@ -138,7 +137,7 @@ function ShowMail({
     }
 
     return (
-        <div className='p-2 bg-positive'>
+        <div className='p-2 bg-background'>
             <div className='flex flex-row justify-between items-center mt-3  '>
                 <div className='flex '>
                     {
@@ -147,7 +146,6 @@ function ShowMail({
                                 Icon={item.icon}
                                 func={item.func}
                                 id={Uid}
-                                MailWithBody={MailWithBody}
                                 ActiveMail={ActiveMail}
                                 maillist={maillist}
                                 message={message}
@@ -164,7 +162,6 @@ function ShowMail({
                                     Icon={item.icon}
                                     func={item.tooltip}
                                     ActiveMail={ActiveMail}
-                                    MailWithBody={MailWithBody}
                                     setActiveMail={setActiveMail}
                                     setopenedmail={setopenedmail}
                                     ActiveIndex={ActiveIndex}
@@ -194,6 +191,7 @@ function ShowMail({
                         setactionFromReply={setactionFromReply}
                         actionFromReply={actionFromReply}
                         DownloadAttachMents={(file) => { DownloadAttachMents(file) }}
+                        setisAnyMail={setisAnyMailOpen}
                     />
                 }
             </div>

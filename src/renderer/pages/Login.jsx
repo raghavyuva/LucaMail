@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   MdAlternateEmail,
   MdOutlineDoorFront,
@@ -56,6 +56,12 @@ function Login({ loading }) {
     },
     secure: securesmtp,
   });
+
+  useEffect(() => {
+    dispatch(setLoading(false));
+
+    return () => {};
+  }, []);
 
   const onLoginClick = async () => {
     dispatch(setLoading(true));
@@ -135,7 +141,7 @@ function Login({ loading }) {
         
       justify-center text-primary-text bg-[url('https://images.pexels.com/photos/696680/pexels-photo-696680.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover "
       >
-        <div className="w-max px-2 py-12  sm:px-6 lg:px-4 sm:py-10 lg:py-14 bg-positive shadow-lg rounded-md">
+        <div className="w-max px-2 py-12  sm:px-6 lg:px-4 sm:py-10 lg:py-14 bg-CardBackground shadow-lg rounded-md">
           <div className="max-w-lg mx-auto text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">
               Incoming Server Settings

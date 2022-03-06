@@ -18,14 +18,8 @@ function TopBar({
   isDrawerOpen,
 }) {
   const [isExpanded, setisExpanded] = useState(false);
-  const [selected, setselected] = useState("RavenBlack");
   const [toggle, settoggle] = useState(false);
   const { ref } = useComponentVisible(false, toggle, settoggle);
-
-  useEffect(() => {
-    setselected(selected);
-    applyTheme(selected);
-  }, [selected]);
 
   const capacity = (
     (Quota?.storage?.limit - Quota?.storage?.usage) /
@@ -37,23 +31,23 @@ function TopBar({
   return (
     <div className=" sticky  top-0 z-0 hidden md:flex  ">
       <nav
-        className={`bg-secondary ${
+        className={`bg-SideBarBackground ${
           isDrawerOpen && "w-[calc(100vw_-_2rem)]"
         } w-screen  shadow-lg`}
       >
         <div className="">
           <div className="flex items-center md:justify-between h-14">
             <div className="flex flex-row items-center">
-              <div className="flex  items-center ml-10 bg-positive rounded-md  p-1   focus-within:shadow-lg ">
+              <div className="flex  items-center ml-10  rounded-md  p-1  bg-searchBackground shadow-md focus-within:shadow-lg ">
                 <MdOutlineFilterList
                   size={30}
-                  className="mr-2  cursor-pointer "
+                  className="mr-2  text-SearchIcons cursor-pointer "
                   onClick={() => settoggled(!toggled)}
                 />
 
                 <input
                   type="text"
-                  className=" text-primary-text  outline-none bg-positive"
+                  className=" text-searchText  outline-none bg-searchBackground "
                   placeholder="Search All Mails"
                   onFocus={() => setisExpanded(!isExpanded)}
                   value={searchText}
@@ -65,7 +59,7 @@ function TopBar({
                   }}
                 />
                 <HiSearch
-                  className="text-primary-text mx-2"
+                  className="text-SearchIcons mx-2"
                   size={20}
                   onClick={search}
                 />
@@ -74,10 +68,10 @@ function TopBar({
             <div className="md:flex  items-center hidden  ">
               {Quota?.storage?.status && (
                 <div className="lg:flex hidden ">
-                  <span className="text-primary-text font-mono mr-2">
+                  <span className="text-text font-mono mr-2">
                     Disk Used: {Quota?.storage?.status} ,
                   </span>
-                  <span className="text-primary-text font-mono mr-2">
+                  <span className="text-text font-mono mr-2">
                     Disk Available : {capacity} gb
                   </span>
                 </div>
@@ -85,16 +79,18 @@ function TopBar({
 
               <div ref={ref} className="m-2 flex items-center mr-4  ">
                 <div className="flex flex-col items-center ">
-                  <ThemeSelect
+                  {/* <ThemeSelect
                     selected={selected}
                     setselected={setselected}
                     toggle={toggle}
                     settoggle={settoggle}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="flex items-center justify-evenly m-2">
-                <span className=" font-semibold  leading-loose">{uname}</span>
+                <span className=" font-semibold  text-UserEmailText leading-loose">
+                  {uname}
+                </span>
               </div>
             </div>
           </div>

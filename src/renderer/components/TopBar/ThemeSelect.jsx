@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { MdArrowDropDown, MdCheck } from 'react-icons/md'
-import { ListOfThemes } from '../../themes'
+// import { ListOfThemes } from '../../themes'
 
 function ThemeSelect({
     selected,

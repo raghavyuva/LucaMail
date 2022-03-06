@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import TitleBar from "~/components/TopBar/WindowBar";
 import { SettingTypes } from "~/static/constants/Settings";
+import { readFile, WriteFile } from "../lib/fileAction";
+const path = require("path");
+const fs = require("fs");
 
 function Settings({}) {
   let localval = JSON.parse(localStorage.getItem("Settings"));
   const [Checked, setChecked] = useState(
     localval ? localval : SettingTypes["boolvaled"]
   );
-
+  const [CustomThemeFile, setCustomThemeFile] = useState();
   function OnApplyChanges() {
     localStorage.setItem("Settings", JSON.stringify(Checked));
     if (Checked[2].default == false) {
@@ -15,17 +18,34 @@ function Settings({}) {
     alert("changes applied");
   }
 
+  async function WriteCustomTheme() {
+    if (!CustomThemeFile) {
+      alert("please select file");
+    } else {
+      let ReadStream;
+      let themepath = path.join("conf", "theme");
+      try {
+        ReadStream = fs.readFileSync(CustomThemeFile?.path, {
+          encoding: "utf8",
+        });
+        if (ReadStream) {
+          WriteFile(themepath, ReadStream);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   return (
     <div>
-      <TitleBar
-        icon="back"
-      />
-      <div className="mt-10 sm:mt-0  bg-opacity-10 w-screen h-[calc(100vh_-_2rem)] bg-[url('https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80')] items-center justify-center flex flex-col">
+      <TitleBar icon="back" />
+      <div className="mt-10 sm:mt-0 text-text  bg-opacity-10 w-screen h-[calc(100vh_-_2rem)] bg-[url('https://images.unsplash.com/photo-1491895200222-0fc4a4c35e18?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80')] items-center justify-center flex flex-col">
         <div className="  ">
-          <div className=" overflow-hidden sm:rounded-md shadow-2xl  px-20 bg-secondary">
+          <div className=" overflow-hidden sm:rounded-md shadow-2xl  px-20 bg-MailCardBackground">
             <div className="px-4 py-5  space-y-6 sm:p-6">
               <fieldset>
-                <legend className="text-base font-medium text-primary-text">
+                <legend className="text-base font-medium text-text">
                   General Settings
                 </legend>
                 {Checked?.map((val, index) => {
@@ -63,9 +83,23 @@ function Settings({}) {
             <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
               <button
                 onClick={OnApplyChanges}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-block px-5 py-3 mt-8 text-sm font-medium  bg-BannerCardButtonBackground rounded-tl-2xl rounded-br-2xl text-BannerCardButtonText shadow-lg "
               >
-                apply changes
+                save changes
+              </button>
+            </div>
+            <div className="flex p-2">
+              <input
+                type="file"
+                onChange={(e) => {
+                  setCustomThemeFile(e.target.files[0]);
+                }}
+              />
+              <button
+                onClick={WriteCustomTheme}
+                className="inline-block px-5 py-3  text-sm font-medium  bg-BannerCardButtonBackground rounded-tl-2xl rounded-br-2xl text-BannerCardButtonText shadow-lg "
+              >
+                apply theme
               </button>
             </div>
           </div>

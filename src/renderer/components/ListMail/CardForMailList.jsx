@@ -1,100 +1,66 @@
-import { HiOutlineStar, HiStar } from "react-icons/hi";
 import React, { useState } from "react";
-import { MdOutlineMarkChatUnread } from "react-icons/md";
-function CardForMailList({
-  username,
-  subject,
-  body,
-  time,
-  isstarred,
-  read,
-  setisAnyMailOpen,
-  setopenedmail,
-  messageId,
-  mailObject,
-  CheckForSelectedDiv,
-  ref,
-  setcomposeopen,
-}) {
-  const [localStar, setlocalStar] = useState(isstarred);
-  const [localread, setlocalread] = useState(read);
+import { MdStar } from "react-icons/md";
+function CardForMailList({ Data, setisAnyMailOpen, setopenedmail }) {
+  const { sender, from, date, replyTo, subject } = Data;
+  let today = new Date();
+
+  function istoDay() {
+    let converted = new Date(date);
+    let val;
+    if (converted?.toDateString() === today?.toDateString()) {
+      val = converted?.toTimeString();
+    } else {
+      val = converted?.toDateString();
+    }
+    return val.slice(0, 8);
+  }
+
   return (
-    <div
-      ref={ref}
-      className={`${
-        localread ? "bg-positive  opacity-90" : "bg-positive opacity-100"
-      } rounded-sm  mr-4  flex flex-col   overflow-clip
-                                       bg-positive shadow-lg lg:max-w-lg  md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
-      onClick={() => {
-        setisAnyMailOpen(true);
-        setopenedmail(mailObject);
-        setlocalread(true);
-        setcomposeopen(false);
-      }}
-    >
-      <div className="flex lg:flex-row flex-col justify-between  ">
-        <div className="flex-row flex justify-start items-center ">
-          <div className="h-10 w-10 bg-gradient-to-tr from-primary via-primary-background to-primary rounded-tr-full pt-2 mr-1 items-center justify-center flex shadow-lg">
-            <span className="uppercase font-extrabold">
-              {subject[0] ? subject[0] : username[0]}
-            </span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-primary-text font-mono font-semibold">
-              {subject}
-            </span>
-          </div>
-        </div>
-        <div className="flex flex-col ">
-          <span className="text-primary-text ">{time ? time : ""}</span>
-        </div>
-      </div>
-      <div>
-        <div className="p-2 flex justify-between ">
-          <span className="text-primary-text text-sm  capitalize text-clip truncate ">
-            {username ? username : ""}
-          </span>
-          {!localread ? (
-            <div className="bg-gradient-to-tr from-primary-background via-positive to-primary px-1 py-1 rounded-br-xl rounded-tl-xl shadow-xl   self-end">
-              <span className="text-sm">read</span>
+    <div>
+      <div
+        className={
+          "relative block px-3  hover:scale-100 bg-MailCardBackground  transition-shadow bg-white  shadow-xl group hover:shadow-lg overflow-hidden  m-2  rounded-lg"
+        }
+        onClick={() => {
+          setisAnyMailOpen(true);
+          setopenedmail(Data);
+          // setlocalread(true);
+          // setcomposeopen(false);
+        }}
+      >
+        <div className="justify-between sm:flex">
+          <div className="flex ">
+            <div className="flex-shrink-0 hidden  sm:block">
+              <div className="h-6 w-6 rounded-full bg-MailCardUserIconBackground text-MailCardUserIconText  mr-1 items-center justify-center flex shadow-lg">
+                <span className="uppercase font-extrabold">
+                  {sender && sender[0]?.name
+                    ? sender[0].name[0]
+                    : sender[0]?.address[0]}
+                </span>
+              </div>
             </div>
-          ) : (
-            <MdOutlineMarkChatUnread
-              size={18}
-              className="text-primary"
-              onClick={() => {
-                setlocalread(!localread);
-                CheckForSelectedDiv(messageId, "unread");
-              }}
-            />
-          )}
-        </div>
-        <div className="flex flex-row justify-between p-2">
-          <span className="text-primary-text cursor-pointer ">
-            {body ? body : ""}
-          </span>
-          <div>
-            <span className="text-primary-text ">
-              {localStar == true ? (
-                <HiStar
-                  size={18}
-                  className="text-primary"
-                  onClick={() => {
-                    setlocalStar(false);
-                    CheckForSelectedDiv(messageId, "removestar");
-                  }}
-                />
-              ) : (
-                <HiOutlineStar
-                  size={18}
-                  onClick={() => {
-                    setlocalStar(true);
-                    CheckForSelectedDiv(messageId, "star");
-                  }}
-                />
-              )}
-            </span>
+            <div>
+              <h5 className="text-sm font-bold ">
+                {sender && sender[0]?.name
+                  ? sender[0].name
+                  : sender[0]?.address}
+              </h5>
+              <p className="mt-1 text-xs font-medium text-primary-text">{}</p>
+            </div>
           </div>
+          <div>{istoDay()}</div>
+        </div>
+        <div className=" sm:flex  justify-between sm:pr-8">
+          <p className="text-sm text-gray-500 truncate">{subject}</p>
+          <strong class="inline-flex items-center  text-red-500  uppercase px-5 py-1.5 rounded-full text-[10px] tracking-wide">
+            <button
+              class=" bg-MailCardReadButtonBackground  text-MailCardReadButtonText hover:opacity-75 transition-opacity rounded-full ml-2.5 -mr-2.5 focus:outline-none focus:ring"
+              type="button"
+            >
+              <span class="sr-only"> star </span>
+              <MdStar className="w-3 h-3 text-MailCardStarredIcon" />
+            </button>
+          </strong>
         </div>
       </div>
     </div>

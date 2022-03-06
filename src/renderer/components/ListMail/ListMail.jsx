@@ -5,6 +5,7 @@ import CardForMailList from "./CardForMailList";
 import ListTopIcons from "./ListTopIcons";
 import { useLocation } from "react-router-dom";
 import { WriteFile } from "~/lib/fileAction";
+import ListBigCard from "./ListBigCard";
 const { ImapFlow } = window.require("imapflow");
 const path = require("path");
 
@@ -22,12 +23,16 @@ function ListMail({
   setselected,
   Refresh,
   setcomposeopen,
+  GridView,
+  setGridView,
+  isAnyMailOpen
 }) {
   let today = new Date();
   const location = useLocation();
   const [singleMail, setsingleMail] = useState();
   const [UpdatedMailStorage, setUpdatedMailStorage] = useState([]);
   const [envelope, setenvelope] = useState([]);
+  const [MailView, setMailView] = useState();
 
   function isFlagged(data, flag) {
     let boolval = false;
@@ -138,41 +143,59 @@ function ListMail({
     }
   }, [UpdatedMailStorage]);
 
-
-
-
   return (
     <div className="   ">
-      <ListTopIcons
-        Refresh={Refresh}
-        toggle={toggle}
-        settoggle={settoggle}
-        selected={selected}
-        setselected={setselected}
-        TotalCount={TotalCount}
-        FetchLimit={FetchLimit}
-        FetchUptoNextLimit={FetchUptoNextLimit}
-        Data={Data}
-      />
-      <div className="flex flex-col ">
+      <div className="w-max flex  ml-8">
+        <ListTopIcons
+          Refresh={Refresh}
+          toggle={toggle}
+          settoggle={settoggle}
+          selected={selected}
+          setselected={setselected}
+          TotalCount={TotalCount}
+          FetchLimit={FetchLimit}
+          FetchUptoNextLimit={FetchUptoNextLimit}
+          Data={Data}
+          GridView={GridView}
+          setGridView={setGridView}
+        />
+      </div>
+      <div
+        className={
+          GridView == 1
+            ? `grid w-full  lg:grid-cols-3 md:grid-cols-2 grid-cols-1 ${isAnyMailOpen && "lg:grid-cols-2 md:grid-cols-1"} `
+            : `w-full `
+        }
+      >
         {Data &&
           Data?.map((data, index) => {
             return (
-              <CardForMailList
-                username={data && data?.from[0]?.address}
-                body={data.subject}
-                subject={data && data?.sender[0]?.name}
-                time={istoDay(data)}
-                isstarred={isFlagged(data, "flagged")}
-                setisAnyMailOpen={setisAnyMailOpen}
-                setopenedmail={setopenedmail}
-                messageId={data.messageId}
-                mailObject={data}
-                read={isFlagged(data, "seen")}
-                CheckForSelectedDiv={CheckForSelectedDiv}
-                key={index.toString()}
-                setcomposeopen={setcomposeopen}
-              />
+              <>
+                {GridView == 0 || GridView == 1 ? (
+                  <CardForMailList
+                    Data={data}
+                    GridView={GridView}
+                    setisAnyMailOpen={setisAnyMailOpen}
+                    setopenedmail={setopenedmail}
+                  />
+                ) : (
+                  <ListBigCard
+                    username={data && data?.from[0]?.address}
+                    body={data.subject}
+                    subject={data && data?.sender[0]?.name}
+                    time={istoDay(data)}
+                    isstarred={isFlagged(data, "flagged")}
+                    setisAnyMailOpen={setisAnyMailOpen}
+                    setopenedmail={setopenedmail}
+                    messageId={data.messageId}
+                    mailObject={data}
+                    read={isFlagged(data, "seen")}
+                    CheckForSelectedDiv={CheckForSelectedDiv}
+                    key={index.toString()}
+                    setcomposeopen={setcomposeopen}
+                  />
+                )}
+              </>
             );
           })}
       </div>

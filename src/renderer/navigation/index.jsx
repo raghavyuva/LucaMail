@@ -9,18 +9,34 @@ import Settings from "~/pages/Settings";
 import NotFound from "./NotFound";
 import { setUser } from "../redux/actions/UserActions";
 import Inbox from "../pages/Inbox";
+import { setTheme } from "../redux/actions/ThemeActions";
+import { DEFAULT_THEME } from "../themes";
+import { ParseContent } from "../utils/Utils";
+import { applyTheme } from "../themes/themeutil";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 
-function Index({ Authenticated }) {
+function Index({ Authenticated, default_theme }) {
   const dispatch = useDispatch();
 
   let data = JSON.parse(readFile(path.join("user", "user.txt")))
     ? JSON.parse(readFile(path.join("user", "user.txt")))
     : null;
 
+  async function CheckPreferredTheme() {
+    let themeSelected = await ParseContent("conf", "theme");
+    let themeObject = JSON.parse(themeSelected);
+    if (themeSelected && themeObject) {
+      applyTheme(themeObject?.preferred);
+      dispatch(setTheme(themeObject?.preferred));
+    } else {
+      applyTheme(DEFAULT_THEME?.PaletteName);
+    }
+  }
+
   useEffect(() => {
     let isMounted = true;
+    CheckPreferredTheme();
     if (data?.auth?.user && data?.auth?.pass) {
       dispatch(setAuthenticated(true));
       dispatch(setUser(data));
@@ -35,8 +51,6 @@ function Index({ Authenticated }) {
       isMounted = false;
     };
   }, [data]);
-
-
 
   return (
     <div>

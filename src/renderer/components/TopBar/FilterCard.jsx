@@ -28,7 +28,7 @@ function FilterCard({
         >
           &#8203;
         </span>
-        <div className="inline-block align-bottom bg-secondary p-2 rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div className="inline-block align-bottom bg-MailCardBackground p-2 rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="flex flex-row justify-between">
             <span className="text-xl font-mono font-bold">Filter Messages</span>
             <span>

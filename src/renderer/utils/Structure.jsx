@@ -44,6 +44,7 @@ function Structure({
   const [selected, setselected] = useState();
   const { ref } = useComponentVisible(false, toggle, settoggle);
   let SettingFromStorage = JSON.parse(localStorage.getItem("Settings"));
+  const [GridView, setGridView] = useState(2);
 
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
@@ -142,13 +143,19 @@ function Structure({
           )}
           <div className="flex flex-1 flex-row overflow-hidden  ">
             {Data?.length > 0 && (
-              <div className=" overflow-y-scroll  scroll-smooth    w-max justify-center items-center scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary  scrollbar-thumb-rounded-full scrollbar-track-rounded-full ">
+              <div
+                className={`overflow-y-scroll ${
+                  GridView == 2 ? "w-max" : "w-full"
+                } scroll-smooth     justify-center items-center scrollbar-thin scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full `}
+              >
                 <ListMail
                   Data={
                     FilteredData && FilteredData?.length > 0
                       ? FilteredData
                       : Data
                   }
+                  GridView={GridView}
+                  setGridView={setGridView}
                   Tabs={Tabs}
                   isAnyMailOpen={isAnyMailOpen}
                   setisAnyMailOpen={setisAnyMailOpen}
@@ -161,6 +168,7 @@ function Structure({
                   FetchUptoNextLimit={FetchUptoNextLimit}
                   setcomposeopen={setcomposeopen}
                   Refresh={Refresh}
+                  isAnyMailOpen={isAnyMailOpen}
                 />
               </div>
             )}
@@ -175,6 +183,7 @@ function Structure({
                   message={message}
                   actionFromReply={actionFromReply}
                   setactionFromReply={setactionFromReply}
+                  setisAnyMailOpen={setisAnyMailOpen}
                   maillist={Data}
                   pathContents={
                     MailStats
@@ -185,7 +194,7 @@ function Structure({
               </div>
             ) : (
               <>
-                {!composeopen ? (
+                {!composeopen && GridView == 2 && (
                   <div className=" overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary w-full md:flex hidden  ">
                     <SelfPromotional
                       uname={MailStats?.user ? MailStats?.user : ""}
@@ -194,7 +203,8 @@ function Structure({
                       setcomposeopen={setcomposeopen}
                     />
                   </div>
-                ) : (
+                )}
+                {composeopen && (
                   <div className=" w-full   mx-10">
                     <ComposeBox
                       editorState={editorState}
