@@ -11,6 +11,7 @@ function SideBarWrapper({
   setactionFromReply,
   isAnyMailOpen,
   showSupportCard,
+  userHome
 }) {
   return (
     <div className="bg-SideBarBackground    md:w-36  w-0 h-screen">
@@ -26,6 +27,7 @@ function SideBarWrapper({
             setactionFromReply={setactionFromReply}
             isAnyMailOpen={isAnyMailOpen}
             showSupportCard={showSupportCard}
+            userHome={userHome}
           />
         </ul>
       </div>

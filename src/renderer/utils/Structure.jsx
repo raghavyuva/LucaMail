@@ -39,6 +39,8 @@ function Structure({
   Refresh,
   MailStats,
   folderStructure,
+  userHome,
+  userslist,
 }) {
   const [toggle, settoggle] = useState(false);
   const [selected, setselected] = useState();
@@ -120,6 +122,7 @@ function Structure({
                 isAnyMailOpen={isAnyMailOpen}
                 showSupportCard={showSupportCard}
                 folderStructure={folderStructure}
+                userHome={userHome}
               />
             )}
           </div>
@@ -139,6 +142,8 @@ function Structure({
               toggled={toggle}
               settoggled={settoggle}
               uname={MailStats?.user}
+              userslist={userslist}
+              userHome={userHome}
             />
           )}
           <div className="flex flex-1 flex-row overflow-hidden  ">
@@ -188,8 +193,11 @@ function Structure({
                   pathContents={
                     MailStats
                       ? MailStats
-                      : JSON.parse(readFile(path.join("conf", "conf.txt")))
+                      : JSON.parse(
+                          readFile(path.join(userHome, "conf", "conf.txt"))
+                        )
                   }
+                  userHome={userHome}
                 />
               </div>
             ) : (

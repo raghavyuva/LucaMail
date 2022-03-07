@@ -9,7 +9,7 @@ const homedir = os.homedir();
 var fs = require("fs");
 const path = require("path");
 let appPath = "luca";
-function SideElementsComp({ index, label, Icon, active, link, bottom }) {
+function SideElementsComp({ index, label, Icon, active, link, bottom ,userHome}) {
   const [visible] = useState(false);
   const dispatch = useDispatch();
 
@@ -29,7 +29,7 @@ function SideElementsComp({ index, label, Icon, active, link, bottom }) {
       onClick={() => {
         if (label.toLowerCase().includes("logout")) {
           try {
-            fs.rmSync(path.join(homedir, appPath), {
+            fs.rmSync(path.join(homedir, appPath,userHome), {
               recursive: true,
               force: true,
             });

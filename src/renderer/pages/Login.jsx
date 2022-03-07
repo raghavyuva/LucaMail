@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   MdAlternateEmail,
   MdOutlineDoorFront,
@@ -14,8 +14,8 @@ import Button from "~/components/Basic/Button";
 import { LogintoAccount } from "~/services";
 import { setLoading } from "~/redux/actions/LoadingActions";
 import { checkExists, createFolder, WriteFile } from "~/lib/fileAction";
-import Loading from "../components/Loading/Loading";
 import WindowBar from "../components/TopBar/WindowBar";
+import { readFile } from "../lib/fileAction";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 const pino = require("pino")();
@@ -83,17 +83,18 @@ function Login({ loading }) {
           let result = await LogintoAccount(client);
           if (result == true) {
             if (checkExists("")) {
-              if (checkExists("user")) {
+              if (checkExists(email)) {
                 StoreInfo();
               } else {
-                createFolder("user");
-                createFolder("conf");
+                createFolder(email);
+                createFolder(path.join(email, "conf"));
                 StoreInfo();
               }
             } else {
+              console.log("hey");
               createFolder("");
-              createFolder("user");
-              createFolder("conf");
+              createFolder(email);
+              createFolder(path.join(email, "conf"));
               StoreInfo();
             }
           } else {
@@ -118,20 +119,26 @@ function Login({ loading }) {
   }
 
   function StoreInfo() {
-    WriteFile(path.join("user", "user.txt"), selected);
+    WriteFile(path.join(email, "user.txt"), selected);
     let smtpobj = selected;
     smtpobj.port = smtpPort;
     smtpobj.host = smtpHost;
     delete smtpobj["logger"];
     smtpobj.secure = securesmtp;
-    WriteFile(path.join("user", "smtp.txt"), smtpobj);
+    let userslist = JSON.parse(readFile("userslist"));
+    if (userslist?.length > 0) {
+      userslist?.push(selected);
+    } else {
+      let usersarray = [];
+      usersarray[0] = selected;
+      WriteFile(path.join("userslist"), usersarray);
+    }
+    WriteFile(path.join(email, "smtp.txt"), smtpobj);
     dispatch(setAuthenticated(true));
     dispatch(setLoading(false));
   }
 
-  if (loading) {
-    return <Loading icon={false} />;
-  }
+
 
   return (
     <div>

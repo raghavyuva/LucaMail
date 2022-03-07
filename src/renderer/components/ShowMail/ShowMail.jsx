@@ -28,7 +28,8 @@ function ShowMail({
     setactionFromReply,
     maillist,
     pathContents,
-    setisAnyMailOpen
+    setisAnyMailOpen,
+    userHome
 }) {
     const { contents, rightcontent } = ListOpenedBar;
     const [ActiveMail, setActiveMail] = useState(null);
@@ -105,9 +106,9 @@ function ShowMail({
     function DownloadAttachMents(attachement) {
         try {
             if (attachement) {
-                const downloadPath = path.join(homedir, appPath, "downloads")
+                const downloadPath = path.join(homedir, appPath,userHome, "downloads")
                 if (!fs.existsSync(downloadPath)) {
-                    createFolder("downloads")
+                    createFolder(path.join(userHome,"downloads"))
                 }
                 let fileName = attachement.filename
                 const buff = Buffer.from(attachement?.content)
@@ -150,6 +151,7 @@ function ShowMail({
                                 maillist={maillist}
                                 message={message}
                                 pathContents={pathContents}
+                                userHome={userHome}
                             />
                         ))
                     }
@@ -166,12 +168,12 @@ function ShowMail({
                                     setopenedmail={setopenedmail}
                                     ActiveIndex={ActiveIndex}
                                     message={message}
+                                    userHome={userHome}
                                 />
                             ))
                         }
                     </div>
                 </div>
-
             </div>
             <div className='p-2 mt-2'>
                 {

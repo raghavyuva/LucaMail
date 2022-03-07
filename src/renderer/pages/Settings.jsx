@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import TitleBar from "~/components/TopBar/WindowBar";
 import { SettingTypes } from "~/static/constants/Settings";
 import { readFile, WriteFile } from "../lib/fileAction";
+import { connect, useDispatch } from "react-redux";
 const path = require("path");
 const fs = require("fs");
 
-function Settings({}) {
+function Settings({ user }) {
   let localval = JSON.parse(localStorage.getItem("Settings"));
   const [Checked, setChecked] = useState(
     localval ? localval : SettingTypes["boolvaled"]
@@ -23,7 +24,7 @@ function Settings({}) {
       alert("please select file");
     } else {
       let ReadStream;
-      let themepath = path.join("conf", "theme");
+      let themepath = path.join(user?.auth?.user, "conf", "theme");
       try {
         ReadStream = fs.readFileSync(CustomThemeFile?.path, {
           encoding: "utf8",
@@ -109,4 +110,15 @@ function Settings({}) {
   );
 }
 
-export default Settings;
+const mapStateToProps = (state) => ({
+  Token: state.userDetails.token,
+  loading: state.loadingDetails.loading,
+  default_theme: state.themeDetails.theme,
+  Authenticated: state.userDetails.Authenticated,
+  user: state.userDetails.user,
+  userslist: state.userDetails.userslist,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

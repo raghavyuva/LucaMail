@@ -2,10 +2,6 @@
 import React, { useEffect } from "react";
 import Index from "./navigation";
 function App() {
-  useEffect(() => {
-    return () => { };
-  }, []);
-
   return (
     <div className=" bg-background text-primary-text ">
       <Index />

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { HiSearch } from "react-icons/hi";
 import { MdOutlineFilterList } from "react-icons/md";
 import { applyTheme } from "../../themes/themeutil";
-import ThemeSelect from "./ThemeSelect";
+import ThemeSelect from "./UserSelect";
 import useComponentVisible from "~/utils/TouchBehaviour";
+import UserSelect from "./UserSelect";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/actions/UserActions";
 
 function TopBar({
   Quota,
@@ -16,10 +19,14 @@ function TopBar({
   settoggled,
   uname,
   isDrawerOpen,
+  userslist,
+  userHome,
 }) {
   const [isExpanded, setisExpanded] = useState(false);
   const [toggle, settoggle] = useState(false);
   const { ref } = useComponentVisible(false, toggle, settoggle);
+  const [selected, setselected] = useState(userHome && userHome);
+  const dispatch = useDispatch();
 
   const capacity = (
     (Quota?.storage?.limit - Quota?.storage?.usage) /
@@ -27,6 +34,11 @@ function TopBar({
   )
     .toString()
     .slice(0, 4);
+
+  function onClickHandler(val) {
+    setselected(val?.auth?.user);
+    dispatch(setUser(val));
+  }
 
   return (
     <div className=" sticky  top-0 z-0 hidden md:flex  ">
@@ -79,18 +91,14 @@ function TopBar({
 
               <div ref={ref} className="m-2 flex items-center mr-4  ">
                 <div className="flex flex-col items-center ">
-                  {/* <ThemeSelect
+                  <UserSelect
                     selected={selected}
-                    setselected={setselected}
+                    onClickHandler={(val) => onClickHandler(val)}
                     toggle={toggle}
                     settoggle={settoggle}
-                  /> */}
+                    Data={userslist?.length > 0 && userslist}
+                  />
                 </div>
-              </div>
-              <div className="flex items-center justify-evenly m-2">
-                <span className=" font-semibold  text-UserEmailText leading-loose">
-                  {uname}
-                </span>
               </div>
             </div>
           </div>

@@ -3,7 +3,12 @@ export const UserTypes = {
   SET_TOKEN: "SET_TOKEN",
   SET_UID: "SET_UID",
   SET_AUTHENTICATED: "SET_AUTHENTICATED",
+  USER_HOME:"USER_HOME",
 };
+
+export const UsersList = {
+  SET_USERS:"SET_USERS",
+}
 
 export const LoadingTypes = {
   SET_LOADING: "SET_LOADING",

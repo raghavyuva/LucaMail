@@ -18,6 +18,7 @@ function ShowTopIcons({
   maillist,
   message,
   pathContents,
+  userHome
 }) {
   const cx = new ImapFlow(config);
   const location = useLocation();
@@ -70,7 +71,7 @@ function ShowTopIcons({
       let obj = {};
       obj.Mail = updatedmessage;
       obj.Body = listupdated;
-      WriteFile(Path.join("mail", "mail"), obj);
+      WriteFile(Path.join(userHome,"mail", "mail"), obj);
     }
   }
 

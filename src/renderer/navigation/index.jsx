@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { checkExists, createFolder, readFile } from "~/lib/fileAction";
 import { connect, useDispatch } from "react-redux";
 import { setAuthenticated } from "~/redux/actions/UserActions";
@@ -7,7 +7,7 @@ import { HashRouter, Route, Routes } from "react-router-dom";
 import Folder from "~/pages/Folder";
 import Settings from "~/pages/Settings";
 import NotFound from "./NotFound";
-import { setUser } from "../redux/actions/UserActions";
+import { setUser, setUsersList } from "../redux/actions/UserActions";
 import Inbox from "../pages/Inbox";
 import { setTheme } from "../redux/actions/ThemeActions";
 import { DEFAULT_THEME } from "../themes";
@@ -16,41 +16,93 @@ import { applyTheme } from "../themes/themeutil";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 
-function Index({ Authenticated, default_theme }) {
+function Index({ Authenticated, default_theme, userslist, user }) {
   const dispatch = useDispatch();
+  const [ActiveUser, setActiveUser] = useState();
+  let data = user;
 
-  let data = JSON.parse(readFile(path.join("user", "user.txt")))
-    ? JSON.parse(readFile(path.join("user", "user.txt")))
-    : null;
+  async function GetOneUser() {
+    let users = JSON.parse(readFile("userslist"));
+    if (users?.length > 0 && !user) {
+      dispatch(setUsersList(users));
+      let firstuser = users[1]?.auth?.user;
+      return JSON.parse(readFile(path.join(firstuser, "user.txt")))
+        ? JSON.parse(readFile(path.join(firstuser, "user.txt")))
+        : null;
+    } else {
+      if (userslist?.length > 0 && user) {
+        return JSON.parse(readFile(path.join(user?.auth?.user, "user.txt")))
+          ? JSON.parse(readFile(path.join(user?.auth?.user, "user.txt")))
+          : null;
+      }
+    }
+  }
 
-  async function CheckPreferredTheme() {
-    let themeSelected = await ParseContent("conf", "theme");
+  async function CheckPreferredTheme(data) {
+    let themeSelected = await ParseContent(
+      path.join(data?.auth?.user, "conf"),
+      "theme"
+    );
     let themeObject = JSON.parse(themeSelected);
     if (themeSelected && themeObject) {
-      applyTheme(themeObject?.preferred);
+      applyTheme(themeObject?.preferred,data?.auth?.user);
       dispatch(setTheme(themeObject?.preferred));
     } else {
-      applyTheme(DEFAULT_THEME?.PaletteName);
+      applyTheme(DEFAULT_THEME?.PaletteName,data?.auth?.user);
+    }
+  }
+
+  async function UserDispacth() {
+    data = await GetOneUser();
+    if (data?.auth?.user && data?.auth?.pass) {
+      dispatch(setAuthenticated(true));
+      setActiveUser(data);
+      dispatch(setUser(data));
+      CheckPreferredTheme(data);
+      if (
+        !checkExists(path.join(data?.auth?.user, "conf")) ||
+        !checkExists(path.join(data?.auth?.user, "mail"))
+      ) {
+        createFolder(path.join(data?.auth?.user, "conf"));
+        createFolder(path.join(data?.auth?.user, "mail"));
+      }
+    } else {
+      dispatch(setAuthenticated(false));
+    }
+  }
+
+  async function ChangeUser() {
+    data = await GetOneUser();
+    if (data?.auth?.user && data?.auth?.pass) {
+      dispatch(setAuthenticated(true));
+      setActiveUser(data);
+      dispatch(setUser(data));
+      CheckPreferredTheme(data);
+      if (
+        !checkExists(path.join(data?.auth?.user, "conf")) ||
+        !checkExists(path.join(data?.auth?.user, "mail"))
+      ) {
+        createFolder(path.join(data?.auth?.user, "conf"));
+        createFolder(path.join(data?.auth?.user, "mail"));
+      }
     }
   }
 
   useEffect(() => {
     let isMounted = true;
-    CheckPreferredTheme();
-    if (data?.auth?.user && data?.auth?.pass) {
-      dispatch(setAuthenticated(true));
-      dispatch(setUser(data));
-      if (!checkExists("conf") || !checkExists("mail")) {
-        createFolder("conf");
-        createFolder("mail");
-      }
-    } else {
-      dispatch(setAuthenticated(false));
-    }
+    UserDispacth();
     return () => {
       isMounted = false;
     };
-  }, [data]);
+  }, []);
+
+  useEffect(() => {
+    if (user === ActiveUser) {
+    } else {
+       ChangeUser()
+    }
+    return () => {};
+  }, [user]);
 
   return (
     <div>
@@ -81,6 +133,8 @@ const mapStateToProps = (state) => ({
   loading: state.loadingDetails.loading,
   default_theme: state.themeDetails.theme,
   Authenticated: state.userDetails.Authenticated,
+  user: state.userDetails.user,
+  userslist: state.userDetails.userslist,
 });
 
 const mapDispatchToProps = {};

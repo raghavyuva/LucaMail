@@ -1,6 +1,6 @@
 export const ListOfThemes = {
   Light: {
-    primary: "#003366",
+    primary: "green",
     background: "#feffff",
     text: "#2b2c34",
     windowBarBackground: "#cbe6ef",

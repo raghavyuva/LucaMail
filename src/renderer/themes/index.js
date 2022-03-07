@@ -4,10 +4,10 @@ const path = require("path");
 const { Light } = ListOfThemes;
 export const DEFAULT_THEME = Light;
 
-function CheckCustomTheme() {
+function CheckCustomTheme(email) {
   let CUSTOM_THEMES;
   try {
-    CUSTOM_THEMES = JSON.parse(readFile(path.join("conf", "theme")));
+    CUSTOM_THEMES = JSON.parse(readFile(path.join(email, "conf", "theme")));
     let themeObject = JSON.parse(CUSTOM_THEMES)?.ListOfThemes;
     return themeObject;
   } catch (error) {
@@ -16,5 +16,9 @@ function CheckCustomTheme() {
   }
 }
 
-const DecideBetween = CheckCustomTheme() ? CheckCustomTheme() : ListOfThemes;
-export const themes = DecideBetween;
+const DecideBetween = (email) => {
+  return CheckCustomTheme(email) ? CheckCustomTheme(email) : ListOfThemes;
+};
+export const themes = (email) => {
+  return DecideBetween(email);
+};

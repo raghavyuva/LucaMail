@@ -28,6 +28,7 @@ function SideBar({
   isAnyMailOpen,
   showSupportCard,
   folderStructure,
+  userHome,
 }) {
   const [active, setactive] = useState(0);
   const location = useLocation();
@@ -38,8 +39,10 @@ function SideBar({
     if (!folderStructure) {
       dispatch(
         setFolderStrucure(
-          JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
-            ? JSON.parse(readFile(path.join("conf", "conf.txt")))?.folderTree
+          JSON.parse(readFile(path.join(userHome, "conf", "conf.txt")))
+            ?.folderTree
+            ? JSON.parse(readFile(path.join(userHome, "conf", "conf.txt")))
+                ?.folderTree
             : 0
         )
       );
@@ -105,6 +108,7 @@ function SideBar({
                     active={active}
                     link={content.path}
                     bottom={false}
+                    userHome={userHome}
                   />
                 )}
                 {content?.folders?.map((folder, i) => (
@@ -116,6 +120,7 @@ function SideBar({
                     active={active}
                     link={folder.path}
                     bottom={false}
+                    userHome={userHome}
                   />
                 ))}
               </>
@@ -133,6 +138,7 @@ function SideBar({
               Icon={content.icon}
               link={content.link}
               bottom={true}
+              userHome={userHome}
             />
           ))}
       </div>

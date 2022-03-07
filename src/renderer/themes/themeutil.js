@@ -65,10 +65,10 @@ export const mapTheme = (variables) => {
   };
 };
 
-export const applyTheme = (theme) => {
-  const themeObject = mapTheme(themes[theme]);
+export const applyTheme = (theme,email) => {
+  const themeObject = mapTheme(themes(email)[theme]);
   if (!themeObject) return;
-
+  
   const root = document.documentElement;
 
   Object.keys(themeObject).forEach((property) => {
