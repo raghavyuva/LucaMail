@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { MdArrowDropDown, MdCheck } from "react-icons/md";
+import { MdAdd, MdArrowDropDown, MdCheck } from "react-icons/md";
+import MultiUserAdd from "../Login/MultiUserAdd";
 
-function UserSelect({ selected, toggle, settoggle, Data, onClickHandler }) {
+function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModalOpen}) {
   const [changedval, setchangedval] = useState(selected);
+
 
   useEffect(() => {
     setchangedval(selected);
@@ -11,6 +13,7 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler }) {
   return (
     <div className="relative inline-block text-left">
       <div>
+      
         <button
           onClick={() => settoggle(!toggle)}
           type="button"
@@ -31,6 +34,18 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler }) {
           aria-labelledby="menu-button"
           tabindex="-1"
         >
+          <div className="flex py-2  items-center">
+            <button
+              onClick={() => {
+                setModalOpen(true);
+              }}
+              className="inline-block  text-text bg-primary mr-2  rounded-full hover:bg-background hover:text-indigo-600 active:text-indigo-500 focus:outline-none focus:ring"
+            >
+              <span className="sr-only"> Add User </span>
+              <MdAdd size={20} />
+            </button>
+            <span>Add New User</span>
+          </div>
           {Data.map((val) => {
             return (
               <div
@@ -58,3 +73,4 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler }) {
 }
 
 export default UserSelect;
+

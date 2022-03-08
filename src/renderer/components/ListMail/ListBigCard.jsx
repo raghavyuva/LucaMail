@@ -16,21 +16,8 @@ const ListBigCard = ({
   ref,
   setcomposeopen,
 }) => {
-  let today = new Date();
   const [localStar, setlocalStar] = useState(isstarred);
   const [localread, setlocalread] = useState(read);
-
-  function istoDay() {
-    let converted = new Date(date);
-    let val;
-    if (converted?.toDateString() === today?.toDateString()) {
-      val = converted?.toTimeString();
-    } else {
-      val = converted?.toDateString();
-    }
-    return val.slice(0, 8);
-  }
-
   return (
     <div
       ref={ref}
@@ -39,15 +26,17 @@ const ListBigCard = ({
           ? "bg-MailCardBackground  opacity-90"
           : "bg-MailCardBackground opacity-100"
       } rounded-sm  mr-4  flex flex-col   overflow-clip
-                                      shadow-md hover:shadow-lg lg:max-w-lg  md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
-      onClick={() => {
-        setisAnyMailOpen(true);
-        setopenedmail(mailObject);
-        setlocalread(true);
-        setcomposeopen(false);
-      }}
+        shadow-md hover:shadow-lg lg:max-w-full md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
     >
-      <div className="flex lg:flex-row flex-col justify-between  ">
+      <div
+        className="flex lg:flex-row flex-col justify-between  "
+        onClick={() => {
+          setisAnyMailOpen(true);
+          setopenedmail(mailObject);
+          setlocalread(true);
+          setcomposeopen(false);
+        }}
+      >
         <div className="flex-row flex justify-start items-center ">
           <div className="h-10 w-10 bg-MailCardUserIconBackground  text-text   rounded-full  mr-1 shadow-2xl items-center justify-center flex ">
             <span className="uppercase font-extrabold text-MailCardUserIconText">
@@ -70,7 +59,13 @@ const ListBigCard = ({
             {username ? username : ""}
           </span>
           {!localread ? (
-            <div className="bg-MailCardReadButtonBackground px-1 py-1 rounded-br-xl rounded-tl-xl shadow-xl   self-end">
+            <div
+              onClick={() => {
+                setlocalread(!localread);
+                CheckForSelectedDiv(messageId, "seen");
+              }}
+              className="bg-MailCardReadButtonBackground px-1 py-1 rounded-br-xl rounded-tl-xl shadow-xl   self-end"
+            >
               <span className="text-sm text-MailCardReadButtonText">read</span>
             </div>
           ) : (

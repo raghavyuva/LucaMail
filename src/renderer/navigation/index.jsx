@@ -18,7 +18,8 @@ const path = require("path");
 
 function Index({ Authenticated, default_theme, userslist, user }) {
   const dispatch = useDispatch();
-  const [ActiveUser, setActiveUser] = useState();
+  const [load, setload] = useState(true);
+
   let data = user;
 
   async function GetOneUser() {
@@ -45,18 +46,20 @@ function Index({ Authenticated, default_theme, userslist, user }) {
     );
     let themeObject = JSON.parse(themeSelected);
     if (themeSelected && themeObject) {
-      applyTheme(themeObject?.preferred,data?.auth?.user);
+      applyTheme(themeObject?.preferred, data?.auth?.user);
       dispatch(setTheme(themeObject?.preferred));
+      setload(false)
     } else {
-      applyTheme(DEFAULT_THEME?.PaletteName,data?.auth?.user);
+      applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
+      setload(false)
     }
   }
 
   async function UserDispacth() {
+    setload(true)
     data = await GetOneUser();
     if (data?.auth?.user && data?.auth?.pass) {
       dispatch(setAuthenticated(true));
-      setActiveUser(data);
       dispatch(setUser(data));
       CheckPreferredTheme(data);
       if (
@@ -67,24 +70,8 @@ function Index({ Authenticated, default_theme, userslist, user }) {
         createFolder(path.join(data?.auth?.user, "mail"));
       }
     } else {
+      setload(false)
       dispatch(setAuthenticated(false));
-    }
-  }
-
-  async function ChangeUser() {
-    data = await GetOneUser();
-    if (data?.auth?.user && data?.auth?.pass) {
-      dispatch(setAuthenticated(true));
-      setActiveUser(data);
-      dispatch(setUser(data));
-      CheckPreferredTheme(data);
-      if (
-        !checkExists(path.join(data?.auth?.user, "conf")) ||
-        !checkExists(path.join(data?.auth?.user, "mail"))
-      ) {
-        createFolder(path.join(data?.auth?.user, "conf"));
-        createFolder(path.join(data?.auth?.user, "mail"));
-      }
     }
   }
 
@@ -96,13 +83,9 @@ function Index({ Authenticated, default_theme, userslist, user }) {
     };
   }, []);
 
-  useEffect(() => {
-    if (user === ActiveUser) {
-    } else {
-       ChangeUser()
-    }
-    return () => {};
-  }, [user]);
+  if (load) {
+    return <>hey iam loading</>;
+  }
 
   return (
     <div>

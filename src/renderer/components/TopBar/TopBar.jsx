@@ -13,14 +13,13 @@ function TopBar({
   searchText,
   setsearchText,
   search,
-  selection,
-  setselection,
   toggled,
   settoggled,
   uname,
   isDrawerOpen,
   userslist,
   userHome,
+  setModalOpen
 }) {
   const [isExpanded, setisExpanded] = useState(false);
   const [toggle, settoggle] = useState(false);
@@ -96,6 +95,7 @@ function TopBar({
                     onClickHandler={(val) => onClickHandler(val)}
                     toggle={toggle}
                     settoggle={settoggle}
+                    setModalOpen={setModalOpen}
                     Data={userslist?.length > 0 && userslist}
                   />
                 </div>

@@ -1,15 +1,18 @@
 const simpleParser = window.require("mailparser").simpleParser;
 
 export async function OnUpdatedMailFromServer(client, fetchedCount, path) {
-  await client.connect();
-  let lock = await client.getMailboxLock(path);
+  console.log(path);
   try {
+    await client.connect();
+    let lock = await client.getMailboxLock(path);
     await client.mailboxOpen(path);
     let status = await client.status(path, { unseen: true, messages: true });
+    console.log(status);
     let total = status.messages;
     let count = 0;
     let latestmailwithenvelope = [];
     let latestMessagesarray = [];
+    console.log(total, fetchedCount);
     if (total > fetchedCount) {
       for await (let message of client.fetch(`${fetchedCount + 1}:${total}`, {
         envelope: true,
@@ -32,9 +35,10 @@ export async function OnUpdatedMailFromServer(client, fetchedCount, path) {
         latestmailwithenvelope.push(message.envelope);
       }
     }
+    console.log(latestmailwithenvelope);
     return { count, latestmailwithenvelope, latestMessagesarray };
-  } finally {
-    lock.release();
+  } catch (err) {
+    console.log(err);
   }
   await client.logout();
 }

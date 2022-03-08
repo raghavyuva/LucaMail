@@ -3,7 +3,6 @@ import Structure from "../utils/Structure";
 import { FetchMail, OnUpdatedMailFromServer } from "../services";
 import { useDispatch, connect } from "react-redux";
 import { setAllMail } from "../redux/actions/MailList";
-import Loading from "~/components/Loading/Loading";
 import { checkExists, readFile, WriteFile } from "~/lib/fileAction";
 import { getInformation } from "~/services/flow";
 import { setEnvelope } from "~/redux/actions/MailList";
@@ -12,6 +11,7 @@ import { setLoading } from "../redux/actions/LoadingActions";
 import { setFolderStrucure, setMailStats } from "../redux/actions/appActions";
 import { ParseContent } from "../utils/Utils";
 import { setUser, setUsersList } from "../redux/actions/UserActions";
+import Loading from "../components/Loading/Loading";
 const { ImapFlow } = window.require("imapflow");
 const path = require("path");
 
@@ -25,10 +25,12 @@ function Home({
   folderStructure,
   userslist,
 }) {
+  let allusers = JSON.parse(readFile("userslist"));
   let userHome = user
     ? user?.auth?.user
-    : "raghavendra.19is085@cambridge.edu.in";
-
+    : allusers && allusers?.length > 0
+    ? allusers[0]?.auth?.user
+    : "";
   let MailPath = currentSideBar?.path ? currentSideBar?.path : "INBOX";
   const [StoreObj, setStoreObj] = useState();
   const [isAnyMailOpen, setisAnyMailOpen] = useState(false);
@@ -42,7 +44,9 @@ function Home({
       ? JSON.parse(readFile(path.join(userHome, "conf", "conf.txt")))
       : 0
   );
-  const [ActiveUser, setActiveUser] = useState();
+  const [ActiveUser, setActiveUser] = useState(
+    user ? user : allusers && allusers?.length > 0 ? allusers[0] : ""
+  );
   const [tLen, settLen] = useState(InfoData?.mailStatus?.messages);
   const [fLimit, setfLimit] = useState(tLen ? (tLen > 50 ? 20 : tLen) : 1);
   const [fetchedCount, setfetchedCount] = useState(
@@ -206,6 +210,7 @@ function Home({
     let isMounted = true;
     if (ActiveUser != user) {
       dispatch(setLoading(true));
+      setisAnyMailOpen(false);
       GetFolderStructure();
     }
     return () => {
@@ -244,14 +249,15 @@ function Home({
   }
 
   async function UpdateArrayWithLatestMail(data) {
+    console.log(data, tLen);
     updatedClient = new ImapFlow(data);
 
-    let { latestmailwithenvelope, count, latestMessagesarray } =
+    let { count, latestmailwithenvelope, latestMessagesarray } =
       await OnUpdatedMailFromServer(updatedClient, tLen, "INBOX");
-
     if (latestmailwithenvelope?.length > 0 && latestMessagesarray?.length > 0) {
       let mailfromlocal = await ParseContent(userHome, "mail", "mail");
       if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
+        console.log(mailfromlocal);
         let envelopeconcat = mailfromlocal?.Mail?.concat(
           latestmailwithenvelope
         );
@@ -288,9 +294,9 @@ function Home({
     }
   }
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <div>
       <Structure
@@ -314,11 +320,12 @@ function Home({
         Status={tLen}
         // FetchLimit={fLimit}
         FetchUptoNextLimit={FetchUptoNextLimit}
-        Refresh={UpdateArrayWithLatestMail}
+        Refresh={() => UpdateArrayWithLatestMail(user)}
         MailStats={MailStats}
         folderStructure={folderStructure}
         userHome={userHome}
         userslist={userslist}
+        user={user}
       />
     </div>
   );

@@ -12,6 +12,7 @@ import { SettingTypes } from "~/static/constants/Settings";
 import ComposeBox from "~/components/ShowMail/ComposeBox";
 import FilterCard from "~/components/TopBar/FilterCard";
 import { readFile } from "../lib/fileAction";
+import MultiUserAdd from "../components/Login/MultiUserAdd";
 const path = require("path");
 function Structure({
   isAnyMailOpen,
@@ -41,13 +42,14 @@ function Structure({
   folderStructure,
   userHome,
   userslist,
+  user
 }) {
   const [toggle, settoggle] = useState(false);
   const [selected, setselected] = useState();
   const { ref } = useComponentVisible(false, toggle, settoggle);
   let SettingFromStorage = JSON.parse(localStorage.getItem("Settings"));
   const [GridView, setGridView] = useState(2);
-
+  const [ModalOpen, setModalOpen] = useState(false);
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
       ? SettingFromStorage[0].default
@@ -110,6 +112,7 @@ function Structure({
               onFilterSelection={(val) => OnFilterSelection(val)}
             />
           )}
+          {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
           <div>
             {isDrawerOpen && (
               <SideBar
@@ -144,14 +147,19 @@ function Structure({
               uname={MailStats?.user}
               userslist={userslist}
               userHome={userHome}
+              setModalOpen={setModalOpen}
             />
           )}
           <div className="flex flex-1 flex-row overflow-hidden  ">
             {Data?.length > 0 && (
               <div
+                boundsByDirection
+                onResizeStop={(e, direction, ref, d) => {
+                  console.log(d.width, d.height, direction);
+                }}
                 className={`overflow-y-scroll ${
                   GridView == 2 ? "w-max" : "w-full"
-                } scroll-smooth     justify-center items-center scrollbar-thin scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full `}
+                } scroll-smooth   scrollbar-thin  scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full justify-center items-center  `}
               >
                 <ListMail
                   Data={
@@ -174,6 +182,7 @@ function Structure({
                   setcomposeopen={setcomposeopen}
                   Refresh={Refresh}
                   isAnyMailOpen={isAnyMailOpen}
+                  user={user}
                 />
               </div>
             )}
@@ -198,6 +207,7 @@ function Structure({
                         )
                   }
                   userHome={userHome}
+                  user={user}
                 />
               </div>
             ) : (
