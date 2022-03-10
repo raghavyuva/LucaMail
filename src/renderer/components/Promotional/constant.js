@@ -1,16 +1,16 @@
 export const constant = {
     Banner: [
         {
-            title: "Awesome to be here,",
-            tagline: "Spread the message",
-            description: "Let world knows how you are and where you are, Might be your personnal,official or just an hangout! start sharing with your connections ",
-            PromotebtnText: "Compose New"
+            title: "It's awesome that your here!",
+            tagline: "Spread your messages all around the world!",
+            description: "Let the world knows how you are and where you are! Whether it's your family,friends or just some people, start sharing your messages with them!",
+            PromotebtnText: "Compose New Message"
         }
     ],
     stats: [
         {
-            title: "Hey",
-            tagline: " it's time to see how your mail is working! explore now, to get to know your latest mails",
+            title: "Hey ",
+            tagline: "It's time to check your mail! Refresh LucaMail to check your most recent messages.",
             stat1: "Fetched Messages",
             stat2: "Unread Messages",
             stat3: "Starred Messages",
