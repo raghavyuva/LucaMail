@@ -42,7 +42,7 @@ function Structure({
   folderStructure,
   userHome,
   userslist,
-  user
+  user,
 }) {
   const [toggle, settoggle] = useState(false);
   const [selected, setselected] = useState();
@@ -52,20 +52,14 @@ function Structure({
   const [ModalOpen, setModalOpen] = useState(false);
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
-      ? SettingFromStorage[0].default
-      : SettingTypes["boolvaled"][0].default
+      ? SettingFromStorage[0].defaultval
+      : SettingTypes["boolvaled"][0].defaultval
   );
   const [HideTopbar] = useState(
     SettingFromStorage
-      ? SettingFromStorage[3].default
-      : SettingTypes["boolvaled"][3].default
+      ? SettingFromStorage[3].defaultval
+      : SettingTypes["boolvaled"][3].defaultval
   );
-  const [showSupportCard] = useState(
-    SettingFromStorage
-      ? SettingFromStorage[1].default
-      : SettingTypes["boolvaled"][1].default
-  );
-
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createEmpty()
   );
@@ -101,6 +95,7 @@ function Structure({
         isDrawerOpen={isDrawerOpen}
         setisDrawerOpen={setisDrawerOpen}
       />
+        {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
       <div className=" flex h-[calc(100vh_-_2rem)] ">
         <div ref={ref} className=" overflow-hidden">
           {toggle && (
@@ -112,7 +107,6 @@ function Structure({
               onFilterSelection={(val) => OnFilterSelection(val)}
             />
           )}
-          {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
           <div>
             {isDrawerOpen && (
               <SideBar
@@ -123,9 +117,9 @@ function Structure({
                 actionFromReply={actionFromReply}
                 setactionFromReply={setactionFromReply}
                 isAnyMailOpen={isAnyMailOpen}
-                showSupportCard={showSupportCard}
                 folderStructure={folderStructure}
                 userHome={userHome}
+                user={user}
               />
             )}
           </div>
@@ -158,7 +152,7 @@ function Structure({
                   console.log(d.width, d.height, direction);
                 }}
                 className={`overflow-y-scroll ${
-                  GridView == 2 ? "w-max" : "w-full"
+                  GridView == 2 ? "max-w-sm" : "w-full "
                 } scroll-smooth   scrollbar-thin  scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full justify-center items-center  `}
               >
                 <ListMail

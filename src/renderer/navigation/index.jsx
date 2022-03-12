@@ -5,7 +5,6 @@ import { setAuthenticated } from "~/redux/actions/UserActions";
 import Login from "~/pages/Login";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Folder from "~/pages/Folder";
-import Settings from "~/pages/Settings";
 import NotFound from "./NotFound";
 import { setUser, setUsersList } from "../redux/actions/UserActions";
 import Inbox from "../pages/Inbox";
@@ -13,6 +12,9 @@ import { setTheme } from "../redux/actions/ThemeActions";
 import { DEFAULT_THEME } from "../themes";
 import { ParseContent } from "../utils/Utils";
 import { applyTheme } from "../themes/themeutil";
+import TableViewWrapper from "../components/Table/TableViewWrapper";
+import SettingsWrapper from "../pages/SettingsWrapper";
+import Loading from "../components/Loading/Loading";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 
@@ -26,7 +28,7 @@ function Index({ Authenticated, default_theme, userslist, user }) {
     let users = JSON.parse(readFile("userslist"));
     if (users?.length > 0 && !user) {
       dispatch(setUsersList(users));
-      let firstuser = users[1]?.auth?.user;
+      let firstuser = users[0]?.auth?.user;
       return JSON.parse(readFile(path.join(firstuser, "user.txt")))
         ? JSON.parse(readFile(path.join(firstuser, "user.txt")))
         : null;
@@ -40,25 +42,29 @@ function Index({ Authenticated, default_theme, userslist, user }) {
   }
 
   async function CheckPreferredTheme(data) {
-    let themeSelected = await ParseContent(
-      path.join(data?.auth?.user, "conf"),
-      "theme"
+    let themeObject = await ParseContent(
+      path.join(data?.auth?.user, "conf", "theme")
     );
-    let themeObject = JSON.parse(themeSelected);
-    if (themeSelected && themeObject) {
+    if (themeObject) {
       applyTheme(themeObject?.preferred, data?.auth?.user);
       dispatch(setTheme(themeObject?.preferred));
-      setload(false)
+      setload(false);
     } else {
-      applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
-      setload(false)
+      let localpreferred = localStorage.getItem("preferredtheme");
+      if (localpreferred) {
+        applyTheme(localpreferred, data?.auth?.user);
+      } else {
+        applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
+      }
+      setload(false);
     }
   }
 
   async function UserDispacth() {
-    setload(true)
+    setload(true);
     data = await GetOneUser();
-    if (data?.auth?.user && data?.auth?.pass) {
+    console.log(data);
+    if (data?.auth?.user && (data?.auth?.pass || data?.auth?.accessToken)) {
       dispatch(setAuthenticated(true));
       dispatch(setUser(data));
       CheckPreferredTheme(data);
@@ -70,7 +76,7 @@ function Index({ Authenticated, default_theme, userslist, user }) {
         createFolder(path.join(data?.auth?.user, "mail"));
       }
     } else {
-      setload(false)
+      setload(false);
       dispatch(setAuthenticated(false));
     }
   }
@@ -84,7 +90,11 @@ function Index({ Authenticated, default_theme, userslist, user }) {
   }, []);
 
   if (load) {
-    return <>hey iam loading</>;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 
   return (
@@ -99,7 +109,13 @@ function Index({ Authenticated, default_theme, userslist, user }) {
               exact
               element={<Folder />}
             />
-            <Route index path="/settings" exact element={<Settings />} />
+            <Route index path="/settings" exact element={<SettingsWrapper />} />
+            <Route
+              index
+              path="/tableView"
+              exact
+              element={<TableViewWrapper />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </HashRouter>
@@ -111,6 +127,7 @@ function Index({ Authenticated, default_theme, userslist, user }) {
     </div>
   );
 }
+
 const mapStateToProps = (state) => ({
   Token: state.userDetails.token,
   loading: state.loadingDetails.loading,

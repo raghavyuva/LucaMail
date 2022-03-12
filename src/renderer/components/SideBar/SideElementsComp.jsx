@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setAuthenticated } from "~/redux/actions/UserActions";
+import { readFile } from "../../lib/fileAction";
 import { setActiveSideBar } from "../../redux/actions/appActions";
 import { setAllMail, setEnvelope } from "../../redux/actions/MailList";
 const os = require("os");
@@ -9,9 +10,37 @@ const homedir = os.homedir();
 var fs = require("fs");
 const path = require("path");
 let appPath = "luca";
-function SideElementsComp({ index, label, Icon, active, link, bottom ,userHome}) {
+function SideElementsComp({
+  index,
+  label,
+  Icon,
+  active,
+  link,
+  bottom,
+  userHome,
+  user,
+}) {
   const [visible] = useState(false);
   const dispatch = useDispatch();
+
+  function LogOut() {
+    try {
+      fs.rmSync(path.join(homedir, appPath, userHome), {
+        recursive: true,
+        force: true,
+      });
+      let allusers = JSON.parse(readFile("userslist"));
+      let index = allusers.indexOf(user);
+      allusers.splice(index, 1);
+      if (allusers?.length < 1) {
+        dispatch(setAuthenticated(false));
+      }
+      dispatch(setEnvelope([]));
+      dispatch(setAllMail([]));
+    } catch (error) {
+      alert("error logging out");
+    }
+  }
 
   return (
     <Link
@@ -20,32 +49,24 @@ function SideElementsComp({ index, label, Icon, active, link, bottom ,userHome})
           ? label?.toLowerCase().includes("inbox")
             ? "/"
             : `/folder/:${label}`
-          : label?.toLowerCase().includes("settings")
-          ? "/settings"
+          : link
+          ? link
           : "/",
         state: link,
       }}
       state={link}
       onClick={() => {
         if (label.toLowerCase().includes("logout")) {
-          try {
-            fs.rmSync(path.join(homedir, appPath,userHome), {
-              recursive: true,
-              force: true,
-            });
-            dispatch(setEnvelope([]));
-            dispatch(setAllMail([]));
-            dispatch(setAuthenticated(false));
-          } catch (error) {
-            alert("error logging out");
-          }
+          LogOut();
         } else {
           dispatch(setActiveSideBar(label));
         }
       }}
       className={`${
-        active === label ? "" : "opacity-100 "
-      }  my-3     cursor-pointer opacity-90    no-underline  `}
+        active === label
+          ? "border-l border-l-primary shadow-2xl bg-SideBarIconActiveBackground"
+          : "opacity-100 "
+      }  my-3    mr-2 rounded-lg  cursor-pointer opacity-90 group [transform:translateZ(0)]before:bg-sky-600 before:bottom-0 before:left-0 before:h-full before:w-full before:-translate-x-full hover:before:translate-x-0 before:transition before:ease-in-out before:duration-500    no-underline  `}
     >
       <div className="flex justify-between flex-row items-center ">
         <div
@@ -57,9 +78,9 @@ function SideElementsComp({ index, label, Icon, active, link, bottom ,userHome})
             <Icon
               className={` ${
                 active == label
-                  ? "bg-SideBarIconActiveBackground text-SideBarIconText"
-                  : " bg-SideBarIconInActiveBackground  text-text"
-              } p-2 rounded-lg shadow-lg  `}
+                  ? "text-SideBarIconText bg-MailCardBackground"
+                  : "  bg-SideBarIconActiveBackground text-text"
+              } p-2 rounded-lg shadow-lg group-hover:bg-MailCardBackground transition ease-in-out duration-500  `}
               size={30}
             />
           )}

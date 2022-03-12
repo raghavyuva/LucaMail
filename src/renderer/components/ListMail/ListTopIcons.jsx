@@ -2,9 +2,11 @@ import React from "react";
 import {
   MdGridView,
   MdRefresh,
+  MdTableView,
   MdViewCompact,
   MdViewList,
 } from "react-icons/md";
+import { Link } from "react-router-dom";
 import PaginationComp from "./PaginationComp";
 
 function ListTopIcons({
@@ -15,6 +17,7 @@ function ListTopIcons({
   Data,
   GridView,
   setGridView,
+  message,
 }) {
   return (
     <div className="flex flex-col text-text ">
@@ -24,12 +27,14 @@ function ListTopIcons({
             size={30}
             className="mr-2 cursor-pointer "
             onClick={Refresh}
+            title="Refresh"
           />
           {GridView == 2 && (
             <MdViewList
               className="mr-2 cursor-pointer "
               size={30}
               onClick={() => setGridView(0)}
+              title="List View"
             />
           )}
           {GridView == 0 && (
@@ -37,15 +42,30 @@ function ListTopIcons({
               className="mr-2 cursor-pointer "
               size={30}
               onClick={() => setGridView(1)}
+              title="Grid View"
             />
           )}
           {GridView == 1 && (
             <MdViewCompact
               className="mr-2 cursor-pointer "
+              title="Default View"
               size={30}
               onClick={() => setGridView(2)}
             />
           )}
+          {
+            <Link
+              to={{
+                pathname: "/tableView",
+              }}
+            >
+              <MdTableView
+                title="table view"
+                className="mr-2 cursor-pointer "
+                size={30}
+              />
+            </Link>
+          }
         </div>
         <span className="font-mono font-semibold  mr-4">
           {Data?.length} Fetched Messages

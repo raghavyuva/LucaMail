@@ -6,8 +6,8 @@ const { ipcRenderer } = window.require("electron");
 const ipc = ipcRenderer;
 const WindowBar = ({ icon, isDrawerOpen, setisDrawerOpen }) => {
   return (
-    <div className=" h-8  top-0 bg-windowBarBackground shadow-sm   flex p-2 justify-between  z-50  ">
-      <div>
+    <div className=" h-8  top-0 bg-windowBarBackground shadow-sm   flex  justify-between  z-50  ">
+      <div className="p-2">
         {icon != "back" ? (
           <>
             {icon == false ? (
@@ -15,7 +15,7 @@ const WindowBar = ({ icon, isDrawerOpen, setisDrawerOpen }) => {
             ) : (
               <MdMenu
                 size={20}
-                className="mx-2 text-WindowBarIcon cursor-pointer"
+                className="mx-2 text-WindowBarIcon cursor-pointer  "
                 onClick={() => {
                   setisDrawerOpen(!isDrawerOpen);
                 }}
@@ -27,16 +27,18 @@ const WindowBar = ({ icon, isDrawerOpen, setisDrawerOpen }) => {
             <Link to="/">
               <MdArrowBack
                 size={20}
-                className="mx-2 text-WindowBarIcon cursor-pointer"
+                className="mx-2 text-WindowBarIcon cursor-pointer "
               />
             </Link>
           </>
         )}
       </div>
-      <div className="text-windowBarText font-mono font-bold  titlebar">
-        LucaMail
+      <div className="flex-1 titlebar ">
+        <div className="text-windowBarText self-center text-center p-2 font-mono font-bold  ">
+          LucaMail
+        </div>
       </div>
-      <div className="flex flex-row justify-evenly ">
+      <div className="flex flex-row justify-evenly p-2">
         <VscChromeMinimize
           size={20}
           onClick={() => ipc.send("minimizeApp")}

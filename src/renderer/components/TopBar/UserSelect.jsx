@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { MdAdd, MdArrowDropDown, MdCheck } from "react-icons/md";
-import MultiUserAdd from "../Login/MultiUserAdd";
 
 function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModalOpen}) {
   const [changedval, setchangedval] = useState(selected);

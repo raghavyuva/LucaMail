@@ -1,22 +1,33 @@
-const { ipcRenderer } = window.require("electron");
-const ipc = ipcRenderer;
 export const SettingTypes = {
   boolvaled: [
     {
       label: "Drawer Open on startup",
-      default: true,
+      defaultval: false,
+      description:
+        "Open the Drawer on startup loren sahgjsafcgksh shikfhaskfask",
     },
     {
-      label: "Hide Support Card on Drawer",
-      default: false,
+      label: " Support Card ",
+      defaultval: false,
+      description: "Hide support card on Drawer Hide support card on Drawer",
     },
     {
       label: "Store Mails in Local Drive",
-      default: true,
+      defaultval: true,
+      description: "Store messages in your hard disk as a file",
     },
     {
       label: "Hide TopBar",
-      default: false,
+      defaultval: false,
+      description: "Hide Top Bar consisting of search bar and multi user box",
+    },
+  ],
+  TabHeaders: [
+    {
+      label: "General Settings",
+    },
+    {
+      label: "Theme Configuration",
     },
   ],
 };

@@ -30,7 +30,7 @@ function FilterCard({
         </span>
         <div className="inline-block align-bottom bg-MailCardBackground p-2 rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="flex flex-row justify-between">
-            <span className="text-xl font-mono font-bold">Filter Messages</span>
+            <span className="text-xl text-text font-mono font-bold">Filter Messages</span>
             <span>
               <MdOutlineClose
                 size={30}
@@ -42,17 +42,17 @@ function FilterCard({
               />
             </span>
           </div>
-          <div className="bg-secondary px-4 py-3 sm:px-6 grid grid-cols-2 space-y-2 ">
+          <div className=" px-4 py-3 sm:px-6 grid grid-cols-2 space-y-2 ">
             {FilterItems &&
               FilterItems.map((item) => {
                 return (
                   <div
-                    className="bg-primary-background p-2 shadow-lg  rounded-md  mx-2 items-center flex justify-center   "
+                    className="bg-background p-2 shadow-lg  rounded-md  mx-2 items-center flex justify-center   "
                     onClick={() => {
                       onFilterSelection(item.label);
                     }}
                   >
-                    <span className="text-primary-text font-semibold">
+                    <span className="text-text font-semibold">
                       {item.label}
                     </span>
                     {item.label == selected && (

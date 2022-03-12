@@ -15,7 +15,7 @@ function InputField({
             <div className="relative">
                 <input
                     type={visible ? label : "text"}
-                    className="w-full p-4 pr-12 text-sm text-primary-text  border-double bg-primary-background rounded-lg shadow-lg "
+                    className="w-full p-4 pr-12 text-sm text-primary-text  border bg-primary-background rounded-lg shadow-lg "
                     placeholder={placeholder}
                     onChange={(e) => updatedValue(e.target.value)}
                     value={value}

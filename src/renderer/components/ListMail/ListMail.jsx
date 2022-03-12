@@ -71,8 +71,8 @@ function ListMail({
   }
 
   return (
-    <div className="   ">
-      <div className="w-max flex  ml-8">
+    <div className="  m-2 ">
+      <div className="w-max flex ">
         <ListTopIcons
           Refresh={Refresh}
           toggle={toggle}
@@ -85,6 +85,7 @@ function ListMail({
           Data={Data}
           GridView={GridView}
           setGridView={setGridView}
+          message={message}
         />
       </div>
       <div

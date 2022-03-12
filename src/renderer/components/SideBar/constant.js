@@ -1,4 +1,10 @@
-import { MdContactMail, MdFolder, MdLogout, MdSettings } from "react-icons/md";
+import {
+  MdContactMail,
+  MdFolder,
+  MdLogout,
+  MdSettings,
+  MdTableView,
+} from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { HiMail, HiTrash } from "react-icons/hi";
 import {

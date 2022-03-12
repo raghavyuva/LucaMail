@@ -9,7 +9,10 @@ import DisplayMails from "./DisplayMails";
 import ComposeBox from "./ComposeBox";
 import { useLocation } from "react-router-dom";
 import { createFolder, WriteFile } from "~/lib/fileAction";
-import { UpdateTheArrayInLocalStorage } from "../../utils/provider/provider";
+import {
+  isFlagged,
+  UpdateTheArrayInLocalStorage,
+} from "../../utils/provider/provider";
 const { ImapFlow } = window.require("imapflow");
 const os = require("os");
 const homedir = os.homedir();
@@ -46,6 +49,15 @@ function ShowMail({
       if (message[index]?.envelope?.messageId === openedmail?.messageId) {
         setActiveIndex(index);
         setActiveMail(message[index]?.body);
+        if (
+          ActiveMail &&
+          !isFlagged(message[index]?.envelope, "seen", message, location)
+        ) {
+          client = new ImapFlow(user);
+          client_single = new ImapFlow(user);
+          AddSeenFlag(client, Uid, paths);
+          RetrieveMail();
+        }
         for (let x = 0; x < message?.length; x++) {
           const element = message[x];
           if (element.envelope?.messageId === message[index]?.body?.messageId) {
@@ -55,15 +67,6 @@ function ShowMail({
       }
     }
   }, [openedmail, ActiveMail, message, ActiveIndex]);
-
-  useEffect(() => {
-    if (ActiveMail) {
-      client = new ImapFlow(user);
-      client_single = new ImapFlow(user);
-      AddSeenFlag(client, Uid, paths);
-      RetrieveMail();
-    }
-  }, [ActiveMail, openedmail]);
 
   async function RetrieveMail() {
     let mailreturned = await GetSingleMail(client_single, Uid, paths);
@@ -120,6 +123,7 @@ function ShowMail({
               message={message}
               pathContents={pathContents}
               userHome={userHome}
+              user={user}
             />
           ))}
         </div>
@@ -135,6 +139,8 @@ function ShowMail({
                 ActiveIndex={ActiveIndex}
                 message={message}
                 userHome={userHome}
+                user={user}
+                maillist={maillist}
               />
             ))}
           </div>

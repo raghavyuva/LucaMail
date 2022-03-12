@@ -26,7 +26,7 @@ const ListBigCard = ({
           ? "bg-MailCardBackground  opacity-90"
           : "bg-MailCardBackground opacity-100"
       } rounded-sm  mr-4  flex flex-col   overflow-clip
-        shadow-md hover:shadow-lg lg:max-w-full md:max-w-md sm:max-w-sm  p-4 m-2  flex-wrap`}
+        shadow-md hover:shadow-lg lg:max-w-full md:max-w-md sm:max-w-sm cursor-pointer  p-4 m-2  flex-wrap`}
     >
       <div
         className="flex lg:flex-row flex-col justify-between  "

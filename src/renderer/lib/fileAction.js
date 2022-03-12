@@ -2,6 +2,7 @@ const homedir = require("os").homedir();
 var fs = require("fs");
 const path = require("path");
 let appPath = "luca";
+
 export function readFile(filePath) {
   let newpath = path.join(homedir, appPath, filePath);
   let z;
@@ -49,5 +50,18 @@ export const checkExists = (filepath) => {
     return z;
   } catch (error) {
     return false;
+  }
+};
+
+export const DeleteFile = (filepath) => {
+  let delpath = path.join(homedir, appPath, filepath);
+  try {
+    let x = fs.rmSync(delpath, {
+      recursive: true,
+      force: true,
+    });
+    return true;
+  } catch (error) {
+    console.log(error);
   }
 };

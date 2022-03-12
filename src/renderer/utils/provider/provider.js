@@ -58,13 +58,14 @@ export async function CheckForSelectedDiv(
 }
 
 export async function UpdateTheArrayInLocalStorage(singlemail, Data, message) {
-  if (singlemail) {
+  if (singlemail && Object.values(singlemail)?.length > 0) {
     let filteredData = message.filter((data) => {
       if (data?.envelope?.messageId != singlemail?.envelope?.messageId) {
         return data;
       }
     });
     filteredData.push(singlemail);
+    console.log(singlemail);
     let envelopedata = Data?.filter((data) => {
       if (data?.messageId != singlemail?.envelope?.messageId) {
         return data;

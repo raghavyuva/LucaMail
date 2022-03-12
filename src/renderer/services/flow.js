@@ -9,9 +9,11 @@ export async function LogintoAccount(client) {
     if (client.authenticated == true) {
       return true;
     } else {
+      console.log('heyyyy')
       return false;
     }
   } catch (error) {
+    console.log(error)
     return false;
   }
 }

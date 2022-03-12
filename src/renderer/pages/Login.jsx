@@ -16,12 +16,19 @@ import { setLoading } from "~/redux/actions/LoadingActions";
 import { checkExists, createFolder, WriteFile } from "~/lib/fileAction";
 import WindowBar from "../components/TopBar/WindowBar";
 import { readFile } from "../lib/fileAction";
+import { GoogleLogin } from "react-google-login";
+import { applyTheme } from "../themes/themeutil";
+import { setUser } from "../redux/actions/UserActions";
+
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 const pino = require("pino")();
 pino.level = "silent";
 
-function Login({ loading }) {
+const api_key =
+  "100591090263-tf84oe90da1fl3u9gdf86t6jcqhtc24i.apps.googleusercontent.com";
+
+function Login({ frommultiuser }) {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [Port] = useState(993);
@@ -35,7 +42,6 @@ function Login({ loading }) {
   const [securesmtp] = useState(true);
   let client;
   const dispatch = useDispatch();
-
   const [selected] = useState({
     host: ManualSetup[1].options[0].host,
     secure: isSecure,
@@ -44,32 +50,57 @@ function Login({ loading }) {
     auth: {
       user: email,
       pass: password,
+      accessToken: null,
     },
   });
-
-  const [smtpconfig] = useState({
-    host: smtpHost,
-    port: smtpPort,
-    auth: {
-      user: email,
-      pass: password,
-    },
-    secure: securesmtp,
-  });
-
   useEffect(() => {
     dispatch(setLoading(false));
-
+    if (!frommultiuser) {
+      applyTheme("Light");
+    }
     return () => {};
   }, []);
+
+  async function onSuccess(res) {
+    selected.auth.user = res?.profileObj?.email;
+    selected.auth.accessToken = res?.accessToken;
+    delete selected.auth.pass;
+    client = new ImapFlow(selected);
+    let result = await LogintoAccount(client);
+    if (result == true) {
+      onResultTrue(res?.profileObj?.email);
+    } else {
+      console.log(result);
+    }
+  }
+
+  function onFailure(err) {
+    console.log(err);
+    setErrors(err);
+  }
+
+  function onResultTrue(email, selected) {
+    if (checkExists("")) {
+      if (checkExists(email)) {
+        StoreInfo(email, selected);
+      } else {
+        createFolder(email);
+        createFolder(path.join(email, "conf"));
+        StoreInfo(email, selected);
+      }
+    } else {
+      createFolder("");
+      createFolder(email);
+      createFolder(path.join(email, "conf"));
+      StoreInfo(email, selected);
+    }
+  }
 
   const onLoginClick = async () => {
     dispatch(setLoading(true));
     (selected.auth.user = email),
       (selected.auth.pass = password),
-      (selected.secure = isSecure),
-      (smtpconfig.auth = selected.auth),
-      (smtpconfig.secure = securesmtp);
+      (selected.secure = isSecure);
     if (!email || !password || !Host || !port || !smtpHost || !smtpPort) {
       setErrors("input fields cannot be empty");
       dispatch(setLoading(false));
@@ -82,21 +113,8 @@ function Login({ loading }) {
           client = new ImapFlow(selected);
           let result = await LogintoAccount(client);
           if (result == true) {
-            if (checkExists("")) {
-              if (checkExists(email)) {
-                StoreInfo();
-              } else {
-                createFolder(email);
-                createFolder(path.join(email, "conf"));
-                StoreInfo();
-              }
-            } else {
-              console.log("hey");
-              createFolder("");
-              createFolder(email);
-              createFolder(path.join(email, "conf"));
-              StoreInfo();
-            }
+            console.log(selected);
+            onResultTrue(email, selected);
           } else {
             setErrors("invalid credentials or configuration of your mail");
             dispatch(setLoading(false));
@@ -118,40 +136,54 @@ function Login({ loading }) {
     return re.test(email);
   }
 
-  function StoreInfo() {
-    WriteFile(path.join(email, "user.txt"), selected);
-    let smtpobj = selected;
-    smtpobj.port = smtpPort;
-    smtpobj.host = smtpHost;
-    delete smtpobj["logger"];
-    smtpobj.secure = securesmtp;
+  function StoreInfo(email, selected) {
     let userslist = JSON.parse(readFile("userslist"));
     if (userslist?.length > 0) {
+      console.log(userslist);
       userslist?.push(selected);
+      WriteFile(path.join("userslist"), userslist);
     } else {
       let usersarray = [];
       usersarray[0] = selected;
       WriteFile(path.join("userslist"), usersarray);
     }
+    if (frommultiuser) {
+      dispatch(setUser(selected));
+    }
+
+    WriteFile(path.join(email, "user.txt"), selected);
+    let smtpobj = selected;
+    smtpobj.port = smtpPort;
+    smtpobj.host = smtpHost;
+    delete smtpobj["logger"];
+    delete smtpobj["auth"]["accessToken"];
+    smtpobj.secure = securesmtp;
     WriteFile(path.join(email, "smtp.txt"), smtpobj);
     dispatch(setAuthenticated(true));
     dispatch(setLoading(false));
   }
 
-
-
   return (
     <div>
-      <WindowBar icon={false} />
+      {!frommultiuser && <WindowBar icon={false} />}
       <section
-        className="relative flex flex-wrap lg:h-[calc(100vh_-_2rem)] lg:items-center 
-        
-      justify-center text-primary-text bg-[url('https://images.pexels.com/photos/696680/pexels-photo-696680.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover "
+        className={
+          !frommultiuser
+            ? "relative flex flex-wrap lg:h-[calc(100vh_-_2rem)] lg:items-center justify-center text-text  bg-cover "
+            : ""
+        }
       >
-        <div className="w-max px-2 py-12  sm:px-6 lg:px-4 sm:py-10 lg:py-14 bg-CardBackground shadow-lg rounded-md">
+        <div
+          className={
+            !frommultiuser &&
+            "w-max px-2 py-12  sm:px-6 lg:px-4 sm:py-10 lg:py-14 bg-background shadow-lg rounded-md"
+          }
+        >
           <div className="max-w-lg mx-auto text-center">
             <h1 className="text-2xl font-bold sm:text-3xl">
-              Incoming Server Settings
+              {!frommultiuser
+                ? " Incoming Server Settings"
+                : "Add user to the app"}
             </h1>
             <p className="mt-4 ">
               configure your imap settings to get the mails into your box
@@ -207,7 +239,21 @@ function Login({ loading }) {
               />
             </div>
             <div className="flex items-center justify-center ">
-              <Button btntext="Login" handler={onLoginClick} />
+              <Button
+                btntext={frommultiuser ? "Add User" : "Login"}
+                handler={onLoginClick}
+              />
+            </div>
+            <div className="flex justify-center items-center">
+              <GoogleLogin
+                clientId={api_key}
+                buttonText={frommultiuser ? "Add User" : "Login"}
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                cookiePolicy={"single_host_origin"}
+                scope="https://mail.google.com"
+                className=" justify-center w-32 text-center self-center"
+              />
             </div>
             {Errors && (
               <span className="font-extrabold text-primary-text mt-4 text-center align-middle ">
@@ -221,10 +267,4 @@ function Login({ loading }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  loading: state.loadingDetails.loading,
-});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

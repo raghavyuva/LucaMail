@@ -12,6 +12,7 @@ import { setLoading } from "../redux/actions/LoadingActions";
 import { setFolderStrucure, setMailStats } from "../redux/actions/appActions";
 import { ParseContent } from "../utils/Utils";
 import { useLocation } from "react-router-dom";
+import { setUser } from "../redux/actions/UserActions";
 const { ImapFlow } = window.require("imapflow");
 const path = require("path");
 
@@ -60,8 +61,8 @@ function Folder({
   let SettingFromStorage = JSON.parse(localStorage.getItem("Settings"));
   const [store] = useState(
     SettingFromStorage
-      ? SettingFromStorage[2].default
-      : SettingTypes["boolvaled"][2].default
+      ? SettingFromStorage[2].defaultval
+      : SettingTypes["boolvaled"][2].defaultval
   );
   let infoclient, client;
   useEffect(() => {
@@ -75,8 +76,10 @@ function Folder({
 
   async function GetFolderStructure() {
     try {
-      let folder = await ParseContent(path.join(userHome, "conf"), StorePath);
-
+      if (!user) {
+        dispatch(setUser(allusers?.length > 0 && allusers[0]));
+      }
+      let folder = await ParseContent(path.join(userHome, "conf", StorePath));
       if (folder) {
         DispatchFolderStructure(folder);
       } else {
@@ -89,7 +92,6 @@ function Folder({
   }
 
   async function GetFolderStructureFromServer(client) {
-    console.log(path.join(userHome, "conf", StorePath));
     if (!checkExists(path.join(userHome, "conf", StorePath))) {
       let folder = await getInformation(
         client,
@@ -99,7 +101,7 @@ function Folder({
       console.log(folder);
       DispatchFolderStructure(folder);
     } else {
-      let folder = await ParseContent(path.join(userHome, "conf"), StorePath);
+      let folder = await ParseContent(path.join(userHome, "conf", StorePath));
       console.log(folder);
     }
   }
@@ -112,37 +114,36 @@ function Folder({
       setfLimit(fetchlimit);
       dispatch(setMailStats(folder));
       dispatch(setFolderStrucure(folder?.folderTree));
-      CheckForMailExistense();
+      CheckForMailExistense(fetchlimit);
     }
   }
 
-  async function CheckForMailExistense() {
+  async function CheckForMailExistense(fetchlimit) {
     try {
       let mailfromlocal = await ParseContent(
-        path.join(userHome, "mail"),
-        StorePath
+        path.join(userHome, "mail", StorePath)
       );
       if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
-        console.log("eheye");
         DispatchMails(mailfromlocal.Mail, mailfromlocal?.Body);
         await UpdateArrayWithLatestMail();
       } else {
-        parseToFn();
+        parseToFn(fetchlimit);
       }
     } catch (error) {
       console.log(error);
     }
   }
 
-  function parseToFn() {
-    fetchMail(false, false);
+  function parseToFn(fetchlimit) {
+    fetchMail(false, false, fetchlimit);
   }
 
-  async function fetchMail(again, withlimit) {
+  async function fetchMail(again, withlimit, fetchlimit) {
     client = new ImapFlow(user);
+    console.log(fLimit, fetchedCount);
     let { Messagesarray, envelopearray } = await FetchMail(
       client,
-      fLimit,
+      fetchlimit,
       fetchedCount,
       withlimit,
       again,
@@ -188,6 +189,7 @@ function Folder({
     dispatch(setLoading(true));
     let rlen = tLen - fetchedCount;
     client = new ImapFlow(user);
+
     let { Messagesarray, envelopearray } = await FetchMail(
       client,
       rlen < fLimit ? rlen : fLimit,
@@ -209,11 +211,10 @@ function Folder({
 
     let { latestmailwithenvelope, count, latestMessagesarray } =
       await OnUpdatedMailFromServer(updatedClient, tLen, MailPath);
-
+    console.log(latestmailwithenvelope, latestMessagesarray);
     if (latestmailwithenvelope?.length > 0 && latestMessagesarray?.length > 0) {
       let mailfromlocal = await ParseContent(
-        path.join(userHome, "mail"),
-        MailPath
+        path.join(userHome, "mail", MailPath)
       );
       if (mailfromlocal?.Mail?.length > 0 && mailfromlocal?.Body?.length > 0) {
         let envelopeconcat = mailfromlocal?.Mail?.concat(
@@ -221,14 +222,14 @@ function Folder({
         );
         let maillistconcat = mailfromlocal?.Body?.concat(latestMessagesarray);
         CallToaddLatestMail(envelopeconcat, maillistconcat);
+        infoclient = new ImapFlow(user);
+        getInformation(
+          infoclient,
+          MailPath,
+          path.join(userHome, "conf", StorePath)
+        );
       }
     }
-    infoclient = new ImapFlow(user);
-    getInformation(
-      infoclient,
-      MailPath,
-      path.join(userHome, "conf", StorePath)
-    );
   }
 
   function CallToaddLatestMail(envelopeconcat, maillistconcat) {

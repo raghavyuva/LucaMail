@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { sidebarBottomContents } from "./constant";
 import { useLocation } from "react-router-dom";
 import SideElementsComp from "./SideElementsComp";
-import SupportCard from "./SupportCard";
 import ComposeBtn from "./ComposeBtn";
 import {
   MdInbox,
@@ -26,9 +25,9 @@ function SideBar({
   setcomposeopen,
   setactionFromReply,
   isAnyMailOpen,
-  showSupportCard,
   folderStructure,
   userHome,
+  user
 }) {
   const [active, setactive] = useState(0);
   const location = useLocation();
@@ -85,6 +84,9 @@ function SideBar({
       });
   }, [location]);
 
+
+
+
   return (
     <div className=" flex flex-col shadow-lg justify-between h-[calc(100vh_-_2rem)] ml-2">
       <div className="flex flex-col justify-center ">
@@ -109,6 +111,7 @@ function SideBar({
                     link={content.path}
                     bottom={false}
                     userHome={userHome}
+                    user={user}
                   />
                 )}
                 {content?.folders?.map((folder, i) => (
@@ -121,6 +124,7 @@ function SideBar({
                     link={folder.path}
                     bottom={false}
                     userHome={userHome}
+                    user={user}
                   />
                 ))}
               </>
@@ -128,7 +132,6 @@ function SideBar({
         </div>
       </div>
       <div className=" flex flex-col">
-        {!showSupportCard && <SupportCard />}
         {sidebarBottomContents &&
           sidebarBottomContents.map((content, index) => (
             <SideElementsComp
@@ -139,6 +142,7 @@ function SideBar({
               link={content.link}
               bottom={true}
               userHome={userHome}
+              user={user}
             />
           ))}
       </div>

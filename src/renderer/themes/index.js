@@ -5,11 +5,10 @@ const { Light } = ListOfThemes;
 export const DEFAULT_THEME = Light;
 
 function CheckCustomTheme(email) {
-  let CUSTOM_THEMES;
+  let themeObject;
   try {
-    CUSTOM_THEMES = JSON.parse(readFile(path.join(email, "conf", "theme")));
-    let themeObject = JSON.parse(CUSTOM_THEMES)?.ListOfThemes;
-    return themeObject;
+    themeObject = JSON.parse(readFile(path.join(email, "conf", "theme")));
+    return themeObject?.ListOfThemes;
   } catch (error) {
     console.log(error);
     return null;

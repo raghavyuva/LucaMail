@@ -24,12 +24,12 @@ function CardForMailList({
     <div>
       <div
         className={
-          "relative block px-3 py-1    bg-MailCardBackground  transition-shadow   shadow-xl group hover:shadow-lg overflow-hidden  m-2  rounded-lg"
+          "relative block px-3 py-2  text-text  bg-MailCardBackground  transition-shadow  cursor-pointer  shadow-xl group hover:shadow-lg overflow-hidden  m-2  rounded-lg"
         }
       >
         <div className="justify-between sm:flex">
           <div
-            className="flex flex-col "
+            className="flex flex-col max-w-sm"
             onClick={() => {
               setisAnyMailOpen(true);
               setopenedmail(mailObject);
@@ -37,15 +37,15 @@ function CardForMailList({
               setcomposeopen(false);
             }}
           >
-            <div className="flex">
+            <div className="flex items-center ">
               <div className="flex-shrink-0 hidden  sm:block">
-                <div className="h-6 w-6 rounded-full bg-MailCardUserIconBackground text-MailCardUserIconText  mr-1 items-center justify-center flex shadow-lg">
+                <div className="h-10 w-10 rounded-full bg-MailCardUserIconBackground text-MailCardUserIconText  mr-1 items-center justify-center flex shadow-lg">
                   <span className="uppercase font-extrabold">
                     {subject[0] ? subject[0] : username[0]}
                   </span>
                 </div>
               </div>
-              <div>
+              <div className="flex flex-col">
                 <h5 className="text-sm font-bold ">{subject}</h5>
                 <p className="mt-1 text-xs font-medium text-primary-text">
                   {username ? username : ""}

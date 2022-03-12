@@ -3,7 +3,7 @@ import ToolTip from "./ToolTip";
 import React from "react";
 import { MdAttachment, MdClose } from "react-icons/md";
 import AttachMents from "./AttachMents";
-
+import "./MailStyle.css";
 function DisplayMails({
   Html,
   subject,
@@ -17,6 +17,7 @@ function DisplayMails({
   DownloadAttachMents,
   currMail,
   setisAnyMail,
+  text,
 }) {
   let date = new Date(time);
   let attachments = currMail?.attachments;
@@ -81,10 +82,7 @@ function DisplayMails({
       </div>
       <div className=" justify-center text-text items-center flex p-4">
         <iframe
-          srcDoc={Html}
-          style={{
-            color: "white",
-          }}
+          srcDoc={Html ? Html : text}
           className="w-full aspect-video border-0  text-text overflow-y-scroll h-full  body"
         />
       </div>
