@@ -1,7 +1,7 @@
 export const constant = {
     Banner: [
         {
-            title: "It's awesome that your here!",
+            title: "It's awesome that you're here!",
             tagline: "Spread your messages all around the world!",
             description: "Let the world knows how you are and where you are! Whether it's your family,friends or just some people, start sharing your messages with them!",
             PromotebtnText: "Compose New Message"
