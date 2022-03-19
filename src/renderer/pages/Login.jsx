@@ -137,11 +137,18 @@ function Login({ frommultiuser }) {
   }
 
   function StoreInfo(email, selected) {
+    let accountexists = false;
     let userslist = JSON.parse(readFile("userslist"));
     if (userslist?.length > 0) {
-      console.log(userslist);
-      userslist?.push(selected);
-      WriteFile(path.join("userslist"), userslist);
+      let index = userslist.indexOf(selected);
+      if (index) {
+        alert("account already exists");
+        accountexists = true;
+        dispatch(setLoading(false));
+      } else {
+        userslist?.push(selected);
+        WriteFile(path.join("userslist"), userslist);
+      }
     } else {
       let usersarray = [];
       usersarray[0] = selected;
@@ -150,7 +157,6 @@ function Login({ frommultiuser }) {
     if (frommultiuser) {
       dispatch(setUser(selected));
     }
-
     WriteFile(path.join(email, "user.txt"), selected);
     let smtpobj = selected;
     smtpobj.port = smtpPort;
@@ -180,12 +186,12 @@ function Login({ frommultiuser }) {
           }
         >
           <div className="max-w-lg mx-auto text-center">
-            <h1 className="text-2xl font-bold sm:text-3xl">
+            <h1 className="text-2xl text-text font-bold sm:text-3xl">
               {!frommultiuser
                 ? " Incoming Server Settings"
                 : "Add user to the app"}
             </h1>
-            <p className="mt-4 ">
+            <p className="mt-4 text-text">
               configure your imap settings to get the mails into your box
             </p>
           </div>

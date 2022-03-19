@@ -12,6 +12,25 @@ const TableData = ({
   Data,
   setallselected,
 }) => {
+  function onSelection(e) {
+    Array.prototype.insert = function (index, item) {
+      this.splice(index, 0, item);
+    };
+    let index = Data?.indexOf(data);
+    let newarr = [];
+    let concatarray = newarr.concat(Data);
+    let removed = concatarray?.splice(index, 1);
+    removed[0].checked = e.target.checked;
+    concatarray?.insert(index, removed[0]);
+    let findallselected = concatarray?.filter((ele) => {
+      return ele.checked == true;
+    });
+    if (findallselected?.length > 0) {
+      setallselected(false);
+    }
+    setData(concatarray);
+  }
+
   return (
     <tbody class="text-sm text-text  divide-y divide-solid divide-MailCardBackground">
       <tr>
@@ -21,19 +40,7 @@ const TableData = ({
             type="checkbox"
             id="row_1"
             checked={selected}
-            onChange={(e) => {
-              Array.prototype.insert = function (index, item) {
-                this.splice(index, 0, item);
-              };
-              let index = Data?.indexOf(data);
-              let newarr = [];
-              let concatarray = newarr.concat(Data);
-              let removed = concatarray?.splice(index, 1);
-              removed[0].checked = e.target.checked;
-              concatarray?.insert(index, removed[0]);
-              setallselected(false);
-              setData(concatarray);
-            }}
+            onChange={onSelection}
           />
         </td>
         <td class="p-2 whitespace-nowrap">

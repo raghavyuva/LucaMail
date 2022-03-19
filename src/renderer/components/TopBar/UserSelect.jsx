@@ -48,7 +48,7 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModa
           {Data.map((val) => {
             return (
               <div
-                className="flex items-center cursor-pointer my-2 "
+                className="flex p-2 shadow-lg rounded-md items-center cursor-pointer my-2 "
                 role="none"
               >
                 {changedval != val?.auth?.user ? (
@@ -58,7 +58,7 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModa
                 )}
                 <div
                   onClick={() => onClickHandler(val)}
-                  className="text-gray-700 block px-4 py-2 text-sm no-underline p-2"
+                  className="text-text  block px-4 py-2 text-sm no-underline p-2"
                 >
                   {val?.auth?.user}
                 </div>

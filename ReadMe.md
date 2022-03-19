@@ -26,7 +26,7 @@
   - [Roadmap](#roadmap)
   - [Contributing](#contributing)
     - [Creating A Pull Request](#creating-a-pull-request)
-  - [License](https://github.com/raghavyuva/LucaMail/blob/master/LICENSE)
+  - [License](#license)
   - [Authors](#authors)
   - [Donate](#donate)
 
@@ -120,4 +120,4 @@ Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/raghavyu
 If you find this project as useful then do donate so that the project is maintained up-to date.
 use this platform for donation.
 
-- [kofi-com](https://ko-fi.com/raghavyuva)
+<a href='https://ko-fi.com/raghavyuva' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />

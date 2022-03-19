@@ -6,7 +6,7 @@ import {
   MdViewCompact,
   MdViewList,
 } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PaginationComp from "./PaginationComp";
 
 function ListTopIcons({
@@ -19,13 +19,14 @@ function ListTopIcons({
   setGridView,
   message,
 }) {
+  const location = useLocation();
   return (
     <div className="flex flex-col text-text ">
       <div className="  flex  mt-4 items-center justify-evenly">
         <div className="flex flex-row">
           <MdRefresh
             size={30}
-            className="mr-2 cursor-pointer "
+            className="ml-1 mr-2 cursor-pointer "
             onClick={Refresh}
             title="Refresh"
           />
@@ -58,6 +59,9 @@ function ListTopIcons({
               to={{
                 pathname: "/tableView",
               }}
+              state={{
+                path: location?.pathname,
+              }}
             >
               <MdTableView
                 title="table view"
@@ -67,7 +71,7 @@ function ListTopIcons({
             </Link>
           }
         </div>
-        <span className="font-mono font-semibold  mr-4">
+        <span className="font-mono font-semibold  mr-2">
           {Data?.length} Fetched Messages
         </span>
         <div className="hidden lg:flex">

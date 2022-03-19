@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { HiSearch } from "react-icons/hi";
 import { MdOutlineFilterList } from "react-icons/md";
-import { applyTheme } from "../../themes/themeutil";
-import ThemeSelect from "./UserSelect";
 import useComponentVisible from "~/utils/TouchBehaviour";
 import UserSelect from "./UserSelect";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/actions/UserActions";
+import { setLoading } from "../../redux/actions/LoadingActions";
 
 function TopBar({
   Quota,
@@ -19,7 +18,7 @@ function TopBar({
   isDrawerOpen,
   userslist,
   userHome,
-  setModalOpen
+  setModalOpen,
 }) {
   const [isExpanded, setisExpanded] = useState(false);
   const [toggle, settoggle] = useState(false);
@@ -35,8 +34,10 @@ function TopBar({
     .slice(0, 4);
 
   function onClickHandler(val) {
+    dispatch(setLoading(true));
     setselected(val?.auth?.user);
     dispatch(setUser(val));
+    dispatch(setLoading(false));
   }
 
   return (

@@ -63,7 +63,6 @@ function Index({ Authenticated, default_theme, userslist, user }) {
   async function UserDispacth() {
     setload(true);
     data = await GetOneUser();
-    console.log(data);
     if (data?.auth?.user && (data?.auth?.pass || data?.auth?.accessToken)) {
       dispatch(setAuthenticated(true));
       dispatch(setUser(data));

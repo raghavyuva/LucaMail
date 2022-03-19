@@ -1,12 +1,10 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
 import PageLayout from "../../utils/PageLayout";
 import TableView from "./TableView";
 export const TableViewWrapper = ({
   user,
-  currentSideBar,
-  loading,
   MailStats,
   Envelope,
   maillist,
@@ -15,10 +13,9 @@ export const TableViewWrapper = ({
 }) => {
   const [isAnyMailOpen, setisAnyMailOpen] = useState(false);
   const [OpenedMail, setOpenedMail] = useState();
-  const location = useLocation();
   const [searchText, setsearchText] = useState("");
   const [FilteredData, setFilteredData] = useState([]);
-  
+  const location = useLocation();
   function SearchFor() {
     let FilteredData = Envelope?.filter(function (item) {
       return item?.subject?.toLowerCase().includes(searchText?.toLowerCase());
@@ -36,6 +33,9 @@ export const TableViewWrapper = ({
           params: {
             Envelope: FilteredData?.length > 0 ? FilteredData : Envelope,
             message: maillist,
+            user: user,
+            path: location?.state?.path,
+            pathContents: folderStructure,
           },
         }}
         Data={Envelope}

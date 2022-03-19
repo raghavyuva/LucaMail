@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HiOutlineStar, HiStar } from "react-icons/hi";
-import { MdOutlineMarkChatUnread, MdStar } from "react-icons/md";
+import { MdOutlineMarkChatUnread, } from "react-icons/md";
 function CardForMailList({
   Data,
   username,

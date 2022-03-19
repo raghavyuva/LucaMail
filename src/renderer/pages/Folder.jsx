@@ -98,11 +98,9 @@ function Folder({
         MailPath,
         path.join(userHome, "conf", StorePath)
       );
-      console.log(folder);
       DispatchFolderStructure(folder);
     } else {
       let folder = await ParseContent(path.join(userHome, "conf", StorePath));
-      console.log(folder);
     }
   }
 
@@ -140,7 +138,6 @@ function Folder({
 
   async function fetchMail(again, withlimit, fetchlimit) {
     client = new ImapFlow(user);
-    console.log(fLimit, fetchedCount);
     let { Messagesarray, envelopearray } = await FetchMail(
       client,
       fetchlimit,
@@ -181,7 +178,6 @@ function Folder({
   }, [StoreObj]);
 
   function StoreAsFile() {
-    console.log(userHome);
     WriteFile(path.join(userHome, "mail", StorePath), StoreObj);
   }
 
@@ -211,7 +207,6 @@ function Folder({
 
     let { latestmailwithenvelope, count, latestMessagesarray } =
       await OnUpdatedMailFromServer(updatedClient, tLen, MailPath);
-    console.log(latestmailwithenvelope, latestMessagesarray);
     if (latestmailwithenvelope?.length > 0 && latestMessagesarray?.length > 0) {
       let mailfromlocal = await ParseContent(
         path.join(userHome, "mail", MailPath)
@@ -278,7 +273,6 @@ function Folder({
         search={SearchFor}
         FilteredData={FilteredData}
         Status={tLen}
-        // FetchLimit={fLimit}
         FetchUptoNextLimit={FetchUptoNextLimit}
         Refresh={() => UpdateArrayWithLatestMail(user)}
         MailStats={MailStats}

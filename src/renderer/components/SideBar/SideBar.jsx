@@ -90,13 +90,11 @@ function SideBar({
   return (
     <div className=" flex flex-col shadow-lg justify-between h-[calc(100vh_-_2rem)] ml-2">
       <div className="flex flex-col justify-center ">
-        {isAnyMailOpen && (
           <ComposeBtn
             setactionFromReply={setactionFromReply}
             composeopen={composeopen}
             setcomposeopen={setcomposeopen}
           />
-        )}
         <div className=" flex flex-col mt-2   ">
           {folderStructure?.length &&
             folderStructure?.map((content, index) => (

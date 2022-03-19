@@ -52,6 +52,7 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
         if (ReadStream) {
           WriteFile(themepath, JSON.parse(ReadStream));
           applyTheme(JSON.parse(ReadStream)?.preferred, user?.auth?.user);
+          alert("changes applied");
           CheckThemes();
         }
       } catch (error) {
@@ -69,6 +70,7 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
         let obj = Themes;
         obj.preferred = selected;
         WriteFile(themepath, obj);
+        alert("changes applied");
       }
     } else {
       localStorage.setItem("preferredtheme", selected);

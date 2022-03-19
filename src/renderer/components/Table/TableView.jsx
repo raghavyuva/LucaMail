@@ -1,43 +1,94 @@
-import React, { useState, useEffect } from "react";
-import { istoDay } from "../../utils/provider/provider";
+import React, { useState } from "react";
+import {
+  istoDay,
+  UpdateTheArrayInLocalStorage,
+} from "../../utils/provider/provider";
 import TableData from "./TableData";
-
+import { ListOpenedBar } from "../../static/constants/ListTopContents";
+import { AddFlag, GetSingleMail, MoveToFolder } from "../../services";
+import { WriteFile } from "../../lib/fileAction";
+const { ImapFlow } = require("imapflow");
+const { contents } = ListOpenedBar;
+const pathjoin = require("path");
 const TableView = ({ params }) => {
-  const { Envelope, message } = params;
-  const [FilteredData, setFilteredData] = useState();
+  const { Envelope, message, user, path, pathContents } = params;
   const [Data, setData] = useState(Envelope);
-  let y;
-  const [selected, setselected] = useState();
   const [allselected, setallselected] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    if (FilteredData?.length > 0) {
-      setData(FilteredData);
+  let pathname = path == "/" ? "INBOX" : path;
+  async function onTopIconsClick(itm) {
+    let filtereddata = Data.filter((ele) => {
+      return ele.checked == true;
+    });
+    if (filtereddata?.length > 0) {
+      let uidarray = [];
+      message?.filter((data) => {
+        filtereddata?.map((env) => {
+          if (env?.messageId == data?.envelope?.messageId) {
+            uidarray.push(data?.uid);
+          }
+        });
+      });
+      let returned;
+      switch (itm) {
+        case "delete":
+          const connection = new ImapFlow(user);
+          let destpath;
+          pathContents?.folderTree?.map((folder) => {
+            if (folder?.folders) {
+              folder?.folders?.map((folders) => {
+                if (
+                  folders?.path.toLowerCase().includes("trash") ||
+                  folders?.path.toLowerCase().includes("bin")
+                ) {
+                  destpath = folders.path;
+                }
+              });
+            } else {
+              if (
+                folder?.path.toLowerCase().includes("trash") ||
+                folder?.path.toLowerCase().includes("bin")
+              ) {
+                destpath = folder.path;
+              }
+            }
+          });
+          MoveToFolder(connection, pathname, destpath, uidarray);
+          break;
+        case "star":
+          const client = new ImapFlow(user);
+          returned = await AddFlag("\\Flagged", "INBOX", uidarray, client);
+          break;
+        case "archive":
+          const x = new ImapFlow(user);
+          returned = await AddFlag("Archive", pathname, uidarray, x);
+          break;
+        case "spam":
+          const con = new ImapFlow(user);
+          returned = await AddFlag("$Phishing", pathname, uidarray, con);
+          break;
+        default:
+          alert("invalid action");
+          break;
+      }
+    } else {
+      alert("select one or more messages");
     }
-    return () => {
-      isMounted = false;
-    };
-  }, [FilteredData]);
-
-  useEffect(() => {
-    setData(Envelope);
-    return () => {};
-  }, [Envelope]);
-
-  useEffect(() => {
-    if (selected && selected?.length > 0) {
-      setData(selected);
-      setselected();
-    }
-
-    return () => {};
-  }, [selected]);
-
+  }
   return (
-    <section className="w-full bg-gray-100 text-gray-600  px-4">
+    <section className="w-full bg-MailCardBackground text-text px-4">
       <div className="flex flex-col ">
         <div className="w-full mt-4 mx-auto bg-white shadow-2xl rounded-sm  ">
+          <div className="flex">
+            {contents?.map((ele) => (
+              <ele.icon
+                size={25}
+                className="mr-4 cursor-pointer"
+                onClick={() => {
+                  onTopIconsClick(ele.func);
+                }}
+              />
+            ))}
+          </div>
           <div className="p-3">
             <div className="overflow-x-auto">
               <table className="table-auto w-full">
@@ -57,12 +108,12 @@ const TableView = ({ params }) => {
                             Data?.map((el) => {
                               el.checked = true;
                             });
-                            setselected(Data);
+                            setallselected(true);
                           } else {
                             Data?.map((el) => {
                               el.checked = false;
                             });
-                            setselected(Data);
+                            setallselected(false);
                           }
                         }}
                       />

@@ -108,7 +108,6 @@ function ShowMail({
       alert("error downloading");
     }
   }
-
   return (
     <div className="p-2 bg-background">
       <div className="flex flex-row justify-between items-center mt-3  ">
@@ -166,6 +165,7 @@ function ShowMail({
               DownloadAttachMents(file);
             }}
             setisAnyMail={setisAnyMailOpen}
+           
           />
         )}
       </div>
@@ -181,6 +181,7 @@ function ShowMail({
                 toadress={ActiveMail?.from.value[0].address}
                 subject={ActiveMail.subject}
                 action={actionFromReply}
+                userHome={userHome}
               />
             </div>
           </div>

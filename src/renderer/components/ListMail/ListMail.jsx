@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AddFlag, GetSingleMail, RemoveFlag } from "../../services";
+import {  GetSingleMail, } from "../../services";
 import CardForMailList from "./CardForMailList";
 import ListTopIcons from "./ListTopIcons";
 import { useLocation } from "react-router-dom";

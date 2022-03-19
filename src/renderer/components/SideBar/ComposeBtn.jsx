@@ -7,9 +7,9 @@ function ComposeBtn({
     setcomposeopen
 }) {
     return (
-        <div className=' items-center justify-center flex mt-2'>
+        <div className='  flex mt-3'>
             <button
-                className=' shadow-2xl p-2 rounded-lg    text-center text-text items-center flex flex-row font-bold '
+                className=' shadow-2xl  rounded-lg    text-center text-text items-center flex flex-row font-bold '
                 onClick={() => {
                     setcomposeopen(!composeopen)
                     if (!composeopen) {

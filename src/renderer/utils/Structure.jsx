@@ -95,7 +95,7 @@ function Structure({
         isDrawerOpen={isDrawerOpen}
         setisDrawerOpen={setisDrawerOpen}
       />
-        {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
+      {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
       <div className=" flex h-[calc(100vh_-_2rem)] ">
         <div ref={ref} className=" overflow-hidden">
           {toggle && (
@@ -226,6 +226,7 @@ function Structure({
                       toadress=""
                       subject=""
                       action={actionFromReply}
+                      userHome={userHome}
                     />
                   </div>
                 )}

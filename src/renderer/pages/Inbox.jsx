@@ -47,8 +47,19 @@ function Home({
   const [FilteredData, setFilteredData] = useState([]);
   const [InfoData] = useState(Parser(inboxpath(userHome, "conf")));
   const [ActiveUser, setActiveUser] = useState(user ? user : GetUser());
+  let userDefinedFetchLimit = JSON.parse(localStorage.getItem("fetchlimit"))
+    ? JSON.parse(localStorage.getItem("fetchlimit"))
+    : null;
   const [tLen, settLen] = useState(InfoData?.mailStatus?.messages);
-  const [fLimit, setfLimit] = useState(tLen ? (tLen > 50 ? 20 : tLen) : 1);
+  const [fLimit, setfLimit] = useState(
+    tLen
+      ? tLen > userDefinedFetchLimit
+        ? userDefinedFetchLimit
+        : tLen > 50
+        ? 50
+        : tLen
+      : 1
+  );
   const [fetchedCount, setfetchedCount] = useState(
     GetFetchedCount(path.join(userHome, "mail", "mail"))
   );
@@ -61,6 +72,7 @@ function Home({
   );
 
   let client, updatedClient, infoclient;
+
 
   useEffect(() => {
     let isMounted = true;
@@ -119,7 +131,12 @@ function Home({
     if (folder) {
       settLen(folder?.mailStatus?.messages);
       let fetchlimit =
-        folder?.mailStatus?.messages > 50 ? 20 : folder?.mailStatus?.messages;
+        folder?.mailStatus?.messages > userDefinedFetchLimit
+          ? userDefinedFetchLimit
+          : folder?.mailStatus?.messages > 50
+          ? 50
+          : folder?.mailStatus?.messages;
+
       setfLimit(fetchlimit);
       dispatch(setMailStats(folder));
       dispatch(setFolderStrucure(folder?.folderTree));
@@ -214,7 +231,6 @@ function Home({
   }
 
   async function UpdateArrayWithLatestMail(data) {
-    console.log(data);
     updatedClient = new ImapFlow(data);
     let { count, latestmailwithenvelope, latestMessagesarray } =
       await OnUpdatedMailFromServer(updatedClient, tLen, "INBOX");
@@ -283,7 +299,6 @@ function Home({
         search={SearchFor}
         FilteredData={FilteredData}
         Status={tLen}
-        // FetchLimit={fLimit}
         FetchUptoNextLimit={FetchUptoNextLimit}
         Refresh={() => UpdateArrayWithLatestMail(user)}
         MailStats={MailStats}

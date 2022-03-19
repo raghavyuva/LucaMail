@@ -64,7 +64,7 @@ function SideElementsComp({
       }}
       className={`${
         active === label
-          ? "border-l border-l-primary shadow-2xl bg-SideBarIconActiveBackground"
+          ? "border-l-2 border-l-primary  shadow-2xl border-r-2 border-r-primary"
           : "opacity-100 "
       }  my-3    mr-2 rounded-lg  cursor-pointer opacity-90 group [transform:translateZ(0)]before:bg-sky-600 before:bottom-0 before:left-0 before:h-full before:w-full before:-translate-x-full hover:before:translate-x-0 before:transition before:ease-in-out before:duration-500    no-underline  `}
     >
@@ -78,15 +78,19 @@ function SideElementsComp({
             <Icon
               className={` ${
                 active == label
-                  ? "text-SideBarIconText bg-MailCardBackground"
-                  : "  bg-SideBarIconActiveBackground text-text"
+                  ? "text-text bg-SideBarIconActiveBackground"
+                  : "  bg-SideBarIconInActiveBackground text-text"
               } p-2 rounded-lg shadow-lg group-hover:bg-MailCardBackground transition ease-in-out duration-500  `}
               size={30}
             />
           )}
 
           <div>
-            <span className="text-text capitalize    font-semibold pl-2  no-underline ">
+            <span
+              className={`${
+                active == label ? "text-text" : "text-text"
+              } capitalize    font-semibold pl-2  no-underline`}
+            >
               {label}
             </span>
           </div>

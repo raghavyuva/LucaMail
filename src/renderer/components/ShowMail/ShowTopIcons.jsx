@@ -4,26 +4,21 @@ import { useLocation } from "react-router-dom";
 import { WriteFile } from "~/lib/fileAction";
 import { AddFlag, MoveToFolder } from "~/services";
 import { setAllMail, setEnvelope } from "../../redux/actions/MailList";
-import { GetSingleMail } from "../../services";
+import { GetSingleMail, } from "../../services";
 import { UpdateTheArrayInLocalStorage } from "../../utils/provider/provider";
 const { ImapFlow } = window.require("imapflow");
-const { ipcRenderer } = require("electron");
-const ipc = ipcRenderer;
 const pathjoin = require("path");
 function ShowTopIcons({
   Icon,
   func,
   id,
   ActiveMail,
-  setActiveMail,
   setopenedmail,
   ActiveIndex,
   maillist,
   message,
   pathContents,
-  userHome,
   user,
-  envelope,
 }) {
   const location = useLocation();
   let path = location?.pathname == "/" ? "INBOX" : location?.state;
@@ -55,38 +50,33 @@ function ShowTopIcons({
     }
   }
 
-  // function RemoveFromStore() {
-  //   let listupdated = MailWithBody?.filter((el) => {
-  //     if (el.messageId != ActiveMail?.messageId) {
-  //       return el;
-  //     }
-  //   });
-  //   let updatedmail = maillist?.filter((el) => {
-  //     if (el.messageId != ActiveMail?.messageId) {
-  //       return el;
-  //     }
-  //   });
-  //   let updatedmessage = message?.filter((el) => {
-  //     if (el.envelope.messageId != ActiveMail.messageId) {
-  //       return el;
-  //     }
-  //   });
-  //   if (
-  //     listupdated?.length == MailWithBody?.length - 1 &&
-  //     updatedmail?.length == maillist?.length - 1 &&
-  //     updatedmessage?.length == message?.length - 1
-  //   ) {
-  //     let obj = {};
-  //     obj.Mail = updatedmessage;
-  //     obj.Body = listupdated;
-  //     WriteFile(Path.join(userHome, "mail", "mail"), obj);
-  //   }
-  // }
   let returned;
 
   async function SelectFunction(func) {
     switch (func) {
       case "delete":
+        const connection = new ImapFlow(user);
+        let destpath;
+        pathContents?.folderTree?.map((folder) => {
+          if (folder?.folders) {
+            folder?.folders?.map((folders) => {
+              if (
+                folders?.path.toLowerCase().includes("trash") ||
+                folders?.path.toLowerCase().includes("bin")
+              ) {
+                destpath = folders.path;
+              }
+            });
+          } else {
+            if (
+              folder?.path.toLowerCase().includes("trash") ||
+              folder?.path.toLowerCase().includes("bin")
+            ) {
+              destpath = folder.path;
+            }
+          }
+        });
+        MoveToFolder(connection, path, destpath, id);
         break;
       case "spam":
         const con = new ImapFlow(user);

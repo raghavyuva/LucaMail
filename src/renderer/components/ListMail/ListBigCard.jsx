@@ -1,6 +1,6 @@
 import { HiOutlineStar, HiStar } from "react-icons/hi";
 import React, { useState } from "react";
-import { MdOutlineMarkChatUnread } from "react-icons/md";
+import { MdOutlineMarkChatRead, MdOutlineMarkChatUnread } from "react-icons/md";
 const ListBigCard = ({
   username,
   subject,
@@ -43,8 +43,8 @@ const ListBigCard = ({
               {subject[0] ? subject[0] : username[0]}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-MailCardSenderText font-mono font-semibold">
+          <div className="flex flex-col max-w-sm">
+            <span className="text-MailCardSenderText font-mono  font-semibold">
               {subject}
             </span>
           </div>
@@ -54,8 +54,8 @@ const ListBigCard = ({
         </div>
       </div>
       <div>
-        <div className="p-2 flex justify-between ">
-          <span className="text-MailCardSenderText text-sm  capitalize text-clip truncate ">
+        <div className="p-2 flex justify-between max-w-xs  ">
+          <span className="text-MailCardSenderText text-sm capitalize  ">
             {username ? username : ""}
           </span>
           {!localread ? (
@@ -64,9 +64,12 @@ const ListBigCard = ({
                 setlocalread(!localread);
                 CheckForSelectedDiv(messageId, "seen");
               }}
-              className="bg-MailCardReadButtonBackground px-1 py-1 rounded-br-xl rounded-tl-xl shadow-xl   self-end"
+              className=" px-1 py-1 rounded-br-xl rounded-tl-xl shadow-xl   self-end"
             >
-              <span className="text-sm text-MailCardReadButtonText">read</span>
+              <MdOutlineMarkChatRead
+                size={18}
+                className="text-MailCardUnreadIcon"
+              />
             </div>
           ) : (
             <MdOutlineMarkChatUnread

@@ -38,12 +38,12 @@ export const mapTheme = (variables) => {
       variables.BannerCardButtonBackground || "",
     "--color-BannerCardButtonText": variables.BannerCardButtonText || "",
     "--color-BannerCardTitle": variables.BannerCardTitle || "",
-    "--background-SupportCardBackground": variables.SupportCardBackground || "",
-    "--color-SupportCardText": variables.SupportCardText || "",
-    "--background-SupportCardButtonBackground":
-      variables.SupportCardButtonBackground || "",
-    "--color-SupportCardButtonText": variables.SupportCardButtonText || "",
-    "--color-SupportCardTitle": variables.SupportCardTitle || "",
+    "--background-SettingsButtonBackground": variables.SettingsButtonBackground || "",
+    "--color-SettingsCardText": variables.SettingsCardText || "",
+    "--background-SettingsButtonBackground":
+      variables.SettingsButtonBackground || "",
+    "--color-SettingsCardButtonText": variables.SettingsCardButtonText || "",
+    "--color-SettingsCardTitle": variables.SettingsCardTitle || "",
     "--background-searchBackground": variables.searchBackground || "",
     "--color-searchText": variables.searchText || "",
     "--color-SearchIcons": variables.SearchIcons || "",
