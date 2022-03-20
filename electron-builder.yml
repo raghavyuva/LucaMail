@@ -54,7 +54,6 @@ linux:
     - "deb"
     - "rpm"
     - "snap"
-    - "flatpak"
 
 directories:
   buildResources: "resources"

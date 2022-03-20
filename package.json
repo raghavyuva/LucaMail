@@ -1,7 +1,7 @@
 {
   "name": "lucamail",
   "version": "0.0.1-beta",
-  "author": "Raghavyuva",
+  "author": "Raghavyuva <raghavyuva@gmail.com>",
   "license": "GPL-3.0",
   "scripts": {
     "dev": "run-p dev:*",
