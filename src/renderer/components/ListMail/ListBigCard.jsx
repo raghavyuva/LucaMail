@@ -21,11 +21,10 @@ const ListBigCard = ({
   return (
     <div
       ref={ref}
-      className={`${
-        localread
+      className={`${localread
           ? "bg-MailCardBackground  opacity-90"
           : "bg-MailCardBackground opacity-100"
-      } rounded-sm  mr-4  flex flex-col   overflow-clip
+        } rounded-sm  mr-4  flex flex-col   overflow-clip
         shadow-md hover:shadow-lg lg:max-w-full md:max-w-md sm:max-w-sm cursor-pointer  p-4 m-2  flex-wrap`}
     >
       <div
@@ -82,7 +81,14 @@ const ListBigCard = ({
             />
           )}
         </div>
-        <div className="flex flex-row justify-between p-2">
+        <div className="flex flex-row justify-between p-2"
+          onClick={() => {
+            setisAnyMailOpen(true);
+            setopenedmail(mailObject);
+            setlocalread(true);
+            setcomposeopen(false);
+          }}
+        >
           <span className="text-MailCardMessageTruncated cursor-pointer ">
             {body ? body : ""}
           </span>

@@ -58,7 +58,7 @@ function Login({ frommultiuser }) {
     if (!frommultiuser) {
       applyTheme("Light");
     }
-    return () => {};
+    return () => { };
   }, []);
 
   async function onSuccess(res) {
@@ -97,37 +97,41 @@ function Login({ frommultiuser }) {
   }
 
   const onLoginClick = async () => {
-    dispatch(setLoading(true));
-    (selected.auth.user = email),
-      (selected.auth.pass = password),
-      (selected.secure = isSecure);
-    if (!email || !password || !Host || !port || !smtpHost || !smtpPort) {
-      setErrors("input fields cannot be empty");
-      dispatch(setLoading(false));
-    } else {
-      if (validateEmail(email)) {
-        selected.host = Host;
-        selected.port = port;
-        selected.secure = isSecure;
-        try {
-          client = new ImapFlow(selected);
-          let result = await LogintoAccount(client);
-          if (result == true) {
-            console.log(selected);
-            onResultTrue(email, selected);
-          } else {
-            setErrors("invalid credentials or configuration of your mail");
+    try {
+      dispatch(setLoading(true));
+      (selected.auth.user = email),
+        (selected.auth.pass = password),
+        (selected.secure = isSecure);
+      if (!email || !password || !Host || !port || !smtpHost || !smtpPort) {
+        setErrors("input fields cannot be empty");
+        dispatch(setLoading(false));
+      } else {
+        if (validateEmail(email)) {
+          selected.host = Host;
+          selected.port = port;
+          selected.secure = isSecure;
+          try {
+            client = new ImapFlow(selected);
+            let result = await LogintoAccount(client);
+            if (result == true) {
+              console.log(selected);
+              onResultTrue(email, selected);
+            } else {
+              setErrors("invalid credentials or configuration of your mail");
+              dispatch(setLoading(false));
+            }
+          } catch (error) {
+            console.log(error);
+            setErrors("something went wrong while logging in");
             dispatch(setLoading(false));
           }
-        } catch (error) {
-          console.log(error);
-          setErrors("something went wrong while logging in");
+        } else {
+          setErrors("Email is not properly structured");
           dispatch(setLoading(false));
         }
-      } else {
-        setErrors("Email is not properly structured");
-        dispatch(setLoading(false));
       }
+    } catch (error) {
+      alert(error)
     }
   };
 
@@ -141,11 +145,13 @@ function Login({ frommultiuser }) {
     let userslist = JSON.parse(readFile("userslist"));
     if (userslist?.length > 0) {
       let index = userslist.indexOf(selected);
-      if (index) {
+      console.log(index);
+      if (index > 0) {
         alert("account already exists");
         accountexists = true;
         dispatch(setLoading(false));
       } else {
+        console.log(selected)
         userslist?.push(selected);
         WriteFile(path.join("userslist"), userslist);
       }

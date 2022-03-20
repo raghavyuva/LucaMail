@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://lucamail.raghavyuva.com/">
-<h3 align="center"><img src="https://imgur.com/tcrXEKK.png" alt="LucaMail"><br>LucaMail <i>v0.0.1-beta</i></h3>  </a>
+<h3 align="center"><img src="https://imgur.com/tcrXEKK.png" alt="LucaMail"><br>LucaMail <i>v0.0.2-beta</i></h3>  </a>
   <p align="center">
     An Awesome Cross Platform Email Client!
     <br/>
@@ -19,31 +19,37 @@
   </p>
 </p>
 
-## Table Of Contents
-
-- [Installation](#installation)
-  - [Preview](#preview)
-  - [Roadmap](#roadmap)
-  - [Contributing](#contributing)
-    - [Creating A Pull Request](#creating-a-pull-request)
-  - [License](#license)
-  - [Authors](#authors)
-  - [Donate](#donate)
-
-## About The Project
+# About The Project
 
  <p align="center"><img src="https://imgur.com/A2xKUvn.png"></p>
 LucaMail is an Open Source,Cross Platform  Email Client. LucaMail is developed to provide cross platform alternative to Email Clients
 that already exists. LucaMail focuses on modern Technologies as well as maintaining a user-friendly UI. There exists  Email Clients which lack at providing cross platform software,smooth UI,modern design techniques, and trending technologies. Where as a Solution LucaMail Provides all these features.
-LucaMail is Bundled with 6 stunning themes.LucaMail is Lightweight, simple , os friendly too.
+LucaMail is Bundled with 2 classic dark and white themes.LucaMail is Lightweight, simple , os friendly too.
  
 LucaMail Provides a Rich Text Editing Experience to send a Mail. Only the imap protocol is supported in the beta version as many users don't seem to be using pop protocol.
-It comes with 3 pre-configurations for logging the user into the application. LucaMail stores the messages as files under the user's home directory proceeded by the luca directory.
+LucaMail stores the messages as files under the user's home directory proceeded by the luca directory.
 
 Some Feature may be lacking as it is a beta version but the bundled features are assumed to work in all perspective
-as long as a bug is detected 😀. So feel free to suggest changes by opening a new issue, or if you want to implement your own, feel free to fork this repo and create a pull request.you can also visit [Contributing Guide »](#contributing) to know more!
+as long as a bug is detected 😀. So feel free to suggest changes by opening a new issue, or if you want to implement your own, feel free to fork this repo and create a pull request.you can also visit [Contributing Guide »](docs/contributing.md) to know more!
 
-## Built With
+
+# Features
+- Super Fast
+- Light weight
+- Cross Platform Email Client that supports Windows,MacOs,Linux 
+- Specially built as Desktop Application
+- Multiple Ways to Install the Application
+- New UI Design Systems 
+- Multiple User Account Switch
+- Oauth Login to the application
+- User Customized themes [see how to customize theme](docs/customizetheme.md)
+- 2 classical themes Dark theme and White theme
+- Multiple Layout of Views such as Grid View,List View
+- A Better Card View and a Table View
+- Rich Text Editing Experience to send a mail
+- General Settings to configure app specs
+
+# Built With
 
 Whilst I am the main developer of this project, this project couldn't of even started without the help of these open source projects, special thanks to:
 
@@ -77,37 +83,22 @@ LucaMail can be installed in two ways.
   cd release && ./LucaMail-0.0.1-beta.AppImage
   ```
 
-## Preview
+# Preview
 
-<img src="https://github.com/raghavyuva/LandLucamail/blob/master/src/Static/ssCreamRose.png" alt="LucaMail">
-<img src="https://github.com/raghavyuva/LandLucamail/blob/master/src/Static/ssDark.png" alt="LucaMail">
+<img src="src/main/helpers/assets/lucadarktheme.png" alt="LucaMail">
+<img src="src/main/helpers/assets/lucahome.png" alt="LucaMail">
 
-## Roadmap
+<p  align="center">
+<a href="docs/preview.md" color="blue">More Screen Shots »</a>
+</p>
 
-See the [open issues](https://github.com/raghavyuva/LucaMail/issues) for a list of proposed features (and known issues).
 
-## Contributing
-
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-- If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/raghavyuva/LucaMail/issues/new) to discuss it, or directly create a pull request after you edit the _README.md_ file with necessary changes.
-- Please make sure you check your spelling and grammar.
-- Create individual PR for each suggestion.
-
-### Creating A Pull Request
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/newfeature`)
-3. Commit your Changes (`git commit -m 'Add some newfeature'`)
-4. Push to the Branch (`git push origin feature/newfeature`)
-5. Open a Pull Request
-
-## License
+# License
 
 Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/raghavyuva/LucaMail/blob/master/LICENSE) for more information.  
 [![License](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)](https://github.com/raghavyuva/LucaMail/blob/master/LICENSE)
 
-## Authors
+# Authors
 
 - **Raghavyuva** - _Comp Sci Student_ - [Raghavyuva](https://raghavyuva.com/) - _All Work_
 
@@ -115,7 +106,7 @@ Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/raghavyu
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/raghavyuva)
 [![twitter](https://img.shields.io/badge/twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/yuva_raghav)
 
-## Donate
+# Donate
 
 If you find this project as useful then do donate so that the project is maintained up-to date.
 use this platform for donation.

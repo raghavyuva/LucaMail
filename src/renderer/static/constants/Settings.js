@@ -7,11 +7,6 @@ export const SettingTypes = {
         "Open the Drawer on startup loren sahgjsafcgksh shikfhaskfask",
     },
     {
-      label: " Support Card ",
-      defaultval: false,
-      description: "Hide support card on Drawer Hide support card on Drawer",
-    },
-    {
       label: "Store Mails in Local Drive",
       defaultval: true,
       description: "Store messages in your hard disk as a file",

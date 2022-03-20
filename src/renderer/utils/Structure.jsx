@@ -52,13 +52,13 @@ function Structure({
   const [ModalOpen, setModalOpen] = useState(false);
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
-      ? SettingFromStorage[0].defaultval
-      : SettingTypes["boolvaled"][0].defaultval
+      ? SettingFromStorage[0]?.defaultval
+      : SettingTypes["boolvaled"][0]?.defaultval
   );
   const [HideTopbar] = useState(
     SettingFromStorage
-      ? SettingFromStorage[3].defaultval
-      : SettingTypes["boolvaled"][3].defaultval
+      ? SettingFromStorage[3]?.defaultval
+      : SettingTypes["boolvaled"][3]?.defaultval
   );
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createEmpty()
@@ -151,9 +151,8 @@ function Structure({
                 onResizeStop={(e, direction, ref, d) => {
                   console.log(d.width, d.height, direction);
                 }}
-                className={`overflow-y-scroll ${
-                  GridView == 2 ? "max-w-sm" : "w-full "
-                } scroll-smooth   scrollbar-thin  scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full justify-center items-center  `}
+                className={`overflow-y-scroll ${GridView == 2 ? "max-w-sm" : "w-full "
+                  } scroll-smooth   scrollbar-thin  scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full justify-center items-center  `}
               >
                 <ListMail
                   Data={
@@ -175,7 +174,6 @@ function Structure({
                   FetchUptoNextLimit={FetchUptoNextLimit}
                   setcomposeopen={setcomposeopen}
                   Refresh={Refresh}
-                  isAnyMailOpen={isAnyMailOpen}
                   user={user}
                 />
               </div>
@@ -197,8 +195,8 @@ function Structure({
                     MailStats
                       ? MailStats
                       : JSON.parse(
-                          readFile(path.join(userHome, "conf", "conf.txt"))
-                        )
+                        readFile(path.join(userHome, "conf", "conf.txt"))
+                      )
                   }
                   userHome={userHome}
                   user={user}

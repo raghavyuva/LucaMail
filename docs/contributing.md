@@ -6,14 +6,5 @@ Contributions are what make the open source community such an amazing place to b
 - Please make sure you check your spelling and grammar.
 - Kindly Look into the issue if you are trying to work on, if it really is a bug then only work on that
 - If you are Having a great idea and wants to implement the feature on LucaMail? then please do contact me before implementing so that i will be aware of what feature you are working so that there'll be no confliction!
-- Create individual PR for each suggestion.
+- Create individual PR for each suggestion [see creating a pull request](prcreating.md).
 - be proud that you are contributing :)
-
-
-### Creating A Pull Request
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/newfeature`)
-3. Commit your Changes (`git commit -m 'Add some newfeature'`)
-4. Push to the Branch (`git push origin feature/newfeature`)
-5. Open a Pull Request

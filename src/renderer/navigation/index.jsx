@@ -42,21 +42,27 @@ function Index({ Authenticated, default_theme, userslist, user }) {
   }
 
   async function CheckPreferredTheme(data) {
-    let themeObject = await ParseContent(
-      path.join(data?.auth?.user, "conf", "theme")
-    );
-    if (themeObject) {
-      applyTheme(themeObject?.preferred, data?.auth?.user);
-      dispatch(setTheme(themeObject?.preferred));
-      setload(false);
-    } else {
-      let localpreferred = localStorage.getItem("preferredtheme");
-      if (localpreferred) {
-        applyTheme(localpreferred, data?.auth?.user);
+    try {
+      let themeObject = await ParseContent(
+        path.join(data?.auth?.user, "conf", "theme")
+      );
+      if (themeObject) {
+        applyTheme(themeObject?.preferred, data?.auth?.user);
+        dispatch(setTheme(themeObject?.preferred));
+        setload(false);
       } else {
-        applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
+        let localpreferred = JSON.parse(localStorage.getItem("preferredtheme")) 
+        && JSON.parse(localStorage.getItem("preferredtheme"));
+        if (localpreferred) {
+          applyTheme(localpreferred, data?.auth?.user);
+        } else {
+          console.log("hey")
+          applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
+        }
+        setload(false);
       }
-      setload(false);
+    } catch (error) {
+      console.log(error)
     }
   }
 

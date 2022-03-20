@@ -8,7 +8,7 @@ function CheckCustomTheme(email) {
   let themeObject;
   try {
     themeObject = JSON.parse(readFile(path.join(email, "conf", "theme")));
-    return themeObject?.ListOfThemes;
+    return themeObject?.ListOfThemes ? themeObject?.ListOfThemes : null;
   } catch (error) {
     console.log(error);
     return null;
@@ -16,8 +16,9 @@ function CheckCustomTheme(email) {
 }
 
 const DecideBetween = (email) => {
-  return CheckCustomTheme(email) ? CheckCustomTheme(email) : ListOfThemes;
+  return CheckCustomTheme(email) != null || CheckCustomTheme(email) != undefined ? CheckCustomTheme(email) : ListOfThemes;
 };
 export const themes = (email) => {
+  console.log(DecideBetween(email))
   return DecideBetween(email);
 };

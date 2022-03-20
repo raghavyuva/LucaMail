@@ -39,18 +39,13 @@ const PageLayout = ({
   const [ModalOpen, setModalOpen] = useState(false);
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
-      ? SettingFromStorage[0].defaultval
-      : SettingTypes["boolvaled"][0].defaultval
+      ? SettingFromStorage[0]?.defaultval
+      : SettingTypes["boolvaled"][0]?.defaultval
   );
   const [HideTopbar] = useState(
     SettingFromStorage
-      ? SettingFromStorage[3].defaultval
-      : SettingTypes["boolvaled"][3].defaultval
-  );
-  const [showSupportCard] = useState(
-    SettingFromStorage
-      ? SettingFromStorage[1].defaultval
-      : SettingTypes["boolvaled"][1].defaultval
+      ? SettingFromStorage[3]?.defaultval
+      : SettingTypes["boolvaled"][3]?.defaultval
   );
 
   function OnFilterSelection(selected) {
@@ -155,8 +150,8 @@ const PageLayout = ({
                     MailStats
                       ? MailStats
                       : JSON.parse(
-                          readFile(path.join(userHome, "conf", "conf.txt"))
-                        )
+                        readFile(path.join(userHome, "conf", "conf.txt"))
+                      )
                   }
                   userHome={userHome}
                   user={user}
