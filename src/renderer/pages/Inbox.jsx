@@ -56,9 +56,9 @@ function Home({
       ? tLen > userDefinedFetchLimit
         ? userDefinedFetchLimit
         : tLen > 50
-        ? 50
-        : tLen
-      : 1
+          ? 50
+          : tLen
+      : 10
   );
   const [fetchedCount, setfetchedCount] = useState(
     GetFetchedCount(path.join(userHome, "mail", "mail"))
@@ -131,12 +131,8 @@ function Home({
     if (folder) {
       settLen(folder?.mailStatus?.messages);
       let fetchlimit =
-        folder?.mailStatus?.messages > userDefinedFetchLimit
-          ? userDefinedFetchLimit
-          : folder?.mailStatus?.messages > 50
-          ? 50
-          : folder?.mailStatus?.messages;
-
+        userDefinedFetchLimit ? folder?.mailStatus?.messages > userDefinedFetchLimit
+          ? userDefinedFetchLimit : folder?.mailStatus?.messages : folder?.mailStatus?.messages > 50 ? 50 : folder?.mailStatus?.messages
       setfLimit(fetchlimit);
       dispatch(setMailStats(folder));
       dispatch(setFolderStrucure(folder?.folderTree));
@@ -145,10 +141,8 @@ function Home({
       );
       if (mailfromlocal) {
         DispatchMails(mailfromlocal.Mail, mailfromlocal?.Body);
-        console.log("from local");
         await UpdateArrayWithLatestMail(data);
       } else {
-        console.log("from server");
         client = new ImapFlow(data);
         let obj = await fetchMail(
           false,
@@ -159,7 +153,6 @@ function Home({
           fetchedCount,
           client
         );
-        console.log(obj);
         DispatchMails(obj.Mail, obj.parsedjson);
         delete obj.parsedjson;
         setStoreObj(obj);
@@ -180,13 +173,13 @@ function Home({
         Object.values(StoreObj)[0]?.length > 0 &&
         Object.values(StoreObj)[1]?.length > 0 &&
         Object.values(StoreObj)[0]?.length ===
-          Object.values(StoreObj)[1]?.length &&
+        Object.values(StoreObj)[1]?.length &&
         store
       ) {
         StoreAsFile();
       }
     }
-    return () => {};
+    return () => { };
   }, [StoreObj]);
 
   useEffect(() => {

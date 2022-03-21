@@ -53,6 +53,17 @@ function Login({ frommultiuser }) {
       accessToken: null,
     },
   });
+
+  let smtpobj = {
+    host: "",
+    secure: securesmtp,
+    port: smtpPort,
+    auth: {
+      user: email,
+      pass: password
+    }
+  }
+
   useEffect(() => {
     dispatch(setLoading(false));
     if (!frommultiuser) {
@@ -62,13 +73,25 @@ function Login({ frommultiuser }) {
   }, []);
 
   async function onSuccess(res) {
+    let accountexists = false;
     selected.auth.user = res?.profileObj?.email;
     selected.auth.accessToken = res?.accessToken;
     delete selected.auth.pass;
     client = new ImapFlow(selected);
     let result = await LogintoAccount(client);
-    if (result == true) {
-      onResultTrue(res?.profileObj?.email);
+    if (result && typeof (result == 'boolean') && result == true) {
+      let userslist = JSON.parse(readFile("userslist"));
+      let obj = userslist && userslist?.length > 0 && userslist?.find((o, i) => {
+        if (o?.auth?.user === res?.profileObj?.email) {
+          alert("account already exists");
+          accountexists = true;
+          dispatch(setLoading(false));
+          return true;
+        }
+      });
+      if (!accountexists) {
+        onResultTrue(res?.profileObj?.email);
+      }
     } else {
       console.log(result);
     }
@@ -144,14 +167,15 @@ function Login({ frommultiuser }) {
     let accountexists = false;
     let userslist = JSON.parse(readFile("userslist"));
     if (userslist?.length > 0) {
-      let index = userslist.indexOf(selected);
-      console.log(index);
-      if (index > 0) {
-        alert("account already exists");
-        accountexists = true;
-        dispatch(setLoading(false));
-      } else {
-        console.log(selected)
+      let obj = userslist.find((o, i) => {
+        if (o?.auth?.user === selected?.auth?.user) {
+          alert("account already exists");
+          accountexists = true;
+          dispatch(setLoading(false));
+          return true;
+        }
+      });
+      if (!accountexists) {
         userslist?.push(selected);
         WriteFile(path.join("userslist"), userslist);
       }
@@ -163,16 +187,18 @@ function Login({ frommultiuser }) {
     if (frommultiuser) {
       dispatch(setUser(selected));
     }
-    WriteFile(path.join(email, "user.txt"), selected);
-    let smtpobj = selected;
-    smtpobj.port = smtpPort;
-    smtpobj.host = smtpHost;
-    delete smtpobj["logger"];
-    delete smtpobj["auth"]["accessToken"];
-    smtpobj.secure = securesmtp;
-    WriteFile(path.join(email, "smtp.txt"), smtpobj);
-    dispatch(setAuthenticated(true));
-    dispatch(setLoading(false));
+    if (!accountexists) {
+      smtpobj = selected
+      WriteFile(path.join(email, "user.txt"), selected);
+      smtpobj.port = smtpPort
+      smtpobj.host = smtpHost
+      delete smtpobj["logger"];
+      delete smtpobj["auth"]["accessToken"];
+      smtpobj.secure = securesmtp;
+      WriteFile(path.join(email, "smtp.txt"), smtpobj);
+      dispatch(setAuthenticated(true));
+      dispatch(setLoading(false));
+    }
   }
 
   return (
@@ -257,7 +283,7 @@ function Login({ frommultiuser }) {
               />
             </div>
             <div className="flex justify-center items-center">
-              <GoogleLogin
+              {/* <GoogleLogin
                 clientId={api_key}
                 buttonText={frommultiuser ? "Add User" : "Login"}
                 onSuccess={onSuccess}
@@ -265,7 +291,7 @@ function Login({ frommultiuser }) {
                 cookiePolicy={"single_host_origin"}
                 scope="https://mail.google.com"
                 className=" justify-center w-32 text-center self-center"
-              />
+              /> */}
             </div>
             {Errors && (
               <span className="font-extrabold text-primary-text mt-4 text-center align-middle ">

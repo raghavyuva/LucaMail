@@ -56,7 +56,6 @@ function Index({ Authenticated, default_theme, userslist, user }) {
         if (localpreferred) {
           applyTheme(localpreferred, data?.auth?.user);
         } else {
-          console.log("hey")
           applyTheme(DEFAULT_THEME?.PaletteName, data?.auth?.user);
         }
         setload(false);

@@ -19,6 +19,5 @@ const DecideBetween = (email) => {
   return CheckCustomTheme(email) != null || CheckCustomTheme(email) != undefined ? CheckCustomTheme(email) : ListOfThemes;
 };
 export const themes = (email) => {
-  console.log(DecideBetween(email))
   return DecideBetween(email);
 };
