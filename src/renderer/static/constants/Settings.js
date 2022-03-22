@@ -4,7 +4,7 @@ export const SettingTypes = {
       label: "Drawer Open on startup",
       defaultval: false,
       description:
-        "Open the Drawer on startup loren sahgjsafcgksh shikfhaskfask",
+        "Open the Drawer on startup of the application"
     },
     {
       label: "Store Mails in Local Drive",
