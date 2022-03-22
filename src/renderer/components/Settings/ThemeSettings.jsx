@@ -73,7 +73,7 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
         alert("changes applied");
       }
     } else {
-      localStorage.setItem("preferredtheme", selected);
+      localStorage.setItem("preferredtheme", JSON.stringify(selected));
     }
   }
 
