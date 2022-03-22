@@ -1,27 +1,16 @@
-import React from 'react'
+import React from "react";
 
-function Button({
-    handler,
-    btntext
-}) {
-    return (
-        <div>
-            <button className="inline-flex items-center px-8 py-3 font-medium bg-primary text-primary-background shadow-2xl  rounded-lg hover:opacity-75"
-                onClick={handler}
-            >
-                {btntext}
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 ml-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-            </button>
-        </div>
-    )
+function Button({ handler, btntext }) {
+  return (
+    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <button
+        onClick={handler}
+        className="inline-block px-5 py-3 mt-8 text-sm font-medium hover:bg-primary bg-primary rounded-tl-2xl rounded-br-2xl text-BannerCardButtonText shadow-lg "
+      >
+        {btntext}
+      </button>
+    </div>
+  );
 }
 
-export default Button
+export default Button;

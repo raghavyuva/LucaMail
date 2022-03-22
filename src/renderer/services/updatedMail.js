@@ -1,22 +1,15 @@
 const simpleParser = window.require("mailparser").simpleParser;
 
-export async function OnUpdatedMailFromServer(
-  client,
-  setUpdatedMailsFromServer,
-  setUpdatedMailBody,
-  fetchedCount,
-  setlatestMailCount,
-  Mail,
-  Body,
-  path
-) {
-  await client.connect();
-  let lock = await client.getMailboxLock(path);
+export async function OnUpdatedMailFromServer(client, fetchedCount, path) {
   try {
+    await client.connect();
+    let lock = await client.getMailboxLock(path);
     await client.mailboxOpen(path);
     let status = await client.status(path, { unseen: true, messages: true });
-    let total = status.messages
+    let total = status.messages;
     let count = 0;
+    let latestmailwithenvelope = [];
+    let latestMessagesarray = [];
     if (total > fetchedCount) {
       for await (let message of client.fetch(`${fetchedCount + 1}:${total}`, {
         envelope: true,
@@ -25,20 +18,23 @@ export async function OnUpdatedMailFromServer(
         status: true,
         labels: true,
         uid: true,
-        new: true
+        new: true,
       })) {
         count += 1;
         let obj = {};
-        obj.flags = message.flags; obj.envelope = message.envelope; obj.uid = message.uid; obj.labels = message.labels;
-        setUpdatedMailsFromServer((messages) => [...messages, obj])
+        obj.flags = message.flags;
+        obj.envelope = message.envelope;
+        obj.uid = message.uid;
+        obj.labels = message.labels;
         let parsed = await simpleParser(message.source);
-        setUpdatedMailBody((MailWithBody) => [...MailWithBody, parsed])
+        obj.body = parsed;
+        latestMessagesarray.push(obj);
+        latestmailwithenvelope.push(message.envelope);
       }
-      setlatestMailCount(count);
     }
-  } finally {
-    lock.release();
+    return { count, latestmailwithenvelope, latestMessagesarray };
+  } catch (err) {
+    console.log(err);
   }
   await client.logout();
 }
-

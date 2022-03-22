@@ -3,18 +3,18 @@ import TitleBar from "~/components/TopBar/WindowBar";
 
 function Loading({ icon }) {
   return (
-    <div className="">
+    <div className="bg-LoadingBackground  text-LoadingText">
       <>
         <TitleBar icon={icon} />
         <div className="flex flex-col justify-center items-center      h-[calc(100vh_-_2rem)]">
-          <div className="flex items-center">
-            <span className="text-3xl font-bold capitalize font-mono leading-loose mr-4">
-              hang on while we are fetching mail for you
-            </span>
-            <div
-              style={{ borderTopColor: "transparent" }}
-              className="w-8 h-8  border-4 border-blue-400 border-solid rounded-full animate-spin"
-            ></div>
+          <div className="flex flex-col items-center ">
+            <h1 className="text-3xl font-bold capitalize  leading-loose mr-4  ">
+              hang on while luca is setting up mail for you
+            </h1>
+            <img
+              src="https://camo.githubusercontent.com/09b4eefc1e15caef9a2e732fba9d4a5c4baf1a57c8a1ea21bcb3b639a3c5457d/68747470733a2f2f696d6775722e636f6d2f74637258454b4b2e706e67"
+              className="w-32 h-32 mt-10 animate-bounce"
+            />
           </div>
         </div>
       </>

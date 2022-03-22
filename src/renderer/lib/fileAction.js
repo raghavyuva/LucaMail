@@ -2,6 +2,7 @@ const homedir = require("os").homedir();
 var fs = require("fs");
 const path = require("path");
 let appPath = "luca";
+
 export function readFile(filePath) {
   let newpath = path.join(homedir, appPath, filePath);
   let z;
@@ -21,14 +22,16 @@ export const createFolder = (newpath) => {
 
 export const WriteFile = async (filePath, data) => {
   try {
-    await fs.writeFileSync(
-      path.join(homedir, appPath, filePath),
-      JSON.stringify(data, Set_toJSON),
-      {
-        encoding: "utf8",
-        flag: "w",
-      }
-    );
+    if (data) {
+      await fs.writeFileSync(
+        path.join(homedir, appPath, filePath),
+        JSON.stringify(data, Set_toJSON),
+        {
+          encoding: "utf8",
+          flag: "w",
+        }
+      );
+    }
     function Set_toJSON(key, value) {
       if (typeof value === "object" && value instanceof Set) {
         return [...value];
@@ -36,6 +39,7 @@ export const WriteFile = async (filePath, data) => {
       return value;
     }
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -46,5 +50,18 @@ export const checkExists = (filepath) => {
     return z;
   } catch (error) {
     return false;
+  }
+};
+
+export const DeleteFile = (filepath) => {
+  let delpath = path.join(homedir, appPath, filepath);
+  try {
+    let x = fs.rmSync(delpath, {
+      recursive: true,
+      force: true,
+    });
+    return true;
+  } catch (error) {
+    console.log(error);
   }
 };

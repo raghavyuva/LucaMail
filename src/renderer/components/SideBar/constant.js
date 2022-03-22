@@ -1,7 +1,19 @@
-import { MdContactMail, MdFolder, MdLogout, MdSettings } from "react-icons/md";
+import {
+  MdContactMail,
+  MdFolder,
+  MdLogout,
+  MdSettings,
+  MdTableView,
+} from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { HiMail, HiTrash } from "react-icons/hi";
-import { MdInbox, MdDrafts, MdLabelImportant, MdStar, MdReport } from "react-icons/md";
+import {
+  MdInbox,
+  MdDrafts,
+  MdLabelImportant,
+  MdStar,
+  MdReport,
+} from "react-icons/md";
 import { RiSendPlaneFill } from "react-icons/ri";
 
 export const ExtendMail = [
@@ -91,26 +103,25 @@ export const SideBarContents = [
     icon: MdFolder,
     link: "/newfolder",
   },
-
 ];
-
 
 export const sidebarBottomContents = [
   {
     label: "Settings",
     icon: MdSettings,
     link: "/settings",
+    id: "37423ruwehd7r48jedchew",
   },
   {
     label: "Logout",
     icon: MdLogout,
     link: "/",
+    id: "gdw83hbsdyewe-2qjsdw3r",
   },
-]
-
+];
 
 export const Supporting = {
   title: "Support us",
   tagline: "Supporting another's success won't ever dampen yours",
-  btn: "Donate Now"
-}
+  btn: "Donate Now",
+};

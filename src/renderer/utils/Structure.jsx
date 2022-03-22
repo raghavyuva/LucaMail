@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ListMail from "../components/ListMail/ListMail";
 import ShowMail from "../components/ShowMail/ShowMail";
 import SideBar from "../components/SideBar/SideBarWrapper";
 import TopBar from "../components/TopBar/TopBar";
-import PropTypes from "prop-types";
 import SelfPromotional from "../components/Promotional/Promote";
 import TitleBar from "~/components/TopBar/WindowBar";
-import { SideBarContents } from "../components/SideBar/constant";
-import { motion } from "framer-motion";
 import { EditorState } from "draft-js";
 import useComponentVisible from "./TouchBehaviour";
 import { MdMenu } from "react-icons/md";
 import { SettingTypes } from "~/static/constants/Settings";
 import ComposeBox from "~/components/ShowMail/ComposeBox";
 import FilterCard from "~/components/TopBar/FilterCard";
-import { config } from "../static/constants/Config";
 import { readFile } from "../lib/fileAction";
+import MultiUserAdd from "../components/Login/MultiUserAdd";
 const path = require("path");
 function Structure({
   isAnyMailOpen,
@@ -27,7 +24,6 @@ function Structure({
   setopenedmail,
   composeopen,
   setcomposeopen,
-  MailWithBody,
   unseenCount,
   listOfUid,
   message,
@@ -42,90 +38,55 @@ function Structure({
   FetchLimit,
   FetchUptoNextLimit,
   Refresh,
-  ConfData,
+  MailStats,
+  folderStructure,
+  userHome,
+  userslist,
+  user,
 }) {
-  let uname = ConfData.user;
   const [toggle, settoggle] = useState(false);
   const [selected, setselected] = useState();
-  const [LocalFilterData, setLocalFilterData] = useState(
-    FilteredData && FilteredData?.length > 0 ? FilteredData : Data
-  );
-  const [backupData, setbackupData] = useState(LocalFilterData);
-  const [changedetect, setchangedetect] = useState(0);
   const { ref } = useComponentVisible(false, toggle, settoggle);
   let SettingFromStorage = JSON.parse(localStorage.getItem("Settings"));
+  const [GridView, setGridView] = useState(2);
+  const [ModalOpen, setModalOpen] = useState(false);
   const [isDrawerOpen, setisDrawerOpen] = useState(
     SettingFromStorage
-      ? SettingFromStorage[0].default
-      : SettingTypes["boolvaled"][0].default
+      ? SettingFromStorage[0]?.defaultval
+      : SettingTypes["boolvaled"][0]?.defaultval
   );
   const [HideTopbar] = useState(
     SettingFromStorage
-      ? SettingFromStorage[3].default
-      : SettingTypes["boolvaled"][3].default
+      ? SettingFromStorage[3]?.defaultval
+      : SettingTypes["boolvaled"][3]?.defaultval
   );
-  const [showSupportCard] = useState(
-    SettingFromStorage
-      ? SettingFromStorage[1].default
-      : SettingTypes["boolvaled"][1].default
-  );
-
   const [editorState, setEditorState] = React.useState(() =>
     EditorState.createEmpty()
   );
 
-  const [SidebarItem, setSidebarItem] = useState(
-    ConfData ? ConfData : JSON.parse(readFile(path.join("conf", "conf.txt")))
-  );
-
-  useEffect(() => {
-    setLocalFilterData(
-      FilteredData && FilteredData?.length > 0 ? FilteredData : Data
-    );
-  }, [Data]);
-
-  useEffect(() => {
+  function OnFilterSelection(selected) {
+    setselected(selected);
     if (selected) {
-      SetBack(FilteredData && FilteredData?.length > 0 ? FilteredData : Data);
       switch (selected) {
         case "A-Z":
-          let filteredval = LocalFilterData.sort((a, b) =>
-            a.subject.localeCompare(b.subject)
-          );
-          SetBack(filteredval);
+          Data.sort((a, b) => a.subject.localeCompare(b.subject));
           break;
         case "Z-A":
-          let val = LocalFilterData.sort((a, b) =>
-            a.subject.localeCompare(b.subject)
-          );
-          SetBack(val?.reverse());
+          Data.sort((a, b) => a.subject.localeCompare(b.subject))?.reverse();
           break;
         case "sent-by":
-          let v = LocalFilterData.sort((a, b) =>
+          Data.sort((a, b) =>
             a.from[0].address.localeCompare(b.from[0].address)
           );
-          SetBack(v);
           break;
         default:
-          let c = LocalFilterData?.sort((a, b) => {
+          Data?.sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
           });
-          SetBack(c);
           break;
       }
     }
-  }, [selected]);
-
-  useEffect(() => {}, [changedetect]);
-
-  function SetBack(val) {
-    setchangedetect(changedetect + 1);
-    setLocalFilterData(val);
   }
-
-  useEffect(() => {
-    setbackupData(LocalFilterData);
-  }, [LocalFilterData]);
 
   return (
     <div>
@@ -134,6 +95,7 @@ function Structure({
         isDrawerOpen={isDrawerOpen}
         setisDrawerOpen={setisDrawerOpen}
       />
+      {ModalOpen && <MultiUserAdd setModalOpen={setModalOpen} />}
       <div className=" flex h-[calc(100vh_-_2rem)] ">
         <div ref={ref} className=" overflow-hidden">
           {toggle && (
@@ -142,15 +104,12 @@ function Structure({
               settoggle={settoggle}
               selected={selected}
               setselected={setselected}
+              onFilterSelection={(val) => OnFilterSelection(val)}
             />
           )}
-          <motion.div
-            animate={{ x: isDrawerOpen ? 0 : -100 }}
-            transition={{ ease: "easeInOut", duration: 3 }}
-          >
+          <div>
             {isDrawerOpen && (
               <SideBar
-                sideBarContents={ConfData ? ConfData : SideBarContents}
                 isDrawerOpen={isDrawerOpen}
                 setisDrawerOpen={setisDrawerOpen}
                 setcomposeopen={setcomposeopen}
@@ -158,10 +117,12 @@ function Structure({
                 actionFromReply={actionFromReply}
                 setactionFromReply={setactionFromReply}
                 isAnyMailOpen={isAnyMailOpen}
-                showSupportCard={showSupportCard}
+                folderStructure={folderStructure}
+                userHome={userHome}
+                user={user}
               />
             )}
-          </motion.div>
+          </div>
         </div>
         <div className="flex-1 flex-col flex overflow-hidden ">
           {!HideTopbar && (
@@ -177,18 +138,30 @@ function Structure({
               setselection={setselected}
               toggled={toggle}
               settoggled={settoggle}
-              uname={uname}
+              uname={MailStats?.user}
+              userslist={userslist}
+              userHome={userHome}
+              setModalOpen={setModalOpen}
             />
           )}
           <div className="flex flex-1 flex-row overflow-hidden  ">
             {Data?.length > 0 && (
-              <div className=" overflow-y-scroll  scroll-smooth    w-max justify-center items-center scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary  scrollbar-thumb-rounded-full scrollbar-track-rounded-full ">
+              <div
+                boundsByDirection
+                onResizeStop={(e, direction, ref, d) => {
+                  console.log(d.width, d.height, direction);
+                }}
+                className={`overflow-y-scroll ${GridView == 2 ? "max-w-sm" : "w-full "
+                  } scroll-smooth   scrollbar-thin  scrollbar-thumb-primary scrollbar-track-windowBarBackground  scrollbar-thumb-rounded-full scrollbar-track-rounded-full justify-center items-center  `}
+              >
                 <ListMail
                   Data={
                     FilteredData && FilteredData?.length > 0
                       ? FilteredData
-                      : backupData
+                      : Data
                   }
+                  GridView={GridView}
+                  setGridView={setGridView}
                   Tabs={Tabs}
                   isAnyMailOpen={isAnyMailOpen}
                   setisAnyMailOpen={setisAnyMailOpen}
@@ -196,12 +169,12 @@ function Structure({
                   setopenedmail={setopenedmail}
                   unseenCount={unseenCount}
                   message={message}
-                  Body={MailWithBody}
                   TotalCount={Status}
                   FetchLimit={FetchLimit}
                   FetchUptoNextLimit={FetchUptoNextLimit}
                   setcomposeopen={setcomposeopen}
                   Refresh={Refresh}
+                  user={user}
                 />
               </div>
             )}
@@ -212,27 +185,36 @@ function Structure({
                   setopenedmail={setopenedmail}
                   composeopen={composeopen}
                   setcomposeopen={setcomposeopen}
-                  MailWithBody={MailWithBody}
                   listOfUid={listOfUid}
                   message={message}
                   actionFromReply={actionFromReply}
                   setactionFromReply={setactionFromReply}
+                  setisAnyMailOpen={setisAnyMailOpen}
                   maillist={Data}
-                  pathContents={SidebarItem ? SidebarItem : SideBarContents}
+                  pathContents={
+                    MailStats
+                      ? MailStats
+                      : JSON.parse(
+                        readFile(path.join(userHome, "conf", "conf.txt"))
+                      )
+                  }
+                  userHome={userHome}
+                  user={user}
                 />
               </div>
             ) : (
               <>
-                {!composeopen ? (
+                {!composeopen && GridView == 2 && (
                   <div className=" overflow-y-scroll scrollbar-thin scrollbar-thumb-primary scrollbar-track-secondary w-full md:flex hidden  ">
                     <SelfPromotional
-                      uname={uname}
+                      uname={MailStats?.user ? MailStats?.user : ""}
                       Data={message}
                       composeopen={composeopen}
                       setcomposeopen={setcomposeopen}
                     />
                   </div>
-                ) : (
+                )}
+                {composeopen && (
                   <div className=" w-full   mx-10">
                     <ComposeBox
                       editorState={editorState}
@@ -242,6 +224,7 @@ function Structure({
                       toadress=""
                       subject=""
                       action={actionFromReply}
+                      userHome={userHome}
                     />
                   </div>
                 )}
@@ -253,15 +236,4 @@ function Structure({
     </div>
   );
 }
-
-Structure.propTypes = {
-  showSidebar: PropTypes.bool,
-  showTopbar: PropTypes.bool,
-  isDrawerOpen: PropTypes.bool,
-  setisDrawerOpen: PropTypes.func,
-  sideBarContents: PropTypes.array,
-  isAnyMailOpen: PropTypes.bool,
-  setisAnyMailOpen: PropTypes.func,
-};
-
 export default Structure;

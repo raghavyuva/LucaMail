@@ -1,6 +1,6 @@
 {
   "name": "lucamail",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "author": "Raghavyuva <raghavyuva@gmail.com>",
   "license": "GPL-3.0",
   "scripts": {
@@ -19,6 +19,7 @@
     "electron-ipc-proxy": "^2.1.0",
     "electron-log": "^4.4.3",
     "electron-store": "^8.0.1",
+    "electron-updater": "^4.6.5",
     "electron-window-state": "^5.0.3",
     "framer-motion": "^5.5.4",
     "imapflow": "^1.0.78",
@@ -30,6 +31,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
+    "react-google-login": "^5.2.2",
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.1.1",

@@ -9,9 +9,11 @@ export async function LogintoAccount(client) {
     if (client.authenticated == true) {
       return true;
     } else {
+      console.log('heyyyy')
       return false;
     }
   } catch (error) {
+    console.log(error)
     return false;
   }
 }
@@ -44,9 +46,10 @@ export async function getInformation(client, Path, writepath) {
     obj.user = client?.options?.auth?.user;
     let quota = await client.getQuota();
     obj.quota = quota;
-    WriteFile(path.join("conf", writepath), obj);
+    WriteFile(writepath, obj);
     return obj;
   } catch (error) {
+    console.log(error)
     return error;
   }
 }

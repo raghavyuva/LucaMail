@@ -4,21 +4,19 @@ import bannerimg from "../../../main/helpers/assets/promote.svg";
 function Banner({ composeopen, setcomposeopen }) {
   const { title, tagline, description, PromotebtnText } = constant.Banner[0];
   return (
-    <aside className="relative overflow-hidden bg-secondary  rounded-xl lg:flex max-w-screen-xl px-4 shadow-2xl mx-auto ">
+    <aside className="relative overflow-hidden bg-BannerCardBackground text-BannerCardText rounded-xl lg:flex max-w-screen-xl px-4 shadow-2xl mx-auto ">
       <div className="w-full p-12 text-center lg:w-1/2 sm:p-16 lg:p-24 lg:text-left">
         <div className="max-w-xl mx-auto lg:ml-0">
-          <p className="text-sm font-medium">{title}</p>
+          <p className="text-sm text-BannerCardTitle font-medium">{title}</p>
 
-          <p className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-            {tagline}
-          </p>
+          <p className="mt-2 text-2xl font-bold  sm:text-3xl">{tagline}</p>
 
           <p className="hidden lg:mt-4 lg:block">{description}</p>
 
           <button
             href=""
             onClick={() => setcomposeopen(!composeopen)}
-            className="inline-block px-5 py-3 mt-8 text-sm font-medium  bg-gradient-to-tl from-primary-background to-primary rounded-tl-2xl rounded-br-2xl  shadow-lg "
+            className="inline-block px-5 py-3 mt-8 text-sm font-medium  bg-BannerCardButtonBackground rounded-tl-2xl rounded-br-2xl text-BannerCardButtonText shadow-lg "
           >
             {PromotebtnText}
           </button>

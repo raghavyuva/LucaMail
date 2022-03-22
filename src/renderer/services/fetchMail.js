@@ -1,10 +1,6 @@
-const log = require("electron-log");
 const simpleParser = window.require("mailparser").simpleParser;
-const Store = require("electron-store");
-const store = new Store();
+
 export async function FetchMail(
-  setMessages,
-  setMailWithBody,
   client,
   fetchLimit,
   fetchedCount,
@@ -35,6 +31,8 @@ export async function FetchMail(
     if (decreasedCount < 0) {
       decreasedCount = 0;
     }
+    let Messagesarray = [];
+    let envelopearray = [];
     for await (let message of client.fetch(
       `${decreasedCount + 1}:${totalCount}`,
       {
@@ -48,14 +46,18 @@ export async function FetchMail(
       }
     )) {
       let obj = {};
+      let envelopeobj = {};
+      envelopeobj = message.envelope;
       obj.flags = message.flags;
       obj.envelope = message.envelope;
       obj.uid = message.uid;
       obj.labels = message.labels;
-      setMessages((messages) => [...messages, obj]);
       let parsed = await simpleParser(message.source);
-      setMailWithBody((MailWithBody) => [...MailWithBody, parsed]);
+      obj.body = parsed;
+      envelopearray.push(envelopeobj);
+      Messagesarray.push(obj);
     }
+    return { Messagesarray, envelopearray };
   } catch (err) {
   } finally {
     lock.release();
