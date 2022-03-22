@@ -37,13 +37,12 @@ linux:
   icon: src/main/helpers/lucamail.png
   category: Development
   target:
-    - AppImage
-    - flatpak
-    - pacman
-    - deb
-    - snap
-    - rpm
-    - apk
+    - "AppImage"
+    - "deb"
+    - "rpm"
+    - "snap"
+    - "pacman"
+
 directories:
-  buildResources: resources
-  output: release
+  buildResources: "resources"
+  output: "release"

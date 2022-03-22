@@ -1,0 +1,63 @@
+name: Build
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build_on_linux:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 17
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run build
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: "release/*"
+
+  build_on_mac:
+    runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 17
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run build
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: "release/*"
+      
+  build_on_win:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@master
+      with:
+        node-version: 17
+    - name: install dependencies
+      run: npm install
+    - name: build
+      run: npm run build
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: "release/*"
