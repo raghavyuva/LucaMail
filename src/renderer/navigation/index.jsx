@@ -51,8 +51,8 @@ function Index({ Authenticated, default_theme, userslist, user }) {
         dispatch(setTheme(themeObject?.preferred));
         setload(false);
       } else {
-        let localpreferred = JSON.parse(localStorage.getItem("preferredtheme")) 
-        && JSON.parse(localStorage.getItem("preferredtheme"));
+        let localpreferred = JSON.parse(localStorage.getItem("preferredtheme"))
+          ? JSON.parse(localStorage.getItem("preferredtheme")) : null;
         if (localpreferred) {
           applyTheme(localpreferred, data?.auth?.user);
         } else {

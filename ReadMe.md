@@ -21,10 +21,10 @@
 
 # About The Project
 
- <p align="center"><img src="https://imgur.com/A2xKUvn.png"></p>
+ <p align="center"><img src="https://imgur.com/tt1JqSC.png"></p>
 LucaMail is an Open Source,Cross Platform  Email Client. LucaMail is developed to provide cross platform alternative to Email Clients
 that already exists. LucaMail focuses on modern Technologies as well as maintaining a user-friendly UI. There exists  Email Clients which lack at providing cross platform software,smooth UI,modern design techniques, and trending technologies. Where as a Solution LucaMail Provides all these features.
-LucaMail is Bundled with 2 classic dark and white themes.LucaMail is Lightweight, simple , os friendly too.
+LucaMail is Bundled with 2 classic dark and Light themes.LucaMail is Lightweight, simple , os friendly too.
  
 LucaMail Provides a Rich Text Editing Experience to send a Mail. Only the imap protocol is supported in the beta version as many users don't seem to be using pop protocol.
 LucaMail stores the messages as files under the user's home directory proceeded by the luca directory.
@@ -41,8 +41,7 @@ as long as a bug is detected 😀. So feel free to suggest changes by opening a 
 - Multiple Ways to Install the Application
 - New UI Design Systems 
 - Multiple User Account Switch
-- Oauth Login to the application
-- User Customized themes [see how to customize theme](docs/customizetheme.md)
+- User Customized themes [see how to customize theme](docs/themecustomize.md)
 - 2 classical themes Dark theme and White theme
 - Multiple Layout of Views such as Grid View,List View
 - A Better Card View and a Table View
@@ -98,7 +97,7 @@ LucaMail can be installed in two ways.
 Distributed under the GPL-3.0 License. See [LICENSE](https://github.com/raghavyuva/LucaMail/blob/master/LICENSE) for more information.  
 [![License](https://www.gnu.org/graphics/gplv3-with-text-136x68.png)](https://github.com/raghavyuva/LucaMail/blob/master/LICENSE)
 
-# Authors
+# Author
 
 - **Raghavyuva** - _Comp Sci Student_ - [Raghavyuva](https://raghavyuva.com/) - _All Work_
 
