@@ -21,7 +21,7 @@
 
 # About The Project
 
- <p align="center"><img src="https://imgur.com/tt1JqSC.png"></p>
+ <p align="center"><a href="https://youtu.be/Nr4P234WgV0"><img src="https://imgur.com/tt1JqSC.png"></a></p>
 LucaMail is an Open Source,Cross Platform  Email Client. LucaMail is developed to provide cross platform alternative to Email Clients
 that already exists. LucaMail focuses on modern Technologies as well as maintaining a user-friendly UI. There exists  Email Clients which lack at providing cross platform software,smooth UI,modern design techniques, and trending technologies. Where as a Solution LucaMail Provides all these features.
 LucaMail is Bundled with 2 classic dark and Light themes.LucaMail is Lightweight, simple , os friendly too.
