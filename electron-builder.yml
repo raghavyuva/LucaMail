@@ -41,8 +41,6 @@ linux:
     - "deb"
     - "rpm"
     - "snap"
-    - "pacman"
-
 directories:
   buildResources: "resources"
   output: "release"
