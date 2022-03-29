@@ -22,16 +22,10 @@
 # About The Project
 
  <p align="center"><a href="https://youtu.be/Nr4P234WgV0"><img src="https://imgur.com/tt1JqSC.png"></a></p>
-LucaMail is an Open Source,Cross Platform  Email Client. LucaMail is developed to provide cross platform alternative to Email Clients
-that already exists. LucaMail focuses on modern Technologies as well as maintaining a user-friendly UI. There exists  Email Clients which lack at providing cross platform software,smooth UI,modern design techniques, and trending technologies. Where as a Solution LucaMail Provides all these features.
-LucaMail is Bundled with 2 classic dark and Light themes.LucaMail is Lightweight, simple , os friendly too.
- 
-LucaMail Provides a Rich Text Editing Experience to send a Mail. Only the imap protocol is supported in the beta version as many users don't seem to be using pop protocol.
-LucaMail stores the messages as files under the user's home directory proceeded by the luca directory.
+LucaMail is an Open Source, Cross-Platform Email Client. LucaMail is developed to provide a cross-platform alternative to Email Clients that already exists. LucaMail focuses on contemporary technologies as well as maintaining a user-friendly UI. There exist Email Clients which lack providing cross-platform software, smooth UI, modern design techniques, and trending technologies. Whereas a Solution *LucaMail* Provides all such features. LucaMail is bundled with 2 classic dark and Light themes along with a customized theme. LucaMail is Lightweight, simple, os friendly too.
+LucaMail Provides a Rich Text Editing Experience to send Mail. Only the `IMAP protocol` is supported in the beta version as many users don't seem to be using a pop protocol. LucaMail stores the messages as files under the user's home directory moved by the `luca` directory.
 
-Some Feature may be lacking as it is a beta version but the bundled features are assumed to work in all perspective
-as long as a bug is detected 😀. So feel free to suggest changes by opening a new issue, or if you want to implement your own, feel free to fork this repo and create a pull request.you can also visit [Contributing Guide »](docs/contributing.md) to know more!
-
+Some features may be lacking as it is a beta version but the bundled features are assumed to work in all perspectives as long as a bug is detected. So feel free to propose changes by opening a new issue, or if you want to implement your own, feel free to fork this repo and create a pull request. You can visit [Contributing Guide »](docs/contributing.md) for contribution aid. 
 
 # Features
 - Super Fast
