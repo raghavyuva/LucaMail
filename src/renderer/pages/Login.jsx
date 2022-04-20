@@ -207,7 +207,7 @@ function Login({ frommultiuser }) {
       <section
         className={
           !frommultiuser
-            ? "relative flex flex-wrap lg:h-[calc(100vh_-_2rem)] lg:items-center justify-center text-text  bg-cover "
+            ? "relative flex flex-wrap lg:h-[calc(100vh_-_2rem)] bg-[url('https://raw.githubusercontent.com/raghavyuva/LucaMail/0b89d509b8f8dd68a23831694a0cf0179dec6a8d/src/main/helpers/assets/LoginBg.jpg')] lg:items-center justify-center text-text  bg-cover "
             : ""
         }
       >
@@ -283,7 +283,7 @@ function Login({ frommultiuser }) {
               />
             </div>
             <div className="flex justify-center items-center">
-              {/* <GoogleLogin
+              <GoogleLogin
                 clientId={api_key}
                 buttonText={frommultiuser ? "Add User" : "Login"}
                 onSuccess={onSuccess}
@@ -291,7 +291,7 @@ function Login({ frommultiuser }) {
                 cookiePolicy={"single_host_origin"}
                 scope="https://mail.google.com"
                 className=" justify-center w-32 text-center self-center"
-              /> */}
+              />
             </div>
             {Errors && (
               <span className="font-extrabold text-primary-text mt-4 text-center align-middle ">

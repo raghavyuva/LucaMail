@@ -1,5 +1,4 @@
-// import { motion } from 'framer-motion'
-import React, { useEffect } from "react";
+import React from "react";
 import Index from "./navigation";
 function App() {
   return (

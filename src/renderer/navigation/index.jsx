@@ -18,7 +18,7 @@ import Loading from "../components/Loading/Loading";
 const { ImapFlow } = require("imapflow");
 const path = require("path");
 
-function Index({ Authenticated, default_theme, userslist, user }) {
+function Index({ Authenticated,  userslist, user }) {
   const dispatch = useDispatch();
   const [load, setload] = useState(true);
 
