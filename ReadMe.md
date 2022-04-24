@@ -41,6 +41,8 @@ Some features may be lacking as it is a beta version but the bundled features ar
 - A Better Card View and a Table View
 - Rich Text Editing Experience to send a mail
 - General Settings to configure app specs
+- Available in 5 Different Languages (Localisation)
+- Download or Export Mails as CSV file
 
 # Built With
 

@@ -112,13 +112,10 @@ function ListMail({
                     subject={data && data?.sender[0]?.name}
                     time={istoDay(data)}
                     isstarred={CheckFlag(data, "flagged")}
-                    setisAnyMailOpen={setisAnyMailOpen}
-                    setopenedmail={setopenedmail}
                     messageId={data.messageId}
                     mailObject={data}
                     read={CheckFlag(data, "seen")}
                     key={index.toString()}
-                    read={CheckFlag(data, "seen")}
                     CheckForSelectedDiv={(val, id) => {
                       try {
                         CheckForSelectedDiv(

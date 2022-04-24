@@ -6,6 +6,7 @@ import ThemeSelect from "./ThemeSelect";
 import useComponentVisible from "~/utils/TouchBehaviour";
 import { applyTheme } from "../../themes/themeutil";
 import Button from "../Basic/Button";
+import { useTranslation } from 'react-i18next';
 import { WriteFile, readFile, DeleteFile } from "../../lib/fileAction";
 const path = require("path");
 const fs = require("fs");
@@ -17,6 +18,7 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
   const [Data, setData] = useState();
   const [Themes, setThemes] = useState();
   let themepath = path.join(user?.auth?.user, "conf", "theme");
+  const { t } = useTranslation()
 
   async function CheckThemes() {
     let themeObject = await ParseContent(themepath);
@@ -102,10 +104,9 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
     <div ref={ref} className="">
       <div className="flex mt-4 justify-between  pb-2 border-b border-b-SideBarBackground">
         <div className="flex flex-col">
-          <span className="text-md ">Upload custom Theme</span>
+          <span className="text-md ">{t("customtheme")}</span>
           <span className="text-xs opacity-75">
-            you can upload your custom json theme file,you can find default
-            theme json file in github repo
+            {t("uploadtheme")}
           </span>
         </div>
         <div>
@@ -128,11 +129,12 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
       </div>
       <div className="flex mt-4 justify-between  pb-2 border-b border-b-SideBarBackground">
         <div className="flex flex-col">
-          <span className="text-md ">Select Preferred Theme</span>
+          <span className="text-md ">{t("preferredtheme")}</span>
           <span className="text-xs opacity-75">
             {Themes && Object.keys(Themes?.ListOfThemes)?.length > 0
-              ? "you have uploaded a custom theme file choose from one of them "
-              : "choose from default themes available,you can upload custom theme if you dont like these themes"}
+              ? `${t("customselect")}`
+              : `${t("defaultselect")}`
+            }
           </span>
         </div>
         <div>
@@ -148,10 +150,9 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
       {Themes && Object.keys(Themes?.ListOfThemes)?.length > 0 && (
         <div className="flex mt-4 justify-between  pb-2 border-b border-b-SideBarBackground">
           <div className="flex flex-col">
-            <span className="text-md ">Delete Custom Theme File</span>
+            <span className="text-md ">{t("deletetheme")}</span>
             <span className="text-xs opacity-75">
-              you can choose themes from default files by removing custom theme
-              file
+              {t("defaultchoose")}
             </span>
           </div>
           <div>
@@ -163,7 +164,7 @@ const ThemeSettings = ({ CustomThemeFile, setCustomThemeFile, user }) => {
           </div>
         </div>
       )}
-      <Button handler={ApplyThemeConf} btntext="apply theme settings" />
+      <Button handler={ApplyThemeConf} btntext={t("applytheme")} />
     </div>
   );
 };

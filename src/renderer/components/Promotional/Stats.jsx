@@ -1,22 +1,25 @@
 import React from "react";
-import { constant } from "./constant";
+import { useTranslation } from 'react-i18next';
+
 function Stats({ uname, Data, UnreadCount, StarredCount }) {
+  const { t } = useTranslation();
+
   return (
     <div>
       <section className="text-StatCardText ">
         <div className="max-w-screen-xl px-0 py-16 mx-auto  ">
           <div className="max-w-xl ">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              {constant?.stats[0].title},{uname?.split("@")[0]}
+              {t("stattitle")},{uname?.split("@")[0]}
             </h2>
-            <p className="mt-4 sm:text-xl">{constant?.stats[0].tagline}</p>
+            <p className="mt-4 sm:text-xl">{t("stattagline")}</p>
           </div>
           <ul className="grid grid-cols-1 gap-8 mt-8 sm:grid-cols-2 lg:grid-cols-3">
             <li className="p-8 shadow-xl rounded-xl bg-StatCardBackground">
               <p className="text-3xl font-extrabold">{Data?.length}</p>
               <p className="mt-1 text-xl font-medium">
                 {" "}
-                {constant?.stats[0].stat1}
+                {t("stat1")}
               </p>
             </li>
 
@@ -24,7 +27,7 @@ function Stats({ uname, Data, UnreadCount, StarredCount }) {
               <p className="text-3xl font-extrabold">{UnreadCount}</p>
               <p className="mt-1 text-xl font-medium">
                 {" "}
-                {constant?.stats[0].stat2}
+                {t("stat2")}
               </p>
             </li>
 
@@ -32,7 +35,7 @@ function Stats({ uname, Data, UnreadCount, StarredCount }) {
               <p className="text-3xl font-extrabold">{StarredCount}</p>
               <p className="mt-1 text-xl font-medium">
                 {" "}
-                {constant?.stats[0].stat3}
+                {t("stat3")}
               </p>
             </li>
           </ul>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { MdAdd, MdArrowDropDown, MdCheck } from "react-icons/md";
+import { useTranslation } from 'react-i18next';
 
-function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModalOpen}) {
+function UserSelect({ selected, toggle, settoggle, Data, onClickHandler, setModalOpen }) {
   const [changedval, setchangedval] = useState(selected);
+  const { t } = useTranslation();
 
 
   useEffect(() => {
@@ -40,10 +42,10 @@ function UserSelect({ selected, toggle, settoggle, Data, onClickHandler ,setModa
               }}
               className="inline-block  text-text bg-primary mr-2  rounded-full hover:bg-background hover:text-indigo-600 active:text-indigo-500 focus:outline-none focus:ring"
             >
-              <span className="sr-only"> Add User </span>
+              <span className="sr-only"> {t("AddUser")} </span>
               <MdAdd size={20} />
             </button>
-            <span>Add New User</span>
+            <span>{t("AddNewUser")}</span>
           </div>
           {Data.map((val) => {
             return (

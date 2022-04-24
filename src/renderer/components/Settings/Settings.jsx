@@ -9,6 +9,9 @@ import Button from "../Basic/Button";
 import InputField from "../Login/InputField";
 import GeneralSettings from "./GeneralSettings";
 import ThemeSettings from "./ThemeSettings";
+import { useTranslation } from 'react-i18next';
+import { LanguagesSupported } from "../../i18n/config";
+import LanguageSelect from "./LanguageSelect";
 const fs = require("fs");
 
 function Settings({ params }) {
@@ -21,6 +24,8 @@ function Settings({ params }) {
   const [activelabel, setactivelabel] = useState(
     SettingTypes["TabHeaders"][0].label
   );
+  const [selected, setselected] = useState("English");
+  const [toggle, settoggle] = useState(false);
   const [CustomThemeFile, setCustomThemeFile] = useState();
   function OnApplyChanges() {
     if (fetchlimit && fetchlimit > 0) {
@@ -35,7 +40,12 @@ function Settings({ params }) {
       StoreSettings();
     }
   }
-  
+
+  const { i18n } = useTranslation();
+
+  function changeLanguage(e) {
+    i18n.changeLanguage(e);
+  }
 
   function StoreSettings(flimit) {
     localStorage.setItem("Settings", JSON.stringify(Checked));
@@ -51,9 +61,8 @@ function Settings({ params }) {
         {SettingTypes?.TabHeaders?.map((e) => (
           <button
             onClick={() => setactivelabel(e.label)}
-            className={` p-4 text-SettingsCardTitle -mb-px border-b border-b-SideBarBackground ${
-              activelabel == e.label && "border-b-primary"
-            } `}
+            className={` p-4 text-SettingsCardTitle -mb-px border-b border-b-SideBarBackground ${activelabel == e.label && "border-b-primary"
+              } `}
             title={e.label}
           >
             <div class="flex items-center justify-center">{e.label}</div>
@@ -81,12 +90,23 @@ function Settings({ params }) {
                       }}
                       Data={e}
                     />
+
                   ))}
-                  <div className="mt-4">
+                  <div className="mt-4 mb-4">
                     <InputField
                       placeholder="Enter Number of Mails to fetch at once"
                       value={fetchlimit}
                       updatedValue={setfetchlimit}
+                    />
+                  </div>
+                  <div className="flex items-end justify-items-end  text-SettingsCardText justify-between">
+                    Select your preferred language
+                    <LanguageSelect
+                      Data={LanguagesSupported}
+                      selected={selected}
+                      settoggle={settoggle}
+                      toggle={toggle}
+                      onClickHandler={(val) => changeLanguage(val)}
                     />
                   </div>
                   <Button handler={OnApplyChanges} btntext="save changes" />

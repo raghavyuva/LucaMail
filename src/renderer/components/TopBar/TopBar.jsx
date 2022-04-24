@@ -6,6 +6,7 @@ import UserSelect from "./UserSelect";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/actions/UserActions";
 import { setLoading } from "../../redux/actions/LoadingActions";
+import { useTranslation } from 'react-i18next';
 
 function TopBar({
   Quota,
@@ -25,7 +26,7 @@ function TopBar({
   const { ref } = useComponentVisible(false, toggle, settoggle);
   const [selected, setselected] = useState(userHome && userHome);
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   const capacity = (
     (Quota?.storage?.limit - Quota?.storage?.usage) /
     1073741824
@@ -43,9 +44,8 @@ function TopBar({
   return (
     <div className=" sticky  top-0 z-0 hidden md:flex  ">
       <nav
-        className={`bg-SideBarBackground ${
-          isDrawerOpen && "w-[calc(100vw_-_2rem)]"
-        } w-screen  shadow-lg`}
+        className={`bg-SideBarBackground ${isDrawerOpen && "w-[calc(100vw_-_2rem)]"
+          } w-screen  shadow-lg`}
       >
         <div className="">
           <div className="flex items-center md:justify-between h-14">
@@ -81,14 +81,13 @@ function TopBar({
               {Quota?.storage?.status && (
                 <div className="lg:flex hidden ">
                   <span className="text-text font-mono mr-2">
-                    Disk Used: {Quota?.storage?.status} ,
+                    {t("diskused")}: {Quota?.storage?.status} ,
                   </span>
                   <span className="text-text font-mono mr-2">
-                    Disk Available : {capacity} gb
+                    {t("DiskAvailable")} : {capacity} gb
                   </span>
                 </div>
               )}
-
               <div ref={ref} className="m-2 flex items-center mr-4  ">
                 <div className="flex flex-col items-center ">
                   <UserSelect
