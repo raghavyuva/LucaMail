@@ -7,11 +7,12 @@ import TableData from "./TableData";
 import { ListOpenedBar } from "../../static/constants/ListTopContents";
 import { AddFlag, GetSingleMail, MoveToFolder } from "../../services";
 import { WriteFile } from "../../lib/fileAction";
+import { MdDownload } from "react-icons/md";
 const { ImapFlow } = require("imapflow");
 const { contents } = ListOpenedBar;
 const pathjoin = require("path");
 const TableView = ({ params }) => {
-  const { Envelope, message, user, path, pathContents } = params;
+  const { Envelope, message, user, path, pathContents,onDownloadAsCsv } = params;
   const [Data, setData] = useState(Envelope);
   const [allselected, setallselected] = useState(false);
   let pathname = path == "/" ? "INBOX" : path;
@@ -88,6 +89,7 @@ const TableView = ({ params }) => {
                 }}
               />
             ))}
+            <MdDownload size={25} onClick={onDownloadAsCsv} />
           </div>
           <div className="p-3">
             <div className="overflow-x-auto">
