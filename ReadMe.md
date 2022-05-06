@@ -5,7 +5,7 @@
   <p align="center">
     An Awesome Cross Platform Email Client!
     <br/>
-    Note : This Project Is Still in <strong>Beta</strong>  Version
+    Note : This Project is Still in <strong>Beta</strong>  Version
     <br/>
     <br/>
     <br/>
@@ -22,27 +22,29 @@
 # About The Project
 
  <p align="center"><a href="https://youtu.be/Nr4P234WgV0"><img src="https://imgur.com/tt1JqSC.png"></a></p>
-LucaMail is an Open Source, Cross-Platform Email Client. LucaMail is developed to provide a cross-platform alternative to Email Clients that already exists. LucaMail focuses on contemporary technologies as well as maintaining a user-friendly UI. There exist Email Clients which lack providing cross-platform software, smooth UI, modern design techniques, and trending technologies. Whereas a Solution *LucaMail* Provides all such features. LucaMail is bundled with 2 classic dark and Light themes along with a customized theme. LucaMail is Lightweight, simple, os friendly too.
-LucaMail Provides a Rich Text Editing Experience to send Mail. Only the `IMAP protocol` is supported in the beta version as many users don't seem to be using a pop protocol. LucaMail stores the messages as files under the user's home directory moved by the `luca` directory.
-
+ 
+LucaMail is an Open Source, Cross-Platform Email Client. LucaMail is developed to provide a cross-platform alternative to Email Clients that already exists. LucaMail focuses on contemporary technologies as well as maintaining a user-friendly UI. There exist Email Clients which lack providing cross-platform software, smooth UI, modern design techniques, and trending technologies. Whereas a solution *LucaMail* provides all such features. LucaMail is bundled with 2 classic dark and light themes along with a customized theme. LucaMail is lightweight, simple, OS friendly too.
+LucaMail provides a Rich Text Editing Experience to send Mail. Only the `IMAP protocol` is supported in the beta version as many users don't seem to be using a POP protocol. LucaMail stores the messages as files under the user's home directory moved by the `luca` directory.
+<br/>
+<br/>
 Some features may be lacking as it is a beta version but the bundled features are assumed to work in all perspectives as long as a bug is detected. So feel free to propose changes by opening a new issue, or if you want to implement your own, feel free to fork this repo and create a pull request. You can visit [Contributing Guide »](docs/contributing.md) for contribution aid. 
 
 # Features
 - Super Fast
-- Light weight
-- Cross Platform Email Client that supports Windows,MacOs,Linux 
-- Specially built as Desktop Application
+- Light Weight
+- Cross Platform Email Client that Supports Windows, MacOS, Linux 
+- Specially Built as Desktop Application
 - Multiple Ways to Install the Application
 - New UI Design Systems 
-- Multiple User Account Switch
-- User Customized themes [see how to customize theme](docs/themecustomize.md)
-- 2 classical themes Dark theme and White theme
-- Multiple Layout of Views such as Grid View,List View
+- Multiple User Accounts Switch
+- User Customized Themes ([See how to customize theme](docs/themecustomize.md))
+- 2 Classical Themes: Dark and White
+- Multiple Layout of Views Such as Grid View, and List View
 - A Better Card View and a Table View
-- Rich Text Editing Experience to send a mail
-- General Settings to configure app specs
-- Available in 5 Different Languages (Localisation)
-- Download or Export Mails as CSV file
+- Rich Text Editing Experience to Send Mail
+- General Settings to Configure App Specs
+- Available in Five Different Languages (Localisation)
+- Download or Export Mail as CSV File
 
 # Built With
 
@@ -55,11 +57,11 @@ Whilst I am the main developer of this project, this project couldn't of even st
 
 # Installation
 
-LucaMail can be installed in two ways.
+LucaMail can be installed in two ways:
 
 - Releases
 
-  head on to [Releases](https://github.com/raghavyuva/LucaMail/releases/latest) and find out the Suitable binary for your OS. and set executable permissions and run it.
+  Head on to [Releases](https://github.com/raghavyuva/LucaMail/releases/latest) and find out the Suitable binary for your OS. and set executable permissions and run it.
 
   ```sh
   wget https://github.com/raghavyuva/LucaMail/releases/latest/download/LucaMail-0.0.1-beta.AppImage
