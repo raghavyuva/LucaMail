@@ -1,6 +1,6 @@
 <br/>
 <p align="center">
-  <a href="https://lucamail.raghavyuva.com/">
+  <a href="https://raghavyuva.github.io/">
 <h3 align="center"><img src="https://imgur.com/tcrXEKK.png" alt="LucaMail"><br>LucaMail <i>v0.0.2-beta</i></h3>  </a>
   <p align="center">
     An Awesome Cross Platform Email Client!
@@ -9,7 +9,7 @@
     <br/>
     <br/>
     <br/>
-    <a href="https://lucamail.raghavyuva.com/">Website</a>
+    <a href="https://raghavyuva.github.io/">Website</a>
     .
     <a href="https://github.com/raghavyuva/LucaMail/issues">Report Bug</a>
     .
